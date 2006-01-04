@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
+	"http://www.seasar.org/dtd/components23.dtd">
+<components namespace="fooB" >
+	<component name="fooB-1">"foo B 1"</component>	
+	<component name="fooB-2">"foo B 2"</component>	
+</components>

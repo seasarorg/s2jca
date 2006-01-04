@@ -1,0 +1,362 @@
+/*
+ * Copyright 2004-2006 the Seasar Foundation and the Others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+package org.seasar.jca.cm.policy;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.resource.spi.ConnectionRequestInfo;
+import javax.resource.spi.ManagedConnection;
+import javax.resource.spi.ManagedConnectionFactory;
+
+import org.easymock.MockControl;
+import org.seasar.jca.cm.support.ConnectionManagementContext;
+import org.seasar.jca.cm.support.ConnectionManagementContextMatcher;
+import org.seasar.jca.cm.support.ManagedConnectionPool;
+import org.seasar.jca.ut.EasyMockTestCase;
+
+/**
+ * @author koichik
+ */
+public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
+    private ThreadBoundedPoolingPolicy target;
+    private ConnectionManagementPolicy policy;
+    private MockControl policyControl;
+    private ManagedConnectionFactory mcf;
+    private MockControl mcfControl;
+    private ManagedConnection[] mc = new ManagedConnection[3];
+    private MockControl[] mcControl = new MockControl[3];
+    private ConnectionRequestInfo info;
+    private MockControl infoControl;
+    private Object[] lch = new Object[3];
+    private ConnectionManagementContext[] context = new ConnectionManagementContext[3];
+    private Set<ManagedConnection> set1;
+    private Set<ManagedConnection> set2;
+
+    public ThreadBoundedPoolingPolicyTest(String name) {
+        super(name);
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        
+        policyControl = createStrictControl(ConnectionManagementPolicy.class);
+        policy = (ConnectionManagementPolicy) policyControl.getMock();
+        mcfControl = createStrictControl(ManagedConnectionFactory.class);
+        mcf = (ManagedConnectionFactory) mcfControl.getMock();
+        infoControl = createStrictControl(ConnectionRequestInfo.class);
+        info = (ConnectionRequestInfo) infoControl.getMock();
+        for (int i = 0; i < 3; ++i) {
+            mcControl[i] = createStrictControl(ManagedConnection.class);
+            mc[i] = (ManagedConnection) mcControl[i].getMock();
+            lch[i] = new Object();
+            context[i] = new ConnectionManagementContext(null, info, mcf);
+        }
+
+        set1 = new HashSet<ManagedConnection>();
+        set1.add(mc[0]);
+        set2 = new HashSet<ManagedConnection>();
+        set2.add(mc[0]);
+        set2.add(mc[1]);
+
+        target = new ThreadBoundedPoolingPolicy();
+    }
+
+    /**
+     * <code>MethodInterceptor</code>
+     * のbefore以降に取得したコネクションがafterで解放されることの擬似的なテスト． <br>
+     * 
+     */
+    public void testAcquireNew() throws Exception {
+        target.initialize(mcf, policy);
+
+        // <code>MethodInterceptor</code>のbeforeで行う処理．
+        final Set<ManagedConnection> before = target.before();
+        final ManagedConnectionPool<?> pool = target.pools.get();
+        assertEquals("0", 0, before.size());
+        assertEquals("1", 0, pool.getActivePoolSize());
+        assertEquals("2", 0, pool.getFreePoolSize());
+
+        // コネクション取得．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.allocate(context[0]);
+                assertEquals("3", 1, pool.getActivePoolSize());
+                assertEquals("4", 0, pool.getFreePoolSize());
+            }
+
+            @Override
+            public void verify() throws Exception {
+                // 後続のpolicyからコネクションを取得，mc0が返される．
+                policy.allocate(context[0]);
+                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+            }
+        }.doTest();
+
+        // 取得したコネクションの解放 (フリープールへ)．
+        // <code>MethodInvocation</code>のproceedで行う処理．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.release(mc[0]);
+                assertEquals("5", 0, pool.getActivePoolSize());
+                assertEquals("6", 1, pool.getFreePoolSize());
+            }
+        }.doTest();
+
+        // <code>MethodInterceptor</code>のafterで行う処理．
+        // 最初に取得したコネクションがリリースされる．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.after(before);
+                assertEquals("7", 0, pool.getActivePoolSize());
+                assertEquals("8", 0, pool.getFreePoolSize());
+            }
+
+            @Override
+            public void verify() throws Exception {
+                // フリープールのコネクションが後続がpolicyへ渡される．
+                policy.release(mc[0]);
+            }
+        }.doTest();
+    }
+
+    /**
+     * コネクションの取得が二回行われた場合で，二番目に取得しようとしたコネクションが最初のコネクションと同じ場合のテスト． <br>
+     * アスペクトが適用されたメソッドがネストした場合に，実際にコネクションを取得しなかった場合にはコネクションが解放されないことを確認する．
+     * 
+     */
+    public void testAcquireSame() throws Exception {
+        target.initialize(mcf, policy);
+
+        // 外側のメソッドにおける<code>MethodInterceptor</code>のbeforeで行われる処理．
+        final Set<ManagedConnection> before1 = target.before();
+        final ManagedConnectionPool<?> pool = target.pools.get();
+        assertEquals("0", 0, before1.size());
+        assertEquals("1", 0, pool.getActivePoolSize());
+        assertEquals("2", 0, pool.getFreePoolSize());
+
+        // 最初のコネクション取得．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.allocate(context[0]);
+                assertEquals("3", 1, pool.getActivePoolSize());
+                assertEquals("4", 0, pool.getFreePoolSize());
+            }
+
+            @Override
+            public void verify() throws Exception {
+                // 後続のpolicyからコネクションを取得，mc0が返される．
+                policy.allocate(context[0]);
+                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+            }
+        }.doTest();
+
+        // 最初に取得したコネクションがクローズ (フリープールへ)．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.release(mc[0]);
+                assertEquals("5", 0, pool.getActivePoolSize());
+                assertEquals("6", 1, pool.getFreePoolSize());
+            }
+            // フリープールに戻されるだけなので後続のpolicyは呼ばれない．
+        }.doTest();
+
+        // 内側のメソッドにおける<code>MethodInterceptor</code>のbeforeで行われる処理．
+        final Set<ManagedConnection> before2 = target.before();
+        assertEquals("7", 1, before2.size());
+        assertEquals("8", 0, pool.getActivePoolSize());
+        assertEquals("9", 1, pool.getFreePoolSize());
+
+        // 二番目のコネクション取得．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.allocate(context[0]);
+                assertEquals("10", 1, pool.getActivePoolSize());
+                assertEquals("11", 0, pool.getFreePoolSize());
+            }
+
+            @Override
+            public void verify() throws Exception {
+                // フリープールのコネクションとマッチング，mc0が返される．
+                mcf.matchManagedConnections(set1, null, info);
+                mcfControl.setReturnValue(mc[0]);
+            }
+        }.doTest();
+
+        // 2番目に取得したコネクションがクローズ (フリープールへ)．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.release(mc[0]);
+                assertEquals("12", 0, pool.getActivePoolSize());
+                assertEquals("13", 1, pool.getFreePoolSize());
+            }
+            // フリープールに戻されるだけなので後続のpolicyは呼ばれない．
+        }.doTest();
+
+        // 内側のメソッドにおける<code>MethodInterceptor</code>のafterで行われる処理．
+        // 取得したコネクション(最初に取得したコネクションと同じ)はクローズされない．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.after(before2);
+                assertEquals("14", 0, pool.getActivePoolSize());
+                assertEquals("15", 1, pool.getFreePoolSize());
+            }
+            // フリープールに戻されるだけなので後続のpolicyは呼ばれない．
+        }.doTest();
+
+        // 外側のメソッドにおける<code>MethodInterceptor</code>のafterで行われる処理．
+        // 最初に取得したコネクションをクローズ．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.after(before1);
+                assertEquals("16", 0, pool.getActivePoolSize());
+                assertEquals("17", 0, pool.getFreePoolSize());
+            }
+
+            @Override
+            public void verify() throws Exception {
+                // コネクションがリリースされる．
+                policy.release(mc[0]);
+            }
+        }.doTest();
+    }
+
+    /**
+     * コネクションの取得が二回行われた場合で，二番目に取得しようとしたコネクションが最初のコネクションとは異なる場合のテスト． <br>
+     * アスペクトが適用されたメソッドがネストした場合に，それぞれが実際に取得したコネクションを解放することを確認．
+     * 
+     * @throws Exception
+     */
+    public void testAcquireDiff() throws Exception {
+        target.initialize(mcf, policy);
+
+        // 外側のメソッドにおける<code>MethodInterceptor</code>のbeforeで行われる処理．
+        final Set<ManagedConnection> before1 = target.before();
+        final ManagedConnectionPool<?> pool = target.pools.get();
+        assertEquals("0", 0, before1.size());
+        assertEquals("1", 0, pool.getActivePoolSize());
+        assertEquals("2", 0, pool.getFreePoolSize());
+
+        // 最初のコネクション取得．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.allocate(context[0]);
+                assertEquals("3", 1, pool.getActivePoolSize());
+                assertEquals("4", 0, pool.getFreePoolSize());
+            }
+
+            @Override
+            public void verify() throws Exception {
+                // 後続のpolicyからコネクションを取得，mc0が返される．
+                policy.allocate(context[0]);
+                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+            }
+        }.doTest();
+
+        // 最初に取得したコネクションがクローズ (フリープールへ)．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.release(mc[0]);
+                assertEquals("5", 0, pool.getActivePoolSize());
+                assertEquals("6", 1, pool.getFreePoolSize());
+            }
+            // フリープールに戻されるだけなので後続のpolicyは呼ばれない．
+        }.doTest();
+
+        // 内側のメソッドにおける<code>MethodInterceptor</code>のbeforeで行われる処理．
+        final Set<ManagedConnection> before2 = target.before();
+        assertEquals("7", 1, before2.size());
+        assertEquals("8", 0, pool.getActivePoolSize());
+        assertEquals("9", 1, pool.getFreePoolSize());
+
+        // 二番目のコネクション取得．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.allocate(context[1]);
+                assertEquals("10", 1, pool.getActivePoolSize());
+                assertEquals("11", 1, pool.getActivePoolSize());
+            }
+
+            @Override
+            public void verify() throws Exception {
+                // フリープールのコネクションとマッチング，どれもマッチしない．
+                mcf.matchManagedConnections(set1, null, info);
+                mcfControl.setReturnValue(null);
+                // 後続のpolicyから新しいコネクションを取得．
+                policy.allocate(context[1]);
+                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
+            }
+        }.doTest();
+
+        // 取得したコネクションがクローズ (フリープールへ)．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.release(mc[1]);
+                assertEquals("12", 0, pool.getActivePoolSize());
+                assertEquals("13", 2, pool.getFreePoolSize());
+            }
+            // フリープールに戻されるだけなので後続のpolicyは呼ばれない．
+        }.doTest();
+
+        // 内側のメソッドにおける<code>MethodInterceptor</code>のafterで行われる処理．
+        // 2番目に取得したコネクション(をクローズする．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.after(before2);
+                assertEquals("16", 0, pool.getActivePoolSize());
+                assertEquals("17", 1, pool.getFreePoolSize());
+            }
+
+            @Override
+            public void verify() throws Exception {
+                // 後続のpolicyにコネクションがリリースされる．
+                policy.release(mc[1]);
+            }
+        }.doTest();
+
+        // 外側のメソッドにおける<code>MethodInterceptor</code>のafterで行われる処理．
+        // 最初に取得したコネクションをクローズ．
+        new Subsequence() {
+            @Override
+            public void replay() throws Exception {
+                target.after(before1);
+                assertEquals("18", 0, pool.getActivePoolSize());
+                assertEquals("19", 0, pool.getFreePoolSize());
+            }
+
+            @Override
+            public void verify() throws Exception {
+                // 後続のpolicyにコネクションがリリースされる．
+                policy.release(mc[0]);
+            }
+        }.doTest();
+    }
+}
