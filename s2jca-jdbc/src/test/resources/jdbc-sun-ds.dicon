@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
+	"http://www.seasar.org/dtd/components23.dtd">
+<components namespace="jdbc-sun-ds">
+	<!--
+		Sun の JCBC Connector と HSQLDB の DataSource を使った構成例．
+	-->
+
+	<include path="j2ee.dicon"/>
+	<include path="jca.dicon"/>
+
+	<component name="raDeployer"
+		class="org.seasar.jca.deploy.impl.RarResourceAdapterDeployer"
+	>
+		<property name="path">
+			@org.seasar.framework.util.EclipseUtil@getProjectRoot("s2jca-jdbc")
+				.getAbsolutePath() + "/ra/spi_15_ds.rar"
+		</property>
+		<initMethod name="start"/>
+		<destroyMethod name="stop"/>
+	</component>
+
+	<component name="mcfDeployer"
+		class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployerImpl"
+	>
+		<property name="managedConnectionFactoryClass">
+			"com.sun.gjc.spi.DSManagedConnectionFactory"
+		</property>
+		<initMethod name="setProperty">
+			<arg>"ClassName"</arg>
+			<arg>"org.hsqldb.jdbc.jdbcDataSource"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"DriverProperties"</arg>
+			<arg>"setDatabase#jdbc:hsqldb:hsql://localhost:9001##"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"User"</arg>
+			<arg>"sa"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"Password"</arg>
+			<arg>""</arg>
+		</initMethod>
+	</component>
+
+	<component name="dataSource" class="javax.sql.DataSource">
+		mcfDeployer.createConnectionFactory()
+	</component>
+</components>

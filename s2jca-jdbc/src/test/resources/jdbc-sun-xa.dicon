@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
+	"http://www.seasar.org/dtd/components23.dtd">
+<components namespace="jdbc-sun-xa">
+	<!--
+		Sun の JCBC Connector と Oracle の XADataSource を使った構成例．
+		Oracle の JDBC ドライバは 10.1.0.2 はバグっていて使えないので注意．
+		10.1.0.4 は大丈夫．
+	-->
+
+	<include path="j2ee.dicon"/>
+	<include path="jca.dicon"/>
+
+	<component name="raDeployer"
+		class="org.seasar.jca.deploy.impl.RarResourceAdapterDeployer"
+	>
+		<property name="path">
+			@org.seasar.framework.util.EclipseUtil@getProjectRoot("s2jca-jdbc")
+				.getAbsolutePath() + "/ra/spi_15_xa.rar"
+		</property>
+		<initMethod name="start"/>
+		<destroyMethod name="stop"/>
+	</component>
+
+	<component name="mcfDeployer"
+		class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployerImpl"
+	>
+		<property name="managedConnectionFactoryClass">
+			"com.sun.gjc.spi.XAManagedConnectionFactory"
+		</property>
+		<initMethod name="setProperty">
+			<arg>"ClassName"</arg>
+			<arg>"oracle.jdbc.xa.client.OracleXADataSource"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"DriverProperties"</arg>
+			<arg>"setURL#jdbc:oracle:thin:@localhost:1521:orcl##"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"User"</arg>
+			<arg>"scott"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"Password"</arg>
+			<arg>"tiger"</arg>
+		</initMethod>
+	</component>
+
+	<component name="dataSource" class="javax.sql.DataSource">
+		mcfDeployer.createConnectionFactory()
+	</component>
+</components>

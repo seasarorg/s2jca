@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
+	"http://www.seasar.org/dtd/components23.dtd">
+<components namespace="jdbc-oracle-xa">
+	<!--
+		Oracle の ManagedConnectionFactory を使った構成例．
+		でもでも，こいつは ConnectionManager を渡しても使ってくれないらしい．
+
+		実際の接続は JNDI からルックアップした XADataSource から取得する．
+		なので，接続に関する情報は jndi-jdbc.dicon にて設定．
+	-->
+
+	<include path="j2ee.dicon"/>
+	<include path="jca.dicon"/>
+	<include path="jndi.dicon"/>
+
+	<component name="mcf" class="oracle.jdbc.connector.OracleManagedConnectionFactory">
+		<property name="XADataSourceName">"java:comp/env/jdbc/OracleXADataSource"</property>
+	</component>
+
+	<component name="cm" class="org.seasar.jca.cm.ConnectionManagerImpl">
+		<arg>mcf</arg>
+
+		<initMethod name="addConnectionManagementPolicy">
+			<arg>jca.basicPool</arg>
+		</initMethod>
+
+		<initMethod name="addConnectionManagementPolicy">
+			<arg>jca.xaTransactionPool</arg>
+		</initMethod>
+		<destroyMethod name="dispose"/>
+	</component>
+
+	<component name="jcaDataSource" class="javax.sql.DataSource">
+		mcf.createConnectionFactory(cm)
+	</component>
+</components>
