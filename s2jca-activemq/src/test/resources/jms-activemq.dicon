@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
+	"http://www.seasar.org/dtd/components23.dtd">
+<components namespace="jms-activemq-cf">
+	<include path="j2ee.dicon"/>
+	<include path="jca.dicon"/>
+
+	<component name="raDeployer"
+		class="org.seasar.jca.deploy.impl.RarResourceAdapterDeployer"
+	>
+		<property name="path">
+			@org.seasar.framework.util.EclipseUtil@getProjectRoot("s2jca-activemq")
+				.getAbsolutePath() +"/ra/activemq-ra-3.2.1.rar"
+		</property>
+		<initMethod name="start"/>
+		<destroyMethod name="stop"/>
+	</component>
+
+	<component name="mcfDeployer"
+		class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployerImpl"
+	>
+		<property name="managedConnectionFactoryClass">
+			"org.activemq.ra.ActiveMQManagedConnectionFactory"
+		</property>
+	</component>
+
+	<component name="connectionFactory" class="javax.jms.ConnectionFactory">
+		mcfDeployer.createConnectionFactory()
+	</component>
+</components>
