@@ -13,15 +13,17 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.jca.cm.jms;
+package org.seasar.jca.mi.jms;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
-import javax.jms.MessageConsumer;
+import javax.jms.Message;
+import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.transaction.TransactionManager;
+
+import junit.framework.Assert;
 
 import org.seasar.extension.unit.S2TestCase;
 
@@ -33,35 +35,29 @@ import org.seasar.extension.unit.S2TestCase;
  * @author koichik
  */
 public class ActiveMQTest extends S2TestCase {
+    protected static volatile int receiveMessages;
+
     protected TransactionManager tm;
     protected ConnectionFactory cf;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        include("jms-activemq-outbound.dicon");
+        include("jms-activemq-inbound.dicon");
+        receiveMessages = 0;
     }
 
     public void test() throws Exception {
-        Thread thread = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    recvMessage();
-                    recvMessage();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    fail(e.toString());
-                }
-            }
-        });
-        thread.start();
-        Thread.sleep(1000);
-        sendMessage();
-        sendMessage();
-        thread.join();
+        for (int i = 0; i < 100; ++i) {
+            sendMessage(i);
+        }
+        Thread.sleep(3000);
+        synchronized (ActiveMQTest.class) {
+            assertEquals("0", 100, receiveMessages);
+        }
     }
 
-    protected void sendMessage() throws Exception {
+    protected void sendMessage(int num) throws Exception {
         tm.begin();
         try {
             Connection con = cf.createConnection();
@@ -69,7 +65,7 @@ public class ActiveMQTest extends S2TestCase {
                 Session session = con.createSession(true, Session.SESSION_TRANSACTED);
                 try {
                     MessageProducer producer = session.createProducer(session.createQueue("foo"));
-                    producer.send(session.createTextMessage("hoge"));
+                    producer.send(session.createTextMessage(Integer.toString(num)));
                 } finally {
                     session.close();
                 }
@@ -81,25 +77,11 @@ public class ActiveMQTest extends S2TestCase {
         }
     }
 
-    protected void recvMessage() throws Exception {
-        tm.begin();
-        try {
-            Connection con = cf.createConnection();
-            try {
-                con.start();
-                Session session = con.createSession(true, Session.SESSION_TRANSACTED);
-                try {
-                    MessageConsumer consumer = session.createConsumer(session.createQueue("foo"));
-                    TextMessage msg = (TextMessage) consumer.receive();
-                    assertEquals("1", "hoge", msg.getText());
-                } finally {
-                    session.close();
-                }
-            } finally {
-                con.close();
+    public static class MessageListenerImpl extends Assert implements MessageListener {
+        public void onMessage(Message message) {
+            synchronized (ActiveMQTest.class) {
+                ++receiveMessages;
             }
-        } finally {
-            tm.commit();
         }
     }
 }
