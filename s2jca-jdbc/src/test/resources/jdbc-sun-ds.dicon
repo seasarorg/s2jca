@@ -21,7 +21,7 @@
 	</component>
 
 	<component name="mcfDeployer"
-		class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployerImpl"
+		class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer"
 	>
 		<property name="managedConnectionFactoryClass">
 			"com.sun.gjc.spi.DSManagedConnectionFactory"

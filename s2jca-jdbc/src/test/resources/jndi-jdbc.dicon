@@ -2,6 +2,11 @@
 <!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
 	"http://www.seasar.org/dtd/components23.dtd">
 <components namespace="jdbc">
+	<!--
+		Oracle の ManagedConnectionFactory は JNDI から XADataSource をルックアップする．
+		そのためのネーミングコンテキスト (java:comp/env/jndi/jdbc) を提供する．
+	-->
+
 	<component name="OracleXADataSource" class="oracle.jdbc.xa.client.OracleXADataSource">
 		<property name="URL">"jdbc:oracle:thin:@localhost:1521:orcl"</property>
 		<property name="user">"scott"</property>

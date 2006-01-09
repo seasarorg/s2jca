@@ -7,7 +7,7 @@
 		でもでも，こいつは ConnectionManager を渡しても使ってくれないらしい．
 
 		実際の接続は JNDI からルックアップした XADataSource から取得する．
-		なので，接続に関する情報は jndi-jdbc.dicon にて設定．
+		そのため，接続に関する情報は jndi.dicon にて設定．
 	-->
 
 	<include path="j2ee.dicon"/>
