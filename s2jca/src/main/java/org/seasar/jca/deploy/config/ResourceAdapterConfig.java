@@ -29,6 +29,7 @@ public class ResourceAdapterConfig extends ConfigPropertyContainer {
     protected String raVersion;
     protected String raClass;
     protected final List<OutboundAdapterConfig> outboundAdapters = new ArrayList<OutboundAdapterConfig>();
+    protected InboundAdapterConfig inboundAdapter;
 
     public String getSpecVersion() {
         return this.specificationVersion;
@@ -102,5 +103,13 @@ public class ResourceAdapterConfig extends ConfigPropertyContainer {
             }
         }
         return result.toArray(new ConnectionDefConfig[result.size()]);
+    }
+    
+    public InboundAdapterConfig getInboundAdapter() {
+        return inboundAdapter;
+    }
+    
+    public void setInboundAdapter(final InboundAdapterConfig inboundAdapter) {
+        this.inboundAdapter = inboundAdapter;
     }
 }

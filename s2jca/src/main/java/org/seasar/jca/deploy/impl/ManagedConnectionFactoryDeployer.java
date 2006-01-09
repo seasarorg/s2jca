@@ -23,23 +23,20 @@ import javax.transaction.TransactionManager;
 
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.log.Logger;
-import org.seasar.framework.util.ClassUtil;
 import org.seasar.jca.cm.ConnectionManagerImpl;
 import org.seasar.jca.cm.policy.BasicPoolingPolicy;
 import org.seasar.jca.cm.policy.LocalTransactionBoundedPoolingPolicy;
 import org.seasar.jca.cm.policy.XATransactionBoundedPoolingPolicy;
-import org.seasar.jca.deploy.ManagedConnectionFactoryDeployer;
 import org.seasar.jca.deploy.ResourceAdapterDeployer;
 import org.seasar.jca.deploy.config.ConnectionDefConfig;
 import org.seasar.jca.exception.SResourceException;
+import org.seasar.jca.util.ReflectionUtil;
 
 /**
  * @author koichik
  */
-public class ManagedConnectionFactoryDeployerImpl extends
-        AbstractDeployer<ManagedConnectionFactory> implements ManagedConnectionFactoryDeployer {
-    private static final Logger logger = Logger
-            .getLogger(ManagedConnectionFactoryDeployerImpl.class);
+public class ManagedConnectionFactoryDeployer extends AbstractDeployer<ManagedConnectionFactory> {
+    private static final Logger logger = Logger.getLogger(ManagedConnectionFactoryDeployer.class);
 
     protected final ResourceAdapterDeployer raDeployer;
     protected TransactionManager tm;
@@ -52,7 +49,7 @@ public class ManagedConnectionFactoryDeployerImpl extends
     protected ManagedConnectionFactory mcf;
     protected Object cf;
 
-    public ManagedConnectionFactoryDeployerImpl(final ResourceAdapterDeployer raDeployer) {
+    public ManagedConnectionFactoryDeployer(final ResourceAdapterDeployer raDeployer) {
         this.raDeployer = raDeployer;
         setClassLoader(raDeployer.getClassLoader());
     }
@@ -71,10 +68,12 @@ public class ManagedConnectionFactoryDeployerImpl extends
     }
 
     protected ManagedConnectionFactory createManagedConnectionFactory() throws ResourceException {
-        final Class mcfClass = forName(mcfClassName);
-        mcf = (ManagedConnectionFactory) ClassUtil.newInstance(mcfClass);
+        final Class<? extends ManagedConnectionFactory> mcfClass = ReflectionUtil.forName(
+                mcfClassName, getClassLoader()).asSubclass(ManagedConnectionFactory.class);
+        final ManagedConnectionFactory mcf = ReflectionUtil.newInstance(mcfClass);
         if (mcf instanceof ResourceAdapterAssociation) {
-            ((ResourceAdapterAssociation) mcf).setResourceAdapter(raDeployer.getResourceAdapter());
+            ResourceAdapterAssociation.class.cast(mcf).setResourceAdapter(
+                    raDeployer.getResourceAdapter());
         }
 
         final ConnectionDefConfig cdConfig = getConnectionDefinitionConfig();
@@ -111,13 +110,13 @@ public class ManagedConnectionFactoryDeployerImpl extends
         return policy;
     }
 
-    protected void assertOutboundResourceAdapterConfig() throws SResourceException {
+    protected void assertOutboundResourceAdapterConfig() throws ResourceException {
         if (raDeployer.getResourceAdapterConfig().getOutboundAdapterSize() == 0) {
             throw new SResourceException("EJCA1015");
         }
     }
 
-    protected void assertConnectionDefinitionConfig() throws SResourceException {
+    protected void assertConnectionDefinitionConfig() throws ResourceException {
         if (getConnectionDefinitionConfig() == null) {
             throw new SResourceException("EJCA1012", new Object[] { mcfClassName });
         }
@@ -128,7 +127,7 @@ public class ManagedConnectionFactoryDeployerImpl extends
     }
 
     protected void loggingDeployedMessage() {
-        final StringBuffer buf = new StringBuffer();
+        final StringBuilder buf = new StringBuilder();
 
         buf.append("\t").append("managedconnectionfactory-class : ").append(mcfClassName).append(
                 LINE_SEPARATOR);

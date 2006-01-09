@@ -22,6 +22,7 @@ import org.seasar.jca.deploy.config.AdminObjectConfig;
 import org.seasar.jca.deploy.config.ConfigProperty;
 import org.seasar.jca.deploy.config.ConfigPropertyContainer;
 import org.seasar.jca.deploy.config.ConnectionDefConfig;
+import org.seasar.jca.deploy.config.InboundAdapterConfig;
 import org.seasar.jca.deploy.config.OutboundAdapterConfig;
 import org.seasar.jca.deploy.config.ResourceAdapterConfig;
 import org.xml.sax.Attributes;
@@ -86,9 +87,9 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final ConfigProperty configProperty = (ConfigProperty) context.pop();
-                final ConfigPropertyContainer parameterizable = (ConfigPropertyContainer) context
-                        .peek();
+                final ConfigProperty configProperty = pop(context, ConfigProperty.class);
+                final ConfigPropertyContainer parameterizable = peek(context,
+                        ConfigPropertyContainer.class);
                 parameterizable.putProperty(configProperty);
             }
         });
@@ -99,8 +100,11 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             public void end(final TagHandlerContext context, final String body) {
                 final Object top = context.peek();
                 if (top instanceof ConfigProperty) {
-                    final ConfigProperty configProperty = (ConfigProperty) top;
+                    final ConfigProperty configProperty = ConfigProperty.class.cast(top);
                     configProperty.setName(body);
+                } else if (top instanceof InboundAdapterConfig) {
+                    final InboundAdapterConfig inboundConfig = InboundAdapterConfig.class.cast(top);
+                    inboundConfig.addRequiredConfigProperty(body);
                 }
             }
         });
@@ -111,7 +115,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             public void end(final TagHandlerContext context, final String body) {
                 final Object top = context.peek();
                 if (top instanceof ConfigProperty) {
-                    final ConfigProperty configProperty = (ConfigProperty) top;
+                    final ConfigProperty configProperty = ConfigProperty.class.cast(top);
                     configProperty.setType(body);
                 }
             }
@@ -123,7 +127,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             public void end(final TagHandlerContext context, final String body) {
                 final Object top = context.peek();
                 if (top instanceof ConfigProperty) {
-                    final ConfigProperty configProperty = (ConfigProperty) top;
+                    final ConfigProperty configProperty = ConfigProperty.class.cast(top);
                     configProperty.setValue(body);
                 }
             }
@@ -147,7 +151,8 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final OutboundAdapterConfig outboundConfig = (OutboundAdapterConfig) context.pop();
+                final OutboundAdapterConfig outboundConfig = pop(context,
+                        OutboundAdapterConfig.class);
                 raConfig.addOutboundAdapter(outboundConfig);
             }
         });
@@ -156,15 +161,17 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void start(final TagHandlerContext context, final Attributes attributes) {
-                final OutboundAdapterConfig outboundConfig = (OutboundAdapterConfig) context.peek();
+                final OutboundAdapterConfig outboundConfig = peek(context,
+                        OutboundAdapterConfig.class);
                 final ConnectionDefConfig cdConfig = new ConnectionDefConfig(outboundConfig);
                 context.push(cdConfig);
             }
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final ConnectionDefConfig cdConfig = (ConnectionDefConfig) context.pop();
-                final OutboundAdapterConfig outboundConfig = (OutboundAdapterConfig) context.peek();
+                final ConnectionDefConfig cdConfig = pop(context, ConnectionDefConfig.class);
+                final OutboundAdapterConfig outboundConfig = peek(context,
+                        OutboundAdapterConfig.class);
                 outboundConfig.addConnectionDef(cdConfig);
             }
         });
@@ -173,7 +180,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final ConnectionDefConfig cdConfig = (ConnectionDefConfig) context.peek();
+                final ConnectionDefConfig cdConfig = peekConnectionDefConfig(context);
                 cdConfig.setMcfClass(body);
             }
         });
@@ -182,7 +189,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final ConnectionDefConfig cdConfig = (ConnectionDefConfig) context.peek();
+                final ConnectionDefConfig cdConfig = peekConnectionDefConfig(context);
                 cdConfig.setCfInterface(body);
             }
         });
@@ -191,7 +198,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final ConnectionDefConfig cdConfig = (ConnectionDefConfig) context.peek();
+                final ConnectionDefConfig cdConfig = peekConnectionDefConfig(context);
                 cdConfig.setCfImplClass(body);
             }
         });
@@ -200,7 +207,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final ConnectionDefConfig cdConfig = (ConnectionDefConfig) context.peek();
+                final ConnectionDefConfig cdConfig = peekConnectionDefConfig(context);
                 cdConfig.setConnectionInterface(body);
             }
         });
@@ -209,7 +216,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final ConnectionDefConfig cdConfig = (ConnectionDefConfig) context.peek();
+                final ConnectionDefConfig cdConfig = peekConnectionDefConfig(context);
                 cdConfig.setConnectionImplClass(body);
             }
         });
@@ -218,8 +225,50 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final OutboundAdapterConfig outboundConfig = (OutboundAdapterConfig) context.peek();
+                final OutboundAdapterConfig outboundConfig = peek(context, OutboundAdapterConfig.class);
                 outboundConfig.setTransactionSupport(body);
+            }
+        });
+        addTagHandler("inbound-resourceadapter", new TagHandler() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void start(final TagHandlerContext context, final Attributes attributes) {
+                final InboundAdapterConfig inboundConfig = new InboundAdapterConfig();
+                context.push(inboundConfig);
+            }
+
+            @Override
+            public void end(final TagHandlerContext context, final String body) {
+                final InboundAdapterConfig inboundConfig = pop(context, InboundAdapterConfig.class);
+                raConfig.setInboundAdapter(inboundConfig);
+            }
+        });
+        addTagHandler("messageListener-type", new TagHandler() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void end(final TagHandlerContext context, final String body) {
+                final InboundAdapterConfig inboundConfig = peekInboundAdapterConfig(context);
+                inboundConfig.addMessageListenerType(body);
+            }
+        });
+        addTagHandler("activationspec-class", new TagHandler() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void end(final TagHandlerContext context, final String body) {
+                final InboundAdapterConfig inboundConfig = peekInboundAdapterConfig(context);
+                inboundConfig.setActivationspecClass(body);
+            }
+        });
+        addTagHandler("activationspec-class", new TagHandler() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void end(final TagHandlerContext context, final String body) {
+                final InboundAdapterConfig inboundConfig = peekInboundAdapterConfig(context);
+                inboundConfig.setActivationspecClass(body);
             }
         });
         addTagHandler("adminobject", new TagHandler() {
@@ -236,5 +285,21 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
                 context.pop();
             }
         });
+    }
+
+    protected <T> T pop(final TagHandlerContext context, Class<T> clazz) {
+        return clazz.cast(context.pop());
+    }
+
+    protected <T> T peek(final TagHandlerContext context, Class<T> clazz) {
+        return clazz.cast(context.peek());
+    }
+    
+    protected ConnectionDefConfig peekConnectionDefConfig(final TagHandlerContext context) {
+        return peek(context, ConnectionDefConfig.class);
+    }
+    
+    protected InboundAdapterConfig peekInboundAdapterConfig(final TagHandlerContext context) {
+        return peek(context, InboundAdapterConfig.class);
     }
 }

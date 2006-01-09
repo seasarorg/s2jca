@@ -125,22 +125,30 @@ public class WorkWrapper implements Runnable {
     }
 
     protected void fireWorkAcceptedEvent() {
-        workListener.workAccepted(new WorkEvent(workManager, WorkEvent.WORK_ACCEPTED, work,
-                exception));
+        if (workListener != null) {
+            workListener.workAccepted(new WorkEvent(workManager, WorkEvent.WORK_ACCEPTED, work,
+                    exception));
+        }
     }
 
     protected void fireWorkRejectedEvent() {
-        workListener.workRejected(new WorkEvent(workManager, WorkEvent.WORK_REJECTED, work,
-                exception, System.currentTimeMillis() - acceptedTime));
+        if (workListener != null) {
+            workListener.workRejected(new WorkEvent(workManager, WorkEvent.WORK_REJECTED, work,
+                    exception, System.currentTimeMillis() - acceptedTime));
+        }
     }
 
     protected void fireWorkStartedEvent() {
-        workListener.workStarted(new WorkEvent(workManager, WorkEvent.WORK_STARTED, work,
-                exception, System.currentTimeMillis() - acceptedTime));
+        if (workListener != null) {
+            workListener.workStarted(new WorkEvent(workManager, WorkEvent.WORK_STARTED, work,
+                    exception, System.currentTimeMillis() - acceptedTime));
+        }
     }
 
     protected void fireWorkCompletedEvent() {
-        workListener.workCompleted(new WorkEvent(workManager, WorkEvent.WORK_COMPLETED, work,
-                exception));
+        if (workListener != null) {
+            workListener.workCompleted(new WorkEvent(workManager, WorkEvent.WORK_COMPLETED, work,
+                    exception));
+        }
     }
 }

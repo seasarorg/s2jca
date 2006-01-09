@@ -7,7 +7,7 @@
 	<component name="bootstrapContext" class="org.seasar.jca.lm.BootstrapContextImpl">
 		<property name="workManager">
 			<component class="org.seasar.jca.wm.WorkManagerImpl">
-				<arg>5</arg>
+				<arg>10</arg>
 			</component>
 		</property>
 	</component>

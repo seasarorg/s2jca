@@ -24,10 +24,8 @@ import java.util.Map;
 
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.PropertyDesc;
-import org.seasar.framework.exception.ClassNotFoundRuntimeException;
-import org.seasar.framework.util.ClassUtil;
-import org.seasar.framework.util.ConstructorUtil;
 import org.seasar.jca.deploy.config.ConfigProperty;
+import org.seasar.jca.util.ReflectionUtil;
 
 /**
  * @author koichik
@@ -59,14 +57,6 @@ public abstract class AbstractDeployer<TARGET> {
         this.cl = cl;
     }
 
-    protected Class forName(final String className) {
-        try {
-            return Class.forName(className, true, cl);
-        } catch (final ClassNotFoundException ex) {
-            throw new ClassNotFoundRuntimeException(ex);
-        }
-    }
-
     protected void applyProperties(final BeanDesc beanDesc, final TARGET target,
             final Collection<ConfigProperty> properties) {
         for (final ConfigProperty property : properties) {
@@ -83,14 +73,15 @@ public abstract class AbstractDeployer<TARGET> {
         if (type.equals(String.class.getName())) {
             desc.setValue(target, value);
         } else {
-            final Class propertyClass = forName(property.getType());
-            final Constructor ctor = ClassUtil.getConstructor(propertyClass, PARAMETER_TYPE);
-            desc.setValue(target, ConstructorUtil.newInstance(ctor, new Object[] { value }));
+            final Class<?> propertyClass = ReflectionUtil.forName(property.getType());
+            final Constructor<?> ctor = ReflectionUtil
+                    .getConstructor(propertyClass, PARAMETER_TYPE);
+            desc.setValue(target, ReflectionUtil.newInstance(ctor, new Object[] { value }));
         }
     }
 
     protected void loggingConfigProperties(final Collection<ConfigProperty> properties,
-            final String indent, final StringBuffer buf) {
+            final String indent, final StringBuilder buf) {
         final Map<String, ConfigProperty> map = new LinkedHashMap<String, ConfigProperty>();
         for (final ConfigProperty property : properties) {
             map.put(property.getName(), property);

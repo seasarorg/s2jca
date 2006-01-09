@@ -25,8 +25,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.seasar.framework.beans.factory.BeanDescFactory;
+import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.log.Logger;
-import org.seasar.framework.util.ClassUtil;
 import org.seasar.framework.util.SAXParserFactoryUtil;
 import org.seasar.framework.xml.SaxHandler;
 import org.seasar.framework.xml.SaxHandlerParser;
@@ -34,6 +34,7 @@ import org.seasar.jca.deploy.ResourceAdapterDeployer;
 import org.seasar.jca.deploy.config.ConnectionDefConfig;
 import org.seasar.jca.deploy.config.OutboundAdapterConfig;
 import org.seasar.jca.deploy.config.ResourceAdapterConfig;
+import org.seasar.jca.util.ReflectionUtil;
 
 /**
  * @author koichik
@@ -53,6 +54,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         this.bc = bc;
     }
 
+    @InitMethod
     public void start() throws ResourceException, IOException {
         setClassLoader(createClassLoader());
         loadDeploymentDescripter();
@@ -73,8 +75,9 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
     }
 
     protected ResourceAdapter createResourceAdapter() {
-        final Class raClass = forName(raConfig.getRaClass());
-        final ResourceAdapter ra = (ResourceAdapter) ClassUtil.newInstance(raClass);
+        final Class<? extends ResourceAdapter> raClass = ReflectionUtil.forName(
+                raConfig.getRaClass(), getClassLoader()).asSubclass(ResourceAdapter.class);
+        final ResourceAdapter ra = ReflectionUtil.newInstance(raClass);
         applyProperties(BeanDescFactory.getBeanDesc(raClass), ra, raConfig.getPropertyValues());
         return ra;
     }
@@ -83,7 +86,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         final SaxHandlerParser parser = createSaxHandlerParser();
         final InputStream is = getDeploymentDescripterAsInputStream();
         try {
-            raConfig = (ResourceAdapterConfig) parser.parse(is);
+            raConfig = ResourceAdapterConfig.class.cast(parser.parse(is));
         } finally {
             is.close();
         }
@@ -101,7 +104,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
     protected abstract InputStream getDeploymentDescripterAsInputStream() throws ResourceException;
 
     protected void loggingDeployedMessage() {
-        final StringBuffer buf = new StringBuffer();
+        final StringBuilder buf = new StringBuilder();
 
         buf.append("\t").append("display-name : ").append(raConfig.getDisplayName()).append(
                 LINE_SEPARATOR);
@@ -119,7 +122,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         logger.log("DJCA1013", new Object[] { new String(buf) });
     }
 
-    protected void loggingOutboundResourceAdapter(final StringBuffer buf) {
+    protected void loggingOutboundResourceAdapter(final StringBuilder buf) {
         for (int i = 0; i < raConfig.getOutboundAdapterSize(); ++i) {
             loggingConnectionDefinition(buf, raConfig.getOutboundAdapter(i));
             buf.append("\t").append(
@@ -129,7 +132,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         }
     }
 
-    protected void loggingConnectionDefinition(final StringBuffer buf,
+    protected void loggingConnectionDefinition(final StringBuilder buf,
             final OutboundAdapterConfig outboundConfig) {
         for (final String mcf : outboundConfig.getMcfClassNames()) {
             for (final ConnectionDefConfig cdConfig : outboundConfig.getConnectionDefs(mcf)) {
