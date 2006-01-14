@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
+	"http://www.seasar.org/dtd/components23.dtd">
+<components>
+	<include path="j2ee.dicon"/>
+	<include path="jca.dicon"/>
+
+	<component
+		class="org.seasar.jca.deploy.impl.RarResourceAdapterDeployer"
+	>
+		<property name="path">
+			@org.seasar.framework.util.EclipseUtil@getProjectRoot("s2jca-activemq")
+				.getAbsolutePath() +"/ra/activemq-ra-3.2.1.rar"
+		</property>
+		<initMethod name="setProperty">
+			<arg>"ServerUrl"</arg>
+			<arg>"tcp://localhost:61616?trace=true"</arg>
+		</initMethod>
+		<initMethod name="start"/>
+		<destroyMethod name="stop"/>
+	</component>
+</components>
