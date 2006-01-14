@@ -66,7 +66,7 @@ public class JndiContext implements Context {
     }
 
     public Object lookup(final Name name) throws NamingException {
-        final StringBuffer buf = new StringBuffer(100);
+        final StringBuilder buf = new StringBuilder(100);
         for (int i = 0; i < name.size(); ++i) {
             buf.append(name.get(i)).append("/");
         }

@@ -1,38 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE components PUBLIC "-//SEASAR2.1//DTD S2Container//EN"
-	"http://www.seasar.org/dtd/components21.dtd">
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
+	"http://www.seasar.org/dtd/components23.dtd">
 <components namespace="jca">
 	<include path="j2ee.dicon"/>
 
-	<component name="bootstrapContext" class="org.seasar.jca.lm.BootstrapContextImpl">
+	<component name="bootstrapContext" class="org.seasar.jca.lifecycle.BootstrapContextImpl">
 		<property name="workManager">
-			<component class="org.seasar.jca.wm.WorkManagerImpl">
-				<arg>10</arg>
+			<component class="org.seasar.jca.work.WorkManagerImpl">
+				<arg>10</arg><!-- thread pool size -->
 			</component>
 		</property>
 	</component>
-
-	<component name="basicPool"
-		class="org.seasar.jca.cm.policy.BasicPoolingPolicy"
-		instance="prototype"
-	>
-		<property name="minPoolSize">5</property>
-		<property name="maxPoolSize">10</property>
-		<property name="timeout">600</property>
-	</component>
-
-	<component name="xaTransactionPool"
-		class="org.seasar.jca.cm.policy.XATransactionBoundedPoolingPolicy"
-		instance="prototype"
-	/>
-
-	<component name="localTransactionPool"
-		class="org.seasar.jca.cm.policy.LocalTransactionBoundedPoolingPolicy"
-		instance="prototype"
-	/>
-
-	<component name="threadPool"
-		class="org.seasar.jca.cm.policy.ThreadBoundedPoolingPolicy"
-		instance="prototype"
-	/>
 </components>

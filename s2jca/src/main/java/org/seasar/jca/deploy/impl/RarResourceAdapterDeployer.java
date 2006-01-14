@@ -32,14 +32,13 @@ import javax.resource.ResourceException;
 import javax.resource.spi.BootstrapContext;
 
 import org.seasar.jca.exception.SResourceException;
-import org.seasar.jca.util.url.JarURLBuilder;
+import org.seasar.jca.url.JarURLBuilder;
 
 /**
  * @author koichik
  */
 public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
-    public RarResourceAdapterDeployer(BootstrapContext bc) {
-        super(bc);
+    public RarResourceAdapterDeployer() {
     }
 
     @Override

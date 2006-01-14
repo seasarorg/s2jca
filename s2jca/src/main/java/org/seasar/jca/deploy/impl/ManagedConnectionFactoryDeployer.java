@@ -23,13 +23,13 @@ import javax.transaction.TransactionManager;
 
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.log.Logger;
-import org.seasar.jca.cm.ConnectionManagerImpl;
-import org.seasar.jca.cm.policy.BasicPoolingPolicy;
-import org.seasar.jca.cm.policy.LocalTransactionBoundedPoolingPolicy;
-import org.seasar.jca.cm.policy.XATransactionBoundedPoolingPolicy;
 import org.seasar.jca.deploy.ResourceAdapterDeployer;
 import org.seasar.jca.deploy.config.ConnectionDefConfig;
 import org.seasar.jca.exception.SResourceException;
+import org.seasar.jca.outbound.ConnectionManagerImpl;
+import org.seasar.jca.outbound.policy.BasicPoolingPolicy;
+import org.seasar.jca.outbound.policy.LocalTransactionBoundedPoolingPolicy;
+import org.seasar.jca.outbound.policy.XATransactionBoundedPoolingPolicy;
 import org.seasar.jca.util.ReflectionUtil;
 
 /**

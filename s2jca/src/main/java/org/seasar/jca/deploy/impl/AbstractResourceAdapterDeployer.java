@@ -25,6 +25,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.seasar.framework.beans.factory.BeanDescFactory;
+import org.seasar.framework.container.annotation.tiger.Binding;
+import org.seasar.framework.container.annotation.tiger.BindingType;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.SAXParserFactoryUtil;
@@ -45,12 +47,16 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
 
     private static final Logger logger = Logger.getLogger(AbstractResourceAdapterDeployer.class);
 
-    protected final BootstrapContext bc;
+    protected BootstrapContext bc;
     protected String path;
     protected ResourceAdapter ra;
     protected ResourceAdapterConfig raConfig;
 
-    protected AbstractResourceAdapterDeployer(final BootstrapContext bc) {
+    protected AbstractResourceAdapterDeployer() {
+    }
+
+    @Binding(bindingType = BindingType.MUST)
+    public void setBootstrapContext(final BootstrapContext bc) {
         this.bc = bc;
     }
 

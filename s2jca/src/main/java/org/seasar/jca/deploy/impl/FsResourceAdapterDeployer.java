@@ -35,8 +35,7 @@ import org.seasar.jca.exception.SResourceException;
  * @author koichik
  */
 public class FsResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
-    public FsResourceAdapterDeployer(final BootstrapContext bc) {
-        super(bc);
+    public FsResourceAdapterDeployer() {
     }
 
     @Override
