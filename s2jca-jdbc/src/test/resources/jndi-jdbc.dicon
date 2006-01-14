@@ -4,7 +4,7 @@
 <components namespace="jdbc">
 	<!--
 		Oracle の ManagedConnectionFactory は JNDI から XADataSource をルックアップする．
-		そのためのネーミングコンテキスト (java:comp/env/jndi/jdbc) を提供する．
+		そのためのネーミングコンテキスト (java:comp/env/jdbc) を提供する．
 	-->
 
 	<component name="OracleXADataSource" class="oracle.jdbc.xa.client.OracleXADataSource">

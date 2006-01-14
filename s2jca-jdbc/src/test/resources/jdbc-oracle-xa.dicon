@@ -18,7 +18,7 @@
 		<property name="XADataSourceName">"java:comp/env/jdbc/OracleXADataSource"</property>
 	</component>
 
-	<component name="cm" class="org.seasar.jca.cm.ConnectionManagerImpl">
+	<component name="cm" class="org.seasar.jca.outbound.ConnectionManagerImpl">
 		<arg>mcf</arg>
 
 		<initMethod name="addConnectionManagementPolicy">

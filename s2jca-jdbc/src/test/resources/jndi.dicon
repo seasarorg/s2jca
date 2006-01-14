@@ -4,7 +4,7 @@
 <components namespace="jndi">
 	<!--
 		Oracle の ManagedConnectionFactory は JNDI から XADataSource をルックアップする．
-		そのためのネーミングコンテキスト (java:comp/env/jndi) を提供する．
+		そのためのネーミングコンテキストルート (java:comp/env) を提供する．
 	-->
 	<include path="jndi-jdbc.dicon"/>
 </components>
