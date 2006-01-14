@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.jca.cm.jms;
+package org.seasar.jca.outbound;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
