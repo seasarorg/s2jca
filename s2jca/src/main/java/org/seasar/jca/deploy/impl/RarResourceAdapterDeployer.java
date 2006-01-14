@@ -29,7 +29,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import javax.resource.ResourceException;
-import javax.resource.spi.BootstrapContext;
 
 import org.seasar.jca.exception.SResourceException;
 import org.seasar.jca.url.JarURLBuilder;

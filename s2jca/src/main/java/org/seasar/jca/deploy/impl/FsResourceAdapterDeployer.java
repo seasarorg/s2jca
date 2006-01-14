@@ -27,7 +27,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import javax.resource.ResourceException;
-import javax.resource.spi.BootstrapContext;
 
 import org.seasar.jca.exception.SResourceException;
 
