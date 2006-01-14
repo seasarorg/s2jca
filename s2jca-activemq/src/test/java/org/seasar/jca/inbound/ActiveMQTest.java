@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.jca.mi.jms;
+package org.seasar.jca.inbound;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -44,6 +44,7 @@ public class ActiveMQTest extends S2TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         include("jms-activemq-inbound.dicon");
+        include("jms-activemq-outbound.dicon");
         receiveMessages = 0;
     }
 
