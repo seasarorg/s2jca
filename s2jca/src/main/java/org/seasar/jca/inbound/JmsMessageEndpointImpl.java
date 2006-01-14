@@ -17,10 +17,8 @@ package org.seasar.jca.inbound;
 
 import java.lang.reflect.Method;
 
-import javax.ejb.EJBException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.resource.ResourceException;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
@@ -46,21 +44,19 @@ public class JmsMessageEndpointImpl extends AbstractMessageEndpointImpl implemen
     }
 
     public void onMessage(final Message message) {
-        if (isBeforeDeliveryCalled()) {
-            doOnMessage(message);
-            return;
-        }
         try {
-            beforeDelivery(LISTENER_METHOD);
-            try {
+            if (isBeforeDeliveryCalled()) {
                 doOnMessage(message);
-            } finally {
-                afterDelivery();
+            } else {
+                beforeDelivery(LISTENER_METHOD);
+                try {
+                    doOnMessage(message);
+                } finally {
+                    afterDelivery();
+                }
             }
-        } catch (final NoSuchMethodException e) {
-            throw new EJBException(e);
-        } catch (final ResourceException e) {
-            throw new EJBException(e);
+        } catch (final Exception e) {
+            logger.error("EJCA0000", e);
         }
     }
 
@@ -74,7 +70,6 @@ public class JmsMessageEndpointImpl extends AbstractMessageEndpointImpl implemen
             setSucceeded(true);
         } catch (final RuntimeException e) {
             logger.log("EJCA1031", new Object[] { this, LISTENER_METHOD }, e);
-            throw new EJBException(e);
         }
 
         if (logger.isDebugEnabled()) {
