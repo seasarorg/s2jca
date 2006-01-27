@@ -24,7 +24,9 @@
 
 	<component
 		class="org.seasar.jca.inbound.MessageEndpointFactoryImpl"
-	/>
+	>
+		<property name="deliveryTransacted">true</property>
+	</component>
 
 	<component instance="prototype"
 		class="org.seasar.jca.inbound.ActiveMQTest$MessageListenerImpl"
