@@ -45,7 +45,7 @@ public class JndiContext implements Context {
 
     public JndiContext(final Hashtable<?, ?> environment) throws NamingException {
         this.environment = environment;
-        this.path = (String) environment.get(PROVIDER_URL);
+        this.path = String.class.cast(environment.get(PROVIDER_URL));
         try {
             final S2Container root = SingletonS2ContainerFactory.getContainer();
             container = (path == null) ? root : (S2Container) root.getComponent(path);

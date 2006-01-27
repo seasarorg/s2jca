@@ -24,6 +24,7 @@ import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
 
 import org.seasar.framework.log.Logger;
+import org.seasar.framework.message.MessageFormatter;
 import org.seasar.framework.util.ClassUtil;
 
 /**
@@ -44,6 +45,9 @@ public class JmsMessageEndpointImpl extends AbstractMessageEndpointImpl implemen
     }
 
     public void onMessage(final Message message) {
+        assertNotReentrant();
+
+        setProcessing(true);
         try {
             if (isBeforeDeliveryCalled()) {
                 doOnMessage(message);
@@ -57,6 +61,8 @@ public class JmsMessageEndpointImpl extends AbstractMessageEndpointImpl implemen
             }
         } catch (final Exception e) {
             logger.error("EJCA0000", e);
+        } finally {
+            setProcessing(false);
         }
     }
 
@@ -65,15 +71,33 @@ public class JmsMessageEndpointImpl extends AbstractMessageEndpointImpl implemen
             logger.log("DJCA1029", new Object[] { this, LISTENER_METHOD });
         }
 
+        final ClassLoader originalClassLoader = setContextClassLoader(getClassLoader());
         try {
             actualEndpoint.onMessage(message);
             setSucceeded(true);
         } catch (final RuntimeException e) {
             logger.log("EJCA1031", new Object[] { this, LISTENER_METHOD }, e);
+        } finally {
+            setContextClassLoader(originalClassLoader);
         }
 
         if (logger.isDebugEnabled()) {
             logger.log("DJCA1030", new Object[] { this, LISTENER_METHOD });
+        }
+    }
+
+    protected ClassLoader setContextClassLoader(final ClassLoader loader) {
+        final Thread thread = Thread.currentThread();
+        final ClassLoader currentClassLoader = thread.getContextClassLoader();
+        thread.setContextClassLoader(loader);
+        return currentClassLoader;
+    }
+
+    protected void assertNotReentrant() {
+        if (isProcessing()) {
+            final Object[] params = new Object[] { this, LISTENER_METHOD };
+            logger.log("EJCA1034", params);
+            throw new IllegalStateException(MessageFormatter.getSimpleMessage("EJCA1034", params));
         }
     }
 }

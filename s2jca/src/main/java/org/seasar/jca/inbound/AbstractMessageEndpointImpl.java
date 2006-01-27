@@ -18,6 +18,7 @@ package org.seasar.jca.inbound;
 import java.lang.reflect.Method;
 
 import javax.resource.ResourceException;
+import javax.resource.spi.IllegalStateException;
 import javax.resource.spi.endpoint.MessageEndpoint;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.Status;
@@ -26,6 +27,7 @@ import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
 
 import org.seasar.framework.log.Logger;
+import org.seasar.framework.message.MessageFormatter;
 import org.seasar.jca.exception.SIllegalStateException;
 import org.seasar.jca.exception.SResourceException;
 
@@ -40,8 +42,8 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
     protected Transaction transaction;
     protected XAResource xaResource;
     protected ClassLoader classLoader;
-    protected ClassLoader originalClassLoader;
     protected boolean beforeDeliveryCalled;
+    protected boolean processing;
     protected boolean succeeded;
 
     public AbstractMessageEndpointImpl(final MessageEndpointFactory messageEndpointFactory,
@@ -53,26 +55,10 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
         this.classLoader = classLoader;
     }
 
-    public boolean isBeforeDeliveryCalled() {
-        return beforeDeliveryCalled;
-    }
-
-    public boolean isSucceeded() {
-        return succeeded;
-    }
-
-    public void setSucceeded(final boolean succeeded) {
-        this.succeeded = succeeded;
-    }
-
     public void beforeDelivery(final Method method) throws NoSuchMethodException, ResourceException {
         if (logger.isDebugEnabled()) {
             logger.log("DJCA1024", new Object[] { this, method });
         }
-
-        final Thread thread = Thread.currentThread();
-        originalClassLoader = thread.getContextClassLoader();
-        thread.setContextClassLoader(classLoader);
 
         if (xaResource != null && messageEndpointFactory.isDeliveryTransacted(method)) {
             beginTransaction();
@@ -85,13 +71,10 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
     }
 
     public void afterDelivery() throws ResourceException {
-        if (logger.isDebugEnabled()) {
-            logger.log("DJCA1026", new Object[] {this});
-        }
+        assertBeforeDeliveryCalled();
 
-        if (!beforeDeliveryCalled) {
-            logger.log("EJCA1028", new Object[] {this});
-            throw new SIllegalStateException("EJCA1028", new Object[] {this});
+        if (logger.isDebugEnabled()) {
+            logger.log("DJCA1026", new Object[] { this });
         }
 
         try {
@@ -99,19 +82,18 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
                 endTransaction();
             }
         } finally {
-            succeeded = false;
-            beforeDeliveryCalled = false;
-            transaction = null;
-            Thread.currentThread().setContextClassLoader(originalClassLoader);
-            originalClassLoader = null;
+            cleanup();
         }
 
         if (logger.isDebugEnabled()) {
-            logger.log("DJCA1027", new Object[] {this});
+            logger.log("DJCA1027", new Object[] { this });
         }
     }
 
     public void release() {
+        assertNotProcessing();
+        cleanup();
+        logger.log("DJCA1033", new Object[] { this });
     }
 
     protected void beginTransaction() throws ResourceException {
@@ -134,5 +116,52 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
         } catch (final Exception e) {
             throw new SResourceException("EJCA0000", e);
         }
+    }
+
+    protected void assertBeforeDeliveryCalled() throws IllegalStateException {
+        if (!beforeDeliveryCalled) {
+            logger.log("EJCA1028", new Object[] { this });
+            throw new SIllegalStateException("EJCA1028", new Object[] { this });
+        }
+    }
+
+    protected void assertNotProcessing() {
+        if (isProcessing()) {
+            final Object[] params = new Object[] { this };
+            logger.log("EJCA1032", params);
+            throw new java.lang.IllegalStateException(MessageFormatter.getSimpleMessage("EJCA1032",
+                    params));
+        }
+    }
+
+    protected void cleanup() {
+        succeeded = false;
+        processing = false;
+        beforeDeliveryCalled = false;
+        transaction = null;
+    }
+
+    protected ClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    protected boolean isBeforeDeliveryCalled() {
+        return beforeDeliveryCalled;
+    }
+
+    protected synchronized boolean isProcessing() {
+        return processing;
+    }
+
+    protected synchronized void setProcessing(final boolean processing) {
+        this.processing = processing;
+    }
+
+    protected boolean isSucceeded() {
+        return succeeded;
+    }
+
+    protected void setSucceeded(final boolean succeeded) {
+        this.succeeded = succeeded;
     }
 }

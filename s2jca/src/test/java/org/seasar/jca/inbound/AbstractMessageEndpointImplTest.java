@@ -72,14 +72,12 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
     public void testDeliveryTransactedSuccessfully() throws Exception {
         target = new TestMessageEndpoint(mef, tm, xar, cl);
-        final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
 
         // test beforeDelivery(Method)
         new Subsequence() {
             @Override
             public void replay() throws Exception {
                 target.beforeDelivery(method);
-                assertSame("0", cl, Thread.currentThread().getContextClassLoader());
             }
 
             @Override
@@ -101,7 +99,6 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             @Override
             public void replay() throws Exception {
                 target.afterDelivery();
-                assertSame("1", contextClassLoader, Thread.currentThread().getContextClassLoader());
             }
 
             @Override
@@ -115,14 +112,12 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
     public void testDeliveryTransactedFailed() throws Exception {
         target = new TestMessageEndpoint(mef, tm, xar, cl);
-        final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
 
         // test beforeDelivery(Method)
         new Subsequence() {
             @Override
             public void replay() throws Exception {
                 target.beforeDelivery(method);
-                assertSame("0", cl, Thread.currentThread().getContextClassLoader());
             }
 
             @Override
@@ -145,7 +140,6 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             @Override
             public void replay() throws Exception {
                 target.afterDelivery();
-                assertSame("1", contextClassLoader, Thread.currentThread().getContextClassLoader());
             }
 
             @Override
@@ -157,14 +151,12 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
     public void testDeliveryTransactedMarkedRollback() throws Exception {
         target = new TestMessageEndpoint(mef, tm, xar, cl);
-        final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
 
         // test beforeDelivery(Method)
         new Subsequence() {
             @Override
             public void replay() throws Exception {
                 target.beforeDelivery(method);
-                assertSame("0", cl, Thread.currentThread().getContextClassLoader());
             }
 
             @Override
@@ -186,7 +178,6 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             @Override
             public void replay() throws Exception {
                 target.afterDelivery();
-                assertSame("1", contextClassLoader, Thread.currentThread().getContextClassLoader());
             }
 
             @Override
@@ -200,14 +191,12 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
     public void testDeliveryNotTransacted() throws Exception {
         target = new TestMessageEndpoint(mef, tm, xar, cl);
-        final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
 
         // test beforeDelivery(Method)
         new Subsequence() {
             @Override
             public void replay() throws Exception {
                 target.beforeDelivery(method);
-                assertSame("0", cl, Thread.currentThread().getContextClassLoader());
             }
 
             @Override
@@ -224,7 +213,6 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             @Override
             public void replay() throws Exception {
                 target.afterDelivery();
-                assertSame("1", contextClassLoader, Thread.currentThread().getContextClassLoader());
             }
 
             @Override
