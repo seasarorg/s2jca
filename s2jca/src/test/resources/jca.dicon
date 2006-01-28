@@ -4,7 +4,7 @@
 <components namespace="jca">
 	<include path="j2ee.dicon"/>
 
-	<component name="bootstrapContext" class="org.seasar.jca.lifecycle.BootstrapContextImpl">
+	<component name="BootstrapContext" class="org.seasar.jca.lifecycle.BootstrapContextImpl">
 		<property name="workManager">
 			<component class="org.seasar.jca.work.WorkManagerImpl">
 				<arg>10</arg><!-- thread pool size -->
