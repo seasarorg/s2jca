@@ -78,20 +78,20 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
     /**
      * <code>MethodInterceptor</code>
-     * ‚ÌbeforeˆÈ~‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ªafter‚Å‰ğ•ú‚³‚ê‚é‚±‚Æ‚Ì‹[—“I‚ÈƒeƒXƒgD <br>
+     * ã®beforeä»¥é™ã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒafterã§è§£æ”¾ã•ã‚Œã‚‹ã“ã¨ã®æ“¬ä¼¼çš„ãªãƒ†ã‚¹ãƒˆï¼ <br>
      * 
      */
     public void testAcquireNew() throws Exception {
         target.initialize(mcf, policy);
 
-        // <code>MethodInterceptor</code>‚Ìbefore‚Ås‚¤ˆ—D
+        // <code>MethodInterceptor</code>ã®beforeã§è¡Œã†å‡¦ç†ï¼
         final Set<ManagedConnection> before = target.before();
         final ManagedConnectionPool<?> pool = target.pools.get();
         assertEquals("0", 0, before.size());
         assertEquals("1", 0, pool.getActivePoolSize());
         assertEquals("2", 0, pool.getFreePoolSize());
 
-        // ƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -102,14 +102,14 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc0‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
             }
         }.doTest();
 
-        // æ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚Ì‰ğ•ú (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
-        // <code>MethodInvocation</code>‚Ìproceed‚Ås‚¤ˆ—D
+        // å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®è§£æ”¾ (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
+        // <code>MethodInvocation</code>ã®proceedã§è¡Œã†å‡¦ç†ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -119,8 +119,8 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
         }.doTest();
 
-        // <code>MethodInterceptor</code>‚Ìafter‚Ås‚¤ˆ—D
-        // Å‰‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
+        // <code>MethodInterceptor</code>ã®afterã§è¡Œã†å‡¦ç†ï¼
+        // æœ€åˆã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -131,28 +131,28 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ªŒã‘±‚ªpolicy‚Ö“n‚³‚ê‚éD
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒå¾Œç¶šãŒpolicyã¸æ¸¡ã•ã‚Œã‚‹ï¼
                 policy.release(mc[0]);
             }
         }.doTest();
     }
 
     /**
-     * ƒRƒlƒNƒVƒ‡ƒ“‚Ìæ“¾‚ª“ñ‰ñs‚í‚ê‚½ê‡‚ÅC“ñ”Ô–Ú‚Éæ“¾‚µ‚æ‚¤‚Æ‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ªÅ‰‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æ“¯‚¶ê‡‚ÌƒeƒXƒgD <br>
-     * ƒAƒXƒyƒNƒg‚ª“K—p‚³‚ê‚½ƒƒ\ƒbƒh‚ªƒlƒXƒg‚µ‚½ê‡‚ÉCÀÛ‚ÉƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾‚µ‚È‚©‚Á‚½ê‡‚É‚ÍƒRƒlƒNƒVƒ‡ƒ“‚ª‰ğ•ú‚³‚ê‚È‚¢‚±‚Æ‚ğŠm”F‚·‚éD
+     * ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®å–å¾—ãŒäºŒå›è¡Œã‚ã‚ŒãŸå ´åˆã§ï¼ŒäºŒç•ªç›®ã«å–å¾—ã—ã‚ˆã†ã¨ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒæœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨åŒã˜å ´åˆã®ãƒ†ã‚¹ãƒˆï¼ <br>
+     * ã‚¢ã‚¹ãƒšã‚¯ãƒˆãŒé©ç”¨ã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ãŒãƒã‚¹ãƒˆã—ãŸå ´åˆã«ï¼Œå®Ÿéš›ã«ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã—ãªã‹ã£ãŸå ´åˆã«ã¯ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒè§£æ”¾ã•ã‚Œãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹ï¼
      * 
      */
     public void testAcquireSame() throws Exception {
         target.initialize(mcf, policy);
 
-        // ŠO‘¤‚Ìƒƒ\ƒbƒh‚É‚¨‚¯‚é<code>MethodInterceptor</code>‚Ìbefore‚Ås‚í‚ê‚éˆ—D
+        // å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãŠã‘ã‚‹<code>MethodInterceptor</code>ã®beforeã§è¡Œã‚ã‚Œã‚‹å‡¦ç†ï¼
         final Set<ManagedConnection> before1 = target.before();
         final ManagedConnectionPool<?> pool = target.pools.get();
         assertEquals("0", 0, before1.size());
         assertEquals("1", 0, pool.getActivePoolSize());
         assertEquals("2", 0, pool.getFreePoolSize());
 
-        // Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -163,13 +163,13 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc0‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
             }
         }.doTest();
 
-        // Å‰‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ªƒNƒ[ƒY (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // æœ€åˆã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¯ãƒ­ãƒ¼ã‚º (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -177,16 +177,16 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
                 assertEquals("5", 0, pool.getActivePoolSize());
                 assertEquals("6", 1, pool.getFreePoolSize());
             }
-            // ƒtƒŠ[ƒv[ƒ‹‚É–ß‚³‚ê‚é‚¾‚¯‚È‚Ì‚ÅŒã‘±‚Ìpolicy‚ÍŒÄ‚Î‚ê‚È‚¢D
+            // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã«æˆ»ã•ã‚Œã‚‹ã ã‘ãªã®ã§å¾Œç¶šã®policyã¯å‘¼ã°ã‚Œãªã„ï¼
         }.doTest();
 
-        // “à‘¤‚Ìƒƒ\ƒbƒh‚É‚¨‚¯‚é<code>MethodInterceptor</code>‚Ìbefore‚Ås‚í‚ê‚éˆ—D
+        // å†…å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãŠã‘ã‚‹<code>MethodInterceptor</code>ã®beforeã§è¡Œã‚ã‚Œã‚‹å‡¦ç†ï¼
         final Set<ManagedConnection> before2 = target.before();
         assertEquals("7", 1, before2.size());
         assertEquals("8", 0, pool.getActivePoolSize());
         assertEquals("9", 1, pool.getFreePoolSize());
 
-        // “ñ”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // äºŒç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -197,13 +197,13 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æƒ}ƒbƒ`ƒ“ƒOCmc0‚ª•Ô‚³‚ê‚éD
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒãƒ³ã‚°ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 mcf.matchManagedConnections(set1, null, info);
                 mcfControl.setReturnValue(mc[0]);
             }
         }.doTest();
 
-        // 2”Ô–Ú‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ªƒNƒ[ƒY (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // 2ç•ªç›®ã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¯ãƒ­ãƒ¼ã‚º (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -211,11 +211,11 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
                 assertEquals("12", 0, pool.getActivePoolSize());
                 assertEquals("13", 1, pool.getFreePoolSize());
             }
-            // ƒtƒŠ[ƒv[ƒ‹‚É–ß‚³‚ê‚é‚¾‚¯‚È‚Ì‚ÅŒã‘±‚Ìpolicy‚ÍŒÄ‚Î‚ê‚È‚¢D
+            // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã«æˆ»ã•ã‚Œã‚‹ã ã‘ãªã®ã§å¾Œç¶šã®policyã¯å‘¼ã°ã‚Œãªã„ï¼
         }.doTest();
 
-        // “à‘¤‚Ìƒƒ\ƒbƒh‚É‚¨‚¯‚é<code>MethodInterceptor</code>‚Ìafter‚Ås‚í‚ê‚éˆ—D
-        // æ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“(Å‰‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚Æ“¯‚¶)‚ÍƒNƒ[ƒY‚³‚ê‚È‚¢D
+        // å†…å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãŠã‘ã‚‹<code>MethodInterceptor</code>ã®afterã§è¡Œã‚ã‚Œã‚‹å‡¦ç†ï¼
+        // å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³(æœ€åˆã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨åŒã˜)ã¯ã‚¯ãƒ­ãƒ¼ã‚ºã•ã‚Œãªã„ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -223,11 +223,11 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
                 assertEquals("14", 0, pool.getActivePoolSize());
                 assertEquals("15", 1, pool.getFreePoolSize());
             }
-            // ƒtƒŠ[ƒv[ƒ‹‚É–ß‚³‚ê‚é‚¾‚¯‚È‚Ì‚ÅŒã‘±‚Ìpolicy‚ÍŒÄ‚Î‚ê‚È‚¢D
+            // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã«æˆ»ã•ã‚Œã‚‹ã ã‘ãªã®ã§å¾Œç¶šã®policyã¯å‘¼ã°ã‚Œãªã„ï¼
         }.doTest();
 
-        // ŠO‘¤‚Ìƒƒ\ƒbƒh‚É‚¨‚¯‚é<code>MethodInterceptor</code>‚Ìafter‚Ås‚í‚ê‚éˆ—D
-        // Å‰‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ğƒNƒ[ƒYD
+        // å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãŠã‘ã‚‹<code>MethodInterceptor</code>ã®afterã§è¡Œã‚ã‚Œã‚‹å‡¦ç†ï¼
+        // æœ€åˆã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ã‚¯ãƒ­ãƒ¼ã‚ºï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -238,29 +238,29 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[0]);
             }
         }.doTest();
     }
 
     /**
-     * ƒRƒlƒNƒVƒ‡ƒ“‚Ìæ“¾‚ª“ñ‰ñs‚í‚ê‚½ê‡‚ÅC“ñ”Ô–Ú‚Éæ“¾‚µ‚æ‚¤‚Æ‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ªÅ‰‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æ‚ÍˆÙ‚È‚éê‡‚ÌƒeƒXƒgD <br>
-     * ƒAƒXƒyƒNƒg‚ª“K—p‚³‚ê‚½ƒƒ\ƒbƒh‚ªƒlƒXƒg‚µ‚½ê‡‚ÉC‚»‚ê‚¼‚ê‚ªÀÛ‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ğ‰ğ•ú‚·‚é‚±‚Æ‚ğŠm”FD
+     * ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®å–å¾—ãŒäºŒå›è¡Œã‚ã‚ŒãŸå ´åˆã§ï¼ŒäºŒç•ªç›®ã«å–å¾—ã—ã‚ˆã†ã¨ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒæœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ã¯ç•°ãªã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆï¼ <br>
+     * ã‚¢ã‚¹ãƒšã‚¯ãƒˆãŒé©ç”¨ã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ãŒãƒã‚¹ãƒˆã—ãŸå ´åˆã«ï¼Œãã‚Œãã‚ŒãŒå®Ÿéš›ã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’è§£æ”¾ã™ã‚‹ã“ã¨ã‚’ç¢ºèªï¼
      * 
      * @throws Exception
      */
     public void testAcquireDiff() throws Exception {
         target.initialize(mcf, policy);
 
-        // ŠO‘¤‚Ìƒƒ\ƒbƒh‚É‚¨‚¯‚é<code>MethodInterceptor</code>‚Ìbefore‚Ås‚í‚ê‚éˆ—D
+        // å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãŠã‘ã‚‹<code>MethodInterceptor</code>ã®beforeã§è¡Œã‚ã‚Œã‚‹å‡¦ç†ï¼
         final Set<ManagedConnection> before1 = target.before();
         final ManagedConnectionPool<?> pool = target.pools.get();
         assertEquals("0", 0, before1.size());
         assertEquals("1", 0, pool.getActivePoolSize());
         assertEquals("2", 0, pool.getFreePoolSize());
 
-        // Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -271,13 +271,13 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc0‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
             }
         }.doTest();
 
-        // Å‰‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ªƒNƒ[ƒY (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // æœ€åˆã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¯ãƒ­ãƒ¼ã‚º (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -285,16 +285,16 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
                 assertEquals("5", 0, pool.getActivePoolSize());
                 assertEquals("6", 1, pool.getFreePoolSize());
             }
-            // ƒtƒŠ[ƒv[ƒ‹‚É–ß‚³‚ê‚é‚¾‚¯‚È‚Ì‚ÅŒã‘±‚Ìpolicy‚ÍŒÄ‚Î‚ê‚È‚¢D
+            // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã«æˆ»ã•ã‚Œã‚‹ã ã‘ãªã®ã§å¾Œç¶šã®policyã¯å‘¼ã°ã‚Œãªã„ï¼
         }.doTest();
 
-        // “à‘¤‚Ìƒƒ\ƒbƒh‚É‚¨‚¯‚é<code>MethodInterceptor</code>‚Ìbefore‚Ås‚í‚ê‚éˆ—D
+        // å†…å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãŠã‘ã‚‹<code>MethodInterceptor</code>ã®beforeã§è¡Œã‚ã‚Œã‚‹å‡¦ç†ï¼
         final Set<ManagedConnection> before2 = target.before();
         assertEquals("7", 1, before2.size());
         assertEquals("8", 0, pool.getActivePoolSize());
         assertEquals("9", 1, pool.getFreePoolSize());
 
-        // “ñ”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // äºŒç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -305,16 +305,16 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æƒ}ƒbƒ`ƒ“ƒOC‚Ç‚ê‚àƒ}ƒbƒ`‚µ‚È‚¢D
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒãƒ³ã‚°ï¼Œã©ã‚Œã‚‚ãƒãƒƒãƒã—ãªã„ï¼
                 mcf.matchManagedConnections(set1, null, info);
                 mcfControl.setReturnValue(null);
-                // Œã‘±‚Ìpolicy‚©‚çV‚µ‚¢ƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾D
+                // å¾Œç¶šã®policyã‹ã‚‰æ–°ã—ã„ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼
                 policy.allocate(context[1]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
             }
         }.doTest();
 
-        // æ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ªƒNƒ[ƒY (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¯ãƒ­ãƒ¼ã‚º (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -322,11 +322,11 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
                 assertEquals("12", 0, pool.getActivePoolSize());
                 assertEquals("13", 2, pool.getFreePoolSize());
             }
-            // ƒtƒŠ[ƒv[ƒ‹‚É–ß‚³‚ê‚é‚¾‚¯‚È‚Ì‚ÅŒã‘±‚Ìpolicy‚ÍŒÄ‚Î‚ê‚È‚¢D
+            // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã«æˆ»ã•ã‚Œã‚‹ã ã‘ãªã®ã§å¾Œç¶šã®policyã¯å‘¼ã°ã‚Œãªã„ï¼
         }.doTest();
 
-        // “à‘¤‚Ìƒƒ\ƒbƒh‚É‚¨‚¯‚é<code>MethodInterceptor</code>‚Ìafter‚Ås‚í‚ê‚éˆ—D
-        // 2”Ô–Ú‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“(‚ğƒNƒ[ƒY‚·‚éD
+        // å†…å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãŠã‘ã‚‹<code>MethodInterceptor</code>ã®afterã§è¡Œã‚ã‚Œã‚‹å‡¦ç†ï¼
+        // 2ç•ªç›®ã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³(ã‚’ã‚¯ãƒ­ãƒ¼ã‚ºã™ã‚‹ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -337,13 +337,13 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚ÉƒRƒlƒNƒVƒ‡ƒ“‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
+                // å¾Œç¶šã®policyã«ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[1]);
             }
         }.doTest();
 
-        // ŠO‘¤‚Ìƒƒ\ƒbƒh‚É‚¨‚¯‚é<code>MethodInterceptor</code>‚Ìafter‚Ås‚í‚ê‚éˆ—D
-        // Å‰‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ğƒNƒ[ƒYD
+        // å¤–å´ã®ãƒ¡ã‚½ãƒƒãƒ‰ã«ãŠã‘ã‚‹<code>MethodInterceptor</code>ã®afterã§è¡Œã‚ã‚Œã‚‹å‡¦ç†ï¼
+        // æœ€åˆã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ã‚¯ãƒ­ãƒ¼ã‚ºï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -354,7 +354,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚ÉƒRƒlƒNƒVƒ‡ƒ“‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
+                // å¾Œç¶šã®policyã«ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[0]);
             }
         }.doTest();

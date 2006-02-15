@@ -97,7 +97,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Å‰‚Ìˆê‰ñ‚¾‚¯ƒ^ƒCƒ}[‚ªì¬‚³‚ê‚éD
+                // æœ€åˆã®ä¸€å›ã ã‘ã‚¿ã‚¤ãƒãƒ¼ãŒä½œæˆã•ã‚Œã‚‹ï¼
                 if (BasicPoolingPolicy.timer == null) {
                     bc.createTimer();
                     bcControl.setReturnValue(timer);
@@ -107,7 +107,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
     }
 
     /**
-     * Å‰(ƒtƒŠ[ƒv[ƒ‹EƒAƒNƒeƒBƒuƒv[ƒ‹‚Æ‚à‹ó)‚ÉƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾‚·‚éê‡‚ÌƒeƒXƒgD
+     * æœ€åˆ(ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ãƒ»ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒ—ãƒ¼ãƒ«ã¨ã‚‚ç©º)ã«ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã™ã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      */
     public void testAcquireFromEmpty() throws Exception {
@@ -118,7 +118,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
         assertEquals("0", 0, target.pool.getActivePoolSize());
         assertEquals("1", 0, target.pool.getFreePoolSize());
 
-        // ƒRƒlƒNƒVƒ‡ƒ“‚Ìæ“¾D
+        // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -130,13 +130,13 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc0‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
             }
         }.doTest();
 
-        // ƒRƒlƒNƒVƒ‡ƒ“ƒŠƒŠ[ƒX (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãƒªãƒªãƒ¼ã‚¹ (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -147,12 +147,12 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ÌƒNƒŠ[ƒ“ƒiƒbƒv
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¯ãƒªãƒ¼ãƒ³ãƒŠãƒƒãƒ—
                 mc[0].cleanup();
             }
         }.doTest();
 
-        // ƒv[ƒ‹‚ÌI—¹ (ƒRƒlƒNƒVƒ‡ƒ“‚ÌƒŠƒŠ[ƒX)D
+        // ãƒ—ãƒ¼ãƒ«ã®çµ‚äº† (ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ãƒªãƒªãƒ¼ã‚¹)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -163,16 +163,16 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ªŒã‘±‚ªpolicy‚Ö“n‚³‚ê‚éD
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒå¾Œç¶šãŒpolicyã¸æ¸¡ã•ã‚Œã‚‹ï¼
                 policy.release(mc[0]);
-                // Œã‘±‚Ìpolicy‚ÉI—¹‚ª“`”d‚³‚ê‚éD
+                // å¾Œç¶šã®policyã«çµ‚äº†ãŒä¼æ’­ã•ã‚Œã‚‹ï¼
                 policy.dispose();
             }
         }.doTest();
     }
 
     /**
-     * ƒtƒŠ[ƒv[ƒ‹‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾‚·‚éê‡‚ÌƒeƒXƒgD
+     * ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã™ã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      */
     public void testAcquireFromFreePool() throws Exception {
@@ -183,7 +183,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
         assertEquals("0", 0, target.pool.getActivePoolSize());
         assertEquals("1", 0, target.pool.getFreePoolSize());
 
-        // Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -194,13 +194,13 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ªæ“¾‚³‚ê‚éCmc0‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒå–å¾—ã•ã‚Œã‚‹ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
             }
         }.doTest();
 
-        // 2”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // 2ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -211,13 +211,13 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ªæ“¾‚³‚êCmc1‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒå–å¾—ã•ã‚Œï¼Œmc1ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[1]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
             }
         }.doTest();
 
-        // Å‰‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ğƒŠƒŠ[ƒX (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // æœ€åˆã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒªãƒªãƒ¼ã‚¹ (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -228,12 +228,12 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ÌƒNƒŠ[ƒ“ƒiƒbƒv
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¯ãƒªãƒ¼ãƒ³ãƒŠãƒƒãƒ—
                 mc[0].cleanup();
             }
         }.doTest();
 
-        // 2”Ô–Ú‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ğƒŠƒŠ[ƒX (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // 2ç•ªç›®ã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒªãƒªãƒ¼ã‚¹ (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -244,12 +244,12 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ÌƒNƒŠ[ƒ“ƒiƒbƒv
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¯ãƒªãƒ¼ãƒ³ãƒŠãƒƒãƒ—
                 mc[1].cleanup();
             }
         }.doTest();
 
-        // 3”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾ (ƒtƒŠ[ƒv[ƒ‹‚©‚ç2”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ğ“¾‚é)D
+        // 3ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾— (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã‹ã‚‰2ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å¾—ã‚‹)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -260,13 +260,13 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æƒ}ƒbƒ`ƒ“ƒOCmc1‚ª•Ô‚³‚ê‚éD
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒãƒ³ã‚°ï¼Œmc1ãŒè¿”ã•ã‚Œã‚‹ï¼
                 mcf.matchManagedConnections(set2, null, info);
                 mcfControl.setReturnValue(mc[1]);
             }
         }.doTest();
 
-        // 4”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾ (ƒtƒŠ[ƒv[ƒ‹‚©‚çÅ‰‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ğ“¾‚é)D
+        // 4ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾— (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã‹ã‚‰æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å¾—ã‚‹)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -277,13 +277,13 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æƒ}ƒbƒ`ƒ“ƒOCmc0‚ªƒ}ƒbƒ`D
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒãƒ³ã‚°ï¼Œmc0ãŒãƒãƒƒãƒï¼
                 mcf.matchManagedConnections(set1, null, info);
                 mcfControl.setReturnValue(mc[0]);
             }
         }.doTest();
 
-        // 3”Ô–Ú‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ğƒŠƒŠ[ƒX (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // 3ç•ªç›®ã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒªãƒªãƒ¼ã‚¹ (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -294,12 +294,12 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ÌƒNƒŠ[ƒ“ƒiƒbƒv
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¯ãƒªãƒ¼ãƒ³ãƒŠãƒƒãƒ—
                 mc[1].cleanup();
             }
         }.doTest();
 
-        // ƒv[ƒ‹‚ğI—¹D
+        // ãƒ—ãƒ¼ãƒ«ã‚’çµ‚äº†ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -310,7 +310,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒAƒNƒeƒBƒuƒv[ƒ‹EƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æ‚àƒŠƒŠ[ƒX‚³‚ê‚éD
+                // ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒ—ãƒ¼ãƒ«ãƒ»ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ã‚‚ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[0]);
                 policy.release(mc[1]);
                 policy.dispose();
@@ -319,9 +319,9 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
     }
 
     /**
-     * ƒv[ƒ‹‚³‚ê‚Ä‚¢‚éƒRƒlƒNƒVƒ‡ƒ“‚ªmaxPoolSize‚É’B‚µ‚Ä‚¢‚éê‡‚É
-     * ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Éƒ}ƒbƒ`‚µ‚È‚¢ƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾‚·‚éê‡‚ÌƒeƒXƒgD <br>
-     * ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ğ”jŠü‚µ‚ÄV‚µ‚¢ƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾‚·‚éD
+     * ãƒ—ãƒ¼ãƒ«ã•ã‚Œã¦ã„ã‚‹ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒmaxPoolSizeã«é”ã—ã¦ã„ã‚‹å ´åˆã«
+     * ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã«ãƒãƒƒãƒã—ãªã„ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã™ã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆï¼ <br>
+     * ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ç ´æ£„ã—ã¦æ–°ã—ã„ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã™ã‚‹ï¼
      * 
      */
     public void testAcquireNew() throws Exception {
@@ -330,7 +330,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
         target.setMaxPoolSize(2);
         target.initialize(mcf, policy);
 
-        // Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -339,13 +339,13 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc0‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
             }
         }.doTest();
 
-        // 2”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // 2ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -354,13 +354,13 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc1‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc1ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[1]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
             }
         }.doTest();
 
-        // æ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ğ—¼•û‚Æ‚àƒŠƒŠ[ƒX (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ä¸¡æ–¹ã¨ã‚‚ãƒªãƒªãƒ¼ã‚¹ (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -372,13 +372,13 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ÌƒNƒŠ[ƒ“ƒiƒbƒv
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¯ãƒªãƒ¼ãƒ³ãƒŠãƒƒãƒ—
                 mc[0].cleanup();
                 mc[1].cleanup();
             }
         }.doTest();
 
-        // 3”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾ (Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ğƒv[ƒ‹‚©‚ç”jŠü‚·‚é)D
+        // 3ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾— (æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒ—ãƒ¼ãƒ«ã‹ã‚‰ç ´æ£„ã™ã‚‹)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -389,18 +389,18 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æƒ}ƒbƒ`ƒ“ƒOC‚Ç‚ê‚àƒ}ƒbƒ`‚µ‚È‚¢D
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒãƒ³ã‚°ï¼Œã©ã‚Œã‚‚ãƒãƒƒãƒã—ãªã„ï¼
                 mcf.matchManagedConnections(set2, null, info);
                 mcfControl.setReturnValue(null);
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ªˆê‚ÂƒŠƒŠ[ƒX‚³‚ê‚éD
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒä¸€ã¤ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[0]);
-                // Œã‘±‚Ìpolicy‚©‚çV‚µ‚¢ƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾D
+                // å¾Œç¶šã®policyã‹ã‚‰æ–°ã—ã„ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼
                 policy.allocate(context[2]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[2], null));
             }
         }.doTest();
 
-        // ƒv[ƒ‹‚ğI—¹D
+        // ãƒ—ãƒ¼ãƒ«ã‚’çµ‚äº†ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -411,7 +411,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒAƒNƒeƒBƒuƒv[ƒ‹EƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æ‚àƒŠƒŠ[ƒX‚³‚ê‚éD
+                // ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒ—ãƒ¼ãƒ«ãƒ»ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ã‚‚ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[2]);
                 policy.release(mc[1]);
                 policy.dispose();
@@ -420,8 +420,8 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
     }
 
     /**
-     * ƒAƒNƒeƒBƒuƒv[ƒ‹‚ªmaxPoolSize‚É’B‚µ‚Ä‚¢‚éê‡‚ÌƒeƒXƒgD <br>
-     * ƒAƒNƒeƒBƒu‚ÈƒRƒlƒNƒVƒ‡ƒ“‚ªƒtƒŠ[ƒv[ƒ‹‚É–ß‚³‚ê‚é‚Ü‚Å‘Ò‹@‚·‚éD
+     * ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãƒ—ãƒ¼ãƒ«ãŒmaxPoolSizeã«é”ã—ã¦ã„ã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆï¼ <br>
+     * ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã«æˆ»ã•ã‚Œã‚‹ã¾ã§å¾…æ©Ÿã™ã‚‹ï¼
      * 
      */
     public void testAcquireFromFull() throws Exception {
@@ -430,7 +430,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
         target.setMaxPoolSize(2);
         target.initialize(mcf, policy);
 
-        // ƒRƒlƒNƒVƒ‡ƒ“‚ğƒŠƒŠ[ƒX‚·‚éƒXƒŒƒbƒhD
+        // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒªãƒªãƒ¼ã‚¹ã™ã‚‹ã‚¹ãƒ¬ãƒƒãƒ‰ï¼
         Thread bg = new Thread() {
             @Override
             public void run() {
@@ -438,7 +438,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
                     Thread.sleep(1000);
                     assertEquals("0", 0, status);
                     ++status;
-                    // ƒRƒlƒNƒVƒ‡ƒ“‚ğƒŠƒŠ[ƒX (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+                    // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒªãƒªãƒ¼ã‚¹ (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
                     target.release(mc[0]);
                 } catch (Exception ignore) {
                 }
@@ -446,7 +446,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
         };
         bg.start();
 
-        // ‰Šúó‘Ô (maxPoolSize•ª‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ªƒAƒNƒeƒBƒu)D
+        // åˆæœŸçŠ¶æ…‹ (maxPoolSizeåˆ†ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -458,7 +458,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             }
         }.doTest();
 
-        // ƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾ (ƒtƒŠ[ƒv[ƒ‹‚ª‹ó‚­‚Ü‚Å‘Ò‹@‚·‚é)D
+        // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾— (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ãŒç©ºãã¾ã§å¾…æ©Ÿã™ã‚‹)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -471,9 +471,9 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ÌƒNƒŠ[ƒ“ƒiƒbƒv
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¯ãƒªãƒ¼ãƒ³ãƒŠãƒƒãƒ—
                 mc[0].cleanup();
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æƒ}ƒbƒ`ƒ“ƒOCmc0‚ª•Ô‚³‚ê‚éD
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒãƒ³ã‚°ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 mcf.matchManagedConnections(set1, null, info);
                 mcfControl.setReturnValue(mc[0]);
             }
@@ -481,7 +481,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
     }
 
     /**
-     * ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ªƒ^ƒCƒ€ƒAƒEƒg‚µ‚Ä”jŠü‚³‚ê‚éê‡‚ÌƒeƒXƒgD
+     * ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ã¦ç ´æ£„ã•ã‚Œã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      */
     public void testExpire() throws Exception {
@@ -491,7 +491,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
         target.setTimeout(3);
         target.initialize(mcf, policy);
 
-        // Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -500,13 +500,13 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc0‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
             }
         }.doTest();
 
-        // 2”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // 2ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -515,64 +515,64 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc1‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc1ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[1]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
             }
         }.doTest();
 
-        // ƒRƒlƒNƒVƒ‡ƒ“‚ª“ñ‚Â‚Æ‚àƒNƒ[ƒY‚³‚ê‚é‚ª‚·‚®‚É‚Ípolicy.release()‚ÍŒÄ‚Î‚ê‚È‚¢D
+        // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒäºŒã¤ã¨ã‚‚ã‚¯ãƒ­ãƒ¼ã‚ºã•ã‚Œã‚‹ãŒã™ãã«ã¯policy.release()ã¯å‘¼ã°ã‚Œãªã„ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
                 target.release(mc[1]);
-                // ŠÔ‚ğ‹ó‚¯‚ÄƒŠƒŠ[ƒX‚·‚é‚½‚ß‘Ò‹@D
+                // æ™‚é–“ã‚’ç©ºã‘ã¦ãƒªãƒªãƒ¼ã‚¹ã™ã‚‹ãŸã‚å¾…æ©Ÿï¼
                 Thread.sleep(1 * 1000);
                 target.release(mc[0]);
-                // mc0Cmc1‚Æ‚àƒtƒŠ[ƒv[ƒ‹‚Éƒv[ƒŠƒ“ƒO‚³‚ê‚Ä‚¢‚é‚±‚Æ‚ğŠm”FD
+                // mc0ï¼Œmc1ã¨ã‚‚ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã«ãƒ—ãƒ¼ãƒªãƒ³ã‚°ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªï¼
                 assertEquals("1", 0, target.pool.getActivePoolSize());
                 assertEquals("2", 2, target.pool.getFreePoolSize());
             }
 
             @Override
             public void verify() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ÌƒNƒŠ[ƒ“ƒiƒbƒv
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¯ãƒªãƒ¼ãƒ³ãƒŠãƒƒãƒ—
                 mc[0].cleanup();
                 mc[1].cleanup();
             }
         }.doTest();
 
-        // ƒ^ƒCƒ€ƒAƒEƒg‚·‚é’¼‘O‚Ü‚Å‘Ò‹@D
+        // ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã™ã‚‹ç›´å‰ã¾ã§å¾…æ©Ÿï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
                 Thread.sleep(1 * 1000);
-                // ‚Ü‚¾mc0Cmc1‚Æ‚àƒtƒŠ[ƒv[ƒ‹‚Éƒv[ƒŠƒ“ƒO‚³‚ê‚Ä‚¢‚é‚±‚Æ‚ğŠm”FD
+                // ã¾ã mc0ï¼Œmc1ã¨ã‚‚ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã«ãƒ—ãƒ¼ãƒªãƒ³ã‚°ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªï¼
                 assertEquals("3", 0, target.pool.getActivePoolSize());
                 assertEquals("4", 2, target.pool.getFreePoolSize());
             }
         }.doTest();
 
-        // ƒRƒlƒNƒVƒ‡ƒ“‚ªƒ^ƒCƒ€ƒAƒEƒg‚µ‚Äæ‚ÉƒNƒ[ƒY‚ªŒÄ‚Î‚ê‚½mc1‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
-        // ‚µ‚©‚µƒv[ƒ‹‚ÌminPoolSize‚ª1‚Å‚ ‚é‚½‚ßmc0‚ÍƒŠƒŠ[ƒX‚³‚ê‚È‚¢D
+        // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ã¦å…ˆã«ã‚¯ãƒ­ãƒ¼ã‚ºãŒå‘¼ã°ã‚ŒãŸmc1ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
+        // ã—ã‹ã—ãƒ—ãƒ¼ãƒ«ã®minPoolSizeãŒ1ã§ã‚ã‚‹ãŸã‚mc0ã¯ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œãªã„ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ªƒ^ƒCƒ€ƒAƒEƒg‚·‚é‚Ü‚Å‘Ò‹@D
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã™ã‚‹ã¾ã§å¾…æ©Ÿï¼
                 Thread.sleep(2 * 1000);
-                // minPoolSize‚ª1‚È‚Ì‚ÅƒŠƒŠ[ƒX‚³‚ê‚½ƒRƒlƒNƒVƒ‡ƒ“‚ªˆê‚Â‚¾‚¯‚Å‚ ‚é‚±‚Æ‚ğŠm”FD
+                // minPoolSizeãŒ1ãªã®ã§ãƒªãƒªãƒ¼ã‚¹ã•ã‚ŒãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒä¸€ã¤ã ã‘ã§ã‚ã‚‹ã“ã¨ã‚’ç¢ºèªï¼
                 assertEquals("5", 0, target.pool.getActivePoolSize());
                 assertEquals("6", 1, target.pool.getFreePoolSize());
             }
 
             @Override
             public void verify() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[1]);
             }
         }.doTest();
 
-        // Œãˆ—D
+        // å¾Œå‡¦ç†ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -583,7 +583,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒv[ƒ‹‚ÌI—¹‚É‚æ‚èmc0‚àƒŠƒŠ[ƒX‚³‚ê‚éD
+                // ãƒ—ãƒ¼ãƒ«ã®çµ‚äº†ã«ã‚ˆã‚Šmc0ã‚‚ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[0]);
                 policy.dispose();
             }

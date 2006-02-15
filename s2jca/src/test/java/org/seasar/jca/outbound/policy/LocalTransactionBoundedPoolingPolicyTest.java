@@ -96,19 +96,19 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
     }
 
     /**
-     * <code>allowLocalTx</code> ‚ªƒfƒtƒHƒ‹ƒg( <code>false</code>
-     * )‚Åƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÌƒeƒXƒgD
+     * <code>allowLocalTx</code> ãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ( <code>false</code>
+     * )ã§ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ãªã„å ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      */
     public void testNoTransaction() throws Exception {
         target.initialize(mcf, policy);
 
-        // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚È‚¢D
+        // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ãªã„ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
                 try {
-                    // ƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾‚·‚é‚ª—áŠO‚ªƒXƒ[‚³‚ê‚éD
+                    // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã™ã‚‹ãŒä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ï¼
                     target.allocate(context[0]);
                     fail("0");
                 } catch (ResourceException expected) {
@@ -117,7 +117,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚È‚¢D
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ãªã„ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(null);
             }
@@ -125,15 +125,15 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
     }
 
     /**
-     * <code>allowLocalTx</code> ‚ªƒfƒtƒHƒ‹ƒg( <code>false</code>
-     * )‚Åƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÌƒeƒXƒgD
+     * <code>allowLocalTx</code> ãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ( <code>false</code>
+     * )ã§ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ãªã„å ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      */
     public void testNoTransactionAllowLocalTx() throws Exception {
         target.setAllowLocalTx(true);
         target.initialize(mcf, policy);
 
-        // ƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+        // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -142,16 +142,16 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚È‚¢D
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ãªã„ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(null);
-                // allowLocalTx‚ªİ’è‚³‚ê‚Ä‚¢‚é‚Ì‚Å‚»‚ê‚Å‚àƒRƒlƒNƒVƒ‡ƒ“‚ªæ“¾‚³‚ê‚éD
+                // allowLocalTxãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹ã®ã§ãã‚Œã§ã‚‚ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒå–å¾—ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
             }
         }.doTest();
 
-        // ƒRƒlƒNƒVƒ‡ƒ“‚ğƒŠƒŠ[ƒXD
+        // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒªãƒªãƒ¼ã‚¹ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -160,23 +160,23 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚È‚¢D
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ãªã„ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(null);
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[0]);
             }
         }.doTest();
     }
 
     /**
-     * ˆê”Ê“I‚Èê‡‚ÌƒeƒXƒgD
+     * ä¸€èˆ¬çš„ãªå ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      */
     public void testNormal() throws Exception {
         target.initialize(mcf, policy);
 
-        // Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾`Transaction‚Ö‚ÌenlistResourceCregisterSynchronization()D
+        // æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï½Transactionã¸ã®enlistResourceï¼ŒregisterSynchronization()ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -186,34 +186,34 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc0‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
-                // ˜_—ƒRƒlƒNƒVƒ‡ƒ“ƒnƒ“ƒhƒ‹‚ªæ“¾‚³‚ê‚éD
-                // ‚±‚ê‚ÍLocalTransaction‚Ìæ“¾‘O‚És‚¤•K—v‚ª‚ ‚éD
-                // uJ2EE Connector Architecture Specification Version
-                // 1.5vP7-43QÆD
+                // è«–ç†ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ³ãƒ‰ãƒ«ãŒå–å¾—ã•ã‚Œã‚‹ï¼
+                // ã“ã‚Œã¯LocalTransactionã®å–å¾—å‰ã«è¡Œã†å¿…è¦ãŒã‚ã‚‹ï¼
+                // ã€ŒJ2EE Connector Architecture Specification Version
+                // 1.5ã€P7-43å‚ç…§ï¼
                 // Sun JDBC Connector + Oracle PooledConnection
-                // ‚Å‚Í‚±‚Ì‡˜‚ğç‚ç‚È‚¢‚Æ—áŠO‚ªƒXƒ[‚³‚ê‚éD
+                // ã§ã¯ã“ã®é †åºã‚’å®ˆã‚‰ãªã„ã¨ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ï¼
                 mc[0].getConnection(null, info);
                 mcControl[0].setReturnValue(lch[0]);
-                // ƒ[ƒJƒ‹ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªæ“¾‚³‚ê‚éD
+                // ãƒ­ãƒ¼ã‚«ãƒ«ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒå–å¾—ã•ã‚Œã‚‹ï¼
                 mc[0].getLocalTransaction();
                 mcControl[0].setReturnValue(localTx);
-                // XAResource‚ªTransaction‚É“o˜^‚³‚ê‚éD
-                // XAResouce‚ÍV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ªì¬‚³‚êŒŸØ‚Å‚«‚È‚¢‚Ì‚ÅALWAYS_MATCHER‚ğg—p‚·‚éD
+                // XAResourceãŒTransactionã«ç™»éŒ²ã•ã‚Œã‚‹ï¼
+                // XAResouceã¯æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒä½œæˆã•ã‚Œæ¤œè¨¼ã§ããªã„ã®ã§ALWAYS_MATCHERã‚’ä½¿ç”¨ã™ã‚‹ï¼
                 tx.enlistResource(null);
                 txControl.setMatcher(MockControl.ALWAYS_MATCHER);
                 txControl.setReturnValue(true);
-                // Transaction‚ÉSynchronization‚Æ‚µ‚Äƒ^[ƒQƒbƒg‚ª“o˜^‚³‚ê‚éD
+                // Transactionã«Synchronizationã¨ã—ã¦ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒç™»éŒ²ã•ã‚Œã‚‹ï¼
                 tx.registerSynchronization(target);
             }
         }.doTest();
 
-        // Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ğƒŠƒŠ[ƒX (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒªãƒªãƒ¼ã‚¹ (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -222,15 +222,15 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // ƒŠƒŠ[ƒX‚³‚ê‚È‚¢D
+                // ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œãªã„ï¼
             }
         }.doTest();
 
-        // 2”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾`Transaction‚Ö‚ÌenlistResource()D
-        // registerSynchronization()‚ÍŒÄ‚Î‚ê‚È‚¢‚±‚ÆD
+        // 2ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï½Transactionã¸ã®enlistResource()ï¼
+        // registerSynchronization()ã¯å‘¼ã°ã‚Œãªã„ã“ã¨ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -239,31 +239,31 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æƒ}ƒbƒ`ƒ“ƒOC‚Ç‚ê‚Æ‚àƒ}ƒbƒ`‚µ‚È‚¢D
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒãƒ³ã‚°ï¼Œã©ã‚Œã¨ã‚‚ãƒãƒƒãƒã—ãªã„ï¼
                 mcf.matchManagedConnections(set1, null, info);
                 mcfControl.setReturnValue(null);
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“æ“¾D
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼
                 policy.allocate(context[1]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
-                // ˜_—ƒRƒlƒNƒVƒ‡ƒ“ƒnƒ“ƒhƒ‹‚ªæ“¾‚³‚ê‚éD
+                // è«–ç†ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ³ãƒ‰ãƒ«ãŒå–å¾—ã•ã‚Œã‚‹ï¼
                 mc[1].getConnection(null, info);
                 mcControl[1].setReturnValue(lch[1]);
-                // ƒ[ƒJƒ‹ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªæ“¾‚³‚ê‚éD
+                // ãƒ­ãƒ¼ã‚«ãƒ«ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒå–å¾—ã•ã‚Œã‚‹ï¼
                 mc[1].getLocalTransaction();
                 mcControl[1].setReturnValue(localTx);
-                // XAResource‚ªTransaction‚É“o˜^‚³‚ê‚éD
-                // XAResouce‚ÍV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ªì¬‚³‚êŒŸØ‚Å‚«‚È‚¢‚Ì‚ÅALWAYS_MATCHER‚ğg—p‚·‚éD
+                // XAResourceãŒTransactionã«ç™»éŒ²ã•ã‚Œã‚‹ï¼
+                // XAResouceã¯æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒä½œæˆã•ã‚Œæ¤œè¨¼ã§ããªã„ã®ã§ALWAYS_MATCHERã‚’ä½¿ç”¨ã™ã‚‹ï¼
                 tx.enlistResource(null);
                 txControl.setMatcher(MockControl.ALWAYS_MATCHER);
                 txControl.setReturnValue(true);
-                // Synchronization‚Ì“o˜^‚Ís‚í‚ê‚È‚¢D
+                // Synchronizationã®ç™»éŒ²ã¯è¡Œã‚ã‚Œãªã„ï¼
             }
         }.doTest();
 
-        // 2”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ªƒNƒ[ƒY (ƒtƒŠ[ƒv[ƒ‹‚Ö)
+        // 2ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¯ãƒ­ãƒ¼ã‚º (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -272,14 +272,14 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // ƒŠƒŠ[ƒX‚³‚ê‚È‚¢D
+                // ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œãªã„ï¼
             }
         }.doTest();
 
-        // O”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾ (Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æƒ}ƒbƒ`)D
+        // ä¸‰ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾— (æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒ)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -288,16 +288,16 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Æƒ}ƒbƒ`ƒ“ƒOCmc0‚ª•Ô‚³‚ê‚éD
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã¨ãƒãƒƒãƒãƒ³ã‚°ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 mcf.matchManagedConnections(set2, null, info);
                 mcfControl.setReturnValue(mc[0]);
             }
         }.doTest();
 
-        // 3”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ªƒNƒ[ƒY (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // 3ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¯ãƒ­ãƒ¼ã‚º (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -306,14 +306,14 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // ƒŠƒŠ[ƒX‚³‚ê‚È‚¢D
+                // ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œãªã„ï¼
             }
         }.doTest();
 
-        // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“ƒRƒ~ƒbƒg (‚±‚±‚ÅƒRƒlƒNƒVƒ‡ƒ“‚ªƒŠƒŠ[ƒX‚³‚ê‚é‚±‚Æ‚ğŠm”F)D
+        // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ã‚³ãƒŸãƒƒãƒˆ (ã“ã“ã§ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ã“ã¨ã‚’ç¢ºèª)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -322,25 +322,25 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // Œã‘±‚Ìpolicy‚Émc1‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
+                // å¾Œç¶šã®policyã«mc1ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[1]);
-                // Œã‘±‚Ìpolicy‚Émc0‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
+                // å¾Œç¶šã®policyã«mc0ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[0]);
             }
         }.doTest();
     }
 
     /**
-     * ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªƒ[ƒ‹ƒoƒbƒN‚³‚ê‚éê‡‚ÌƒeƒXƒgD
+     * ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒãƒ­ãƒ¼ãƒ«ãƒãƒƒã‚¯ã•ã‚Œã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      */
     public void testErrorWithTransaction() throws Exception {
         target.initialize(mcf, policy);
 
-        // Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾`Transaction‚Ö‚ÌenlistResource()CregisterSynchronization()D
+        // æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï½Transactionã¸ã®enlistResource()ï¼ŒregisterSynchronization()ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -350,29 +350,29 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾Cmc0‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼Œmc0ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[0]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
-                // ˜_—ƒRƒlƒNƒVƒ‡ƒ“ƒnƒ“ƒhƒ‹‚ªæ“¾‚³‚ê‚éD
+                // è«–ç†ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ³ãƒ‰ãƒ«ãŒå–å¾—ã•ã‚Œã‚‹ï¼
                 mc[0].getConnection(null, info);
                 mcControl[0].setReturnValue(lch[0]);
-                // ƒ[ƒJƒ‹ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªæ“¾‚³‚ê‚éD
+                // ãƒ­ãƒ¼ã‚«ãƒ«ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒå–å¾—ã•ã‚Œã‚‹ï¼
                 mc[0].getLocalTransaction();
                 mcControl[0].setReturnValue(localTx);
-                // XAResource‚ªTransaction‚É“o˜^‚³‚ê‚éD
-                // XAResouce‚ÍV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ªì¬‚³‚êŒŸØ‚Å‚«‚È‚¢‚Ì‚ÅALWAYS_MATCHER‚ğg—p‚·‚éD
+                // XAResourceãŒTransactionã«ç™»éŒ²ã•ã‚Œã‚‹ï¼
+                // XAResouceã¯æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒä½œæˆã•ã‚Œæ¤œè¨¼ã§ããªã„ã®ã§ALWAYS_MATCHERã‚’ä½¿ç”¨ã™ã‚‹ï¼
                 tx.enlistResource(null);
                 txControl.setMatcher(MockControl.ALWAYS_MATCHER);
                 txControl.setReturnValue(true);
-                // Transaction‚ÉSynchronization‚Æ‚µ‚Äƒ^[ƒQƒbƒg‚ª“o˜^‚³‚ê‚éD
+                // Transactionã«Synchronizationã¨ã—ã¦ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒç™»éŒ²ã•ã‚Œã‚‹ï¼
                 tx.registerSynchronization(target);
             }
         }.doTest();
 
-        // Å‰‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ªƒNƒ[ƒY (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // æœ€åˆã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¯ãƒ­ãƒ¼ã‚º (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -381,15 +381,15 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // ƒŠƒŠ[ƒX‚³‚ê‚È‚¢D
+                // ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œãªã„ï¼
             }
         }.doTest();
 
-        // 2”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“æ“¾`Transaction‚Ö‚ÌenlistResource()D
-        // registerSynchronization()‚ÍŒÄ‚Î‚ê‚È‚¢‚±‚ÆD
+        // 2ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï½Transactionã¸ã®enlistResource()ï¼
+        // registerSynchronization()ã¯å‘¼ã°ã‚Œãªã„ã“ã¨ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -398,31 +398,31 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // ƒtƒŠ[ƒv[ƒ‹‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ğƒ}ƒbƒ`ƒ“ƒOC‚Ç‚ê‚Æ‚àƒ}ƒbƒ`‚µ‚È‚¢D
+                // ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’ãƒãƒƒãƒãƒ³ã‚°ï¼Œã©ã‚Œã¨ã‚‚ãƒãƒƒãƒã—ãªã„ï¼
                 mcf.matchManagedConnections(set1, null, info);
                 mcfControl.setReturnValue(null);
-                // Œã‘±‚Ìpolicy‚©‚çƒRƒlƒNƒVƒ‡ƒ“æ“¾Cmc1‚ª•Ô‚³‚ê‚éD
+                // å¾Œç¶šã®policyã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ï¼Œmc1ãŒè¿”ã•ã‚Œã‚‹ï¼
                 policy.allocate(context[1]);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
-                // ˜_—ƒRƒlƒNƒVƒ‡ƒ“ƒnƒ“ƒhƒ‹‚ªæ“¾‚³‚ê‚éD
+                // è«–ç†ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ³ãƒ‰ãƒ«ãŒå–å¾—ã•ã‚Œã‚‹ï¼
                 mc[1].getConnection(null, info);
                 mcControl[1].setReturnValue(lch[1]);
-                // ƒ[ƒJƒ‹ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªæ“¾‚³‚ê‚éD
+                // ãƒ­ãƒ¼ã‚«ãƒ«ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒå–å¾—ã•ã‚Œã‚‹ï¼
                 mc[1].getLocalTransaction();
                 mcControl[1].setReturnValue(localTx);
-                // XAResource‚ªTransaction‚É“o˜^‚³‚ê‚éD
-                // XAResouce‚ÍV‚µ‚¢ƒCƒ“ƒXƒ^ƒ“ƒX‚ªì¬‚³‚êŒŸØ‚Å‚«‚È‚¢‚Ì‚ÅALWAYS_MATCHER‚ğg—p‚·‚éD
+                // XAResourceãŒTransactionã«ç™»éŒ²ã•ã‚Œã‚‹ï¼
+                // XAResouceã¯æ–°ã—ã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒä½œæˆã•ã‚Œæ¤œè¨¼ã§ããªã„ã®ã§ALWAYS_MATCHERã‚’ä½¿ç”¨ã™ã‚‹ï¼
                 tx.enlistResource(null);
                 txControl.setMatcher(MockControl.ALWAYS_MATCHER);
                 txControl.setReturnValue(true);
-                // Synchronization‚Ì“o˜^‚Ís‚í‚ê‚È‚¢D
+                // Synchronizationã®ç™»éŒ²ã¯è¡Œã‚ã‚Œãªã„ï¼
             }
         }.doTest();
 
-        // 2”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“‚ªƒNƒ[ƒY (ƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // 2ç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒã‚¯ãƒ­ãƒ¼ã‚º (ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -431,14 +431,14 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // ƒŠƒŠ[ƒX‚³‚ê‚È‚¢D
+                // ãƒªãƒªãƒ¼ã‚¹ã•ã‚Œãªã„ï¼
             }
         }.doTest();
 
-        // Å‰‚Éæ“¾‚µ‚½ƒRƒlƒNƒVƒ‡ƒ“‚ÉƒGƒ‰[”­¶D
+        // æœ€åˆã«å–å¾—ã—ãŸã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã«ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -447,15 +447,15 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // Œã‘±‚Ìpolicy‚ÉƒGƒ‰[‚ª’Ê’m‚³‚ê‚éD
+                // å¾Œç¶šã®policyã«ã‚¨ãƒ©ãƒ¼ãŒé€šçŸ¥ã•ã‚Œã‚‹ï¼
                 policy.connectionErrorOccurred(mc[0]);
             }
         }.doTest();
 
-        // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“ƒ[ƒ‹ƒoƒbƒN (“ñ”Ô–Ú‚ÌƒRƒlƒNƒVƒ‡ƒ“‚Ì‚İƒtƒŠ[ƒv[ƒ‹‚Ö)D
+        // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãƒ­ãƒ¼ãƒ«ãƒãƒƒã‚¯ (äºŒç•ªç›®ã®ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ã¿ãƒ•ãƒªãƒ¼ãƒ—ãƒ¼ãƒ«ã¸)ï¼
         new Subsequence() {
             @Override
             public void replay() throws Exception {
@@ -464,10 +464,10 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“‚ªŠJn‚³‚ê‚Ä‚¢‚éD
+                // ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ãŒé–‹å§‹ã•ã‚Œã¦ã„ã‚‹ï¼
                 tm.getTransaction();
                 tmControl.setReturnValue(tx);
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ªƒŠƒŠ[ƒX‚³‚ê‚éD
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãŒãƒªãƒªãƒ¼ã‚¹ã•ã‚Œã‚‹ï¼
                 policy.release(mc[1]);
             }
         }.doTest();

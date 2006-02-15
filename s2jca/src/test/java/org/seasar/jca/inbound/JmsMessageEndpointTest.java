@@ -36,9 +36,9 @@ public class JmsMessageEndpointTest extends TestCase {
 
     /**
      * <p>
-     * uJ2EE Connector Architecture Specification Version 1.5v‚Ì u12.5.6
-     * Transacted Delivery (Using Container-Managed Transaction)v Option A<br>
-     * beforeDelivery() ‚¨‚æ‚Ñ afterDelivery() ‚ªŒÄ‚Ño‚³‚ê‚È‚¢ƒP[ƒX‚ÅCƒŠƒXƒi[ƒƒ\ƒbƒh‚ª³íI—¹‚·‚éê‡‚ÌƒeƒXƒg
+     * ã€ŒJ2EE Connector Architecture Specification Version 1.5ã€ã® ã€Œ12.5.6
+     * Transacted Delivery (Using Container-Managed Transaction)ã€ Option A<br>
+     * beforeDelivery() ãŠã‚ˆã³ afterDelivery() ãŒå‘¼ã³å‡ºã•ã‚Œãªã„ã‚±ãƒ¼ã‚¹ã§ï¼Œãƒªã‚¹ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ãŒæ­£å¸¸çµ‚äº†ã™ã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆ
      * </p>
      * 
      * @throws Exception
@@ -56,14 +56,14 @@ public class JmsMessageEndpointTest extends TestCase {
 
     /**
      * <p>
-     * uJ2EE Connector Architecture Specification Version 1.5v‚Ì u12.5.6
-     * Transacted Delivery (Using Container-Managed Transaction)v Option A<br>
-     * beforeDelivery() ‚¨‚æ‚Ñ afterDelivery() ‚ªŒÄ‚Ño‚³‚ê‚È‚¢ƒP[ƒX‚Å
-     * ƒŠƒXƒi[ƒƒ\ƒbƒh‚ª—áŠO‚ğƒXƒ[‚·‚éê‡‚ÌƒeƒXƒgD
+     * ã€ŒJ2EE Connector Architecture Specification Version 1.5ã€ã® ã€Œ12.5.6
+     * Transacted Delivery (Using Container-Managed Transaction)ã€ Option A<br>
+     * beforeDelivery() ãŠã‚ˆã³ afterDelivery() ãŒå‘¼ã³å‡ºã•ã‚Œãªã„ã‚±ãƒ¼ã‚¹ã§
+     * ãƒªã‚¹ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ãŒä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * </p>
      * <p>
-     * –{—ˆJCAd—l‚Å‚ÍƒŠƒXƒi[ƒƒ\ƒbƒh‚ªƒXƒ[‚µ‚½‚¢—áŠO‚ÍƒŠƒ\[ƒXƒAƒ_ƒvƒ^‚É“`”d‚·‚×‚«‚Å‚ ‚é‚ªC
-     * ActiveMQ‚ÌƒŠƒ\[ƒXƒAƒ_ƒvƒ^‚ªƒƒbƒZ[ƒWóM‚ğ‚â‚ß‚Ä‚µ‚Ü‚¤‚½‚ßC—áŠO‚ğ”jŠü‚·‚é‚±‚Æ‚Æ‚·‚éD
+     * æœ¬æ¥JCAä»•æ§˜ã§ã¯ãƒªã‚¹ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚¹ãƒ­ãƒ¼ã—ãŸã„ä¾‹å¤–ã¯ãƒªã‚½ãƒ¼ã‚¹ã‚¢ãƒ€ãƒ—ã‚¿ã«ä¼æ’­ã™ã¹ãã§ã‚ã‚‹ãŒï¼Œ
+     * ActiveMQã®ãƒªã‚½ãƒ¼ã‚¹ã‚¢ãƒ€ãƒ—ã‚¿ãŒãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å—ä¿¡ã‚’ã‚„ã‚ã¦ã—ã¾ã†ãŸã‚ï¼Œä¾‹å¤–ã‚’ç ´æ£„ã™ã‚‹ã“ã¨ã¨ã™ã‚‹ï¼
      * </p>
      * 
      * @throws Exception
@@ -82,9 +82,9 @@ public class JmsMessageEndpointTest extends TestCase {
 
     /**
      * <p>
-     * uJ2EE Connector Architecture Specification Version 1.5v‚Ì u12.5.6
-     * Transacted Delivery (Using Container-Managed Transaction)v Option B<br>
-     * beforeDelivery() ‚¨‚æ‚Ñ afterDelivery() ‚ªŒÄ‚Ño‚³‚ê‚éƒP[ƒX‚ÅƒŠƒXƒi[ƒƒ\ƒbƒh‚ª³íI—¹‚·‚éê‡‚ÌƒeƒXƒg
+     * ã€ŒJ2EE Connector Architecture Specification Version 1.5ã€ã® ã€Œ12.5.6
+     * Transacted Delivery (Using Container-Managed Transaction)ã€ Option B<br>
+     * beforeDelivery() ãŠã‚ˆã³ afterDelivery() ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‚±ãƒ¼ã‚¹ã§ãƒªã‚¹ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ãŒæ­£å¸¸çµ‚äº†ã™ã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆ
      * </p>
      * 
      * @throws Exception
@@ -103,14 +103,14 @@ public class JmsMessageEndpointTest extends TestCase {
 
     /**
      * <p>
-     * uJ2EE Connector Architecture Specification Version 1.5v‚Ì u12.5.6
-     * Transacted Delivery (Using Container-Managed Transaction)v Option B<br>
-     * beforeDelivery() ‚¨‚æ‚Ñ afterDelivery() ‚ªŒÄ‚Ño‚³‚ê‚éƒP[ƒX‚Å
-     * ƒŠƒXƒi[ƒƒ\ƒbƒh‚ª—áŠO‚ğƒXƒ[‚·‚é‚·‚éê‡‚ÌƒeƒXƒg
+     * ã€ŒJ2EE Connector Architecture Specification Version 1.5ã€ã® ã€Œ12.5.6
+     * Transacted Delivery (Using Container-Managed Transaction)ã€ Option B<br>
+     * beforeDelivery() ãŠã‚ˆã³ afterDelivery() ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‚±ãƒ¼ã‚¹ã§
+     * ãƒªã‚¹ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ãŒä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹ã™ã‚‹å ´åˆã®ãƒ†ã‚¹ãƒˆ
      * </p>
      * <p>
-     * –{—ˆJCAd—l‚Å‚ÍƒŠƒXƒi[ƒƒ\ƒbƒh‚ªƒXƒ[‚µ‚½‚¢—áŠO‚ÍƒŠƒ\[ƒXƒAƒ_ƒvƒ^‚É“`”d‚·‚×‚«‚Å‚ ‚é‚ªC
-     * ActiveMQ‚ÌƒŠƒ\[ƒXƒAƒ_ƒvƒ^‚ªƒƒbƒZ[ƒWóM‚ğ‚â‚ß‚Ä‚µ‚Ü‚¤‚½‚ßC—áŠO‚ğ”jŠü‚·‚é‚±‚Æ‚Æ‚·‚éD
+     * æœ¬æ¥JCAä»•æ§˜ã§ã¯ãƒªã‚¹ãƒŠãƒ¼ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚¹ãƒ­ãƒ¼ã—ãŸã„ä¾‹å¤–ã¯ãƒªã‚½ãƒ¼ã‚¹ã‚¢ãƒ€ãƒ—ã‚¿ã«ä¼æ’­ã™ã¹ãã§ã‚ã‚‹ãŒï¼Œ
+     * ActiveMQã®ãƒªã‚½ãƒ¼ã‚¹ã‚¢ãƒ€ãƒ—ã‚¿ãŒãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å—ä¿¡ã‚’ã‚„ã‚ã¦ã—ã¾ã†ãŸã‚ï¼Œä¾‹å¤–ã‚’ç ´æ£„ã™ã‚‹ã“ã¨ã¨ã™ã‚‹ï¼
      * </p>
      * 
      * @throws Exception

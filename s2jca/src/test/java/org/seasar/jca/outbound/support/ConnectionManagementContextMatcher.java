@@ -21,13 +21,13 @@ import org.easymock.ArgumentsMatcher;
 
 /**
  * <p>
- * {@link ConnectionManagementContext}‚ğƒvƒƒpƒeƒB‚Ì“¯’l«‚Å”äŠr‚·‚é
- * <code>org.easymock.ArgumentsMatcher</code> ‚ÌÀ‘•D
+ * {@link ConnectionManagementContext}ã‚’ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®åŒå€¤æ€§ã§æ¯”è¼ƒã™ã‚‹
+ * <code>org.easymock.ArgumentsMatcher</code> ã®å®Ÿè£…ï¼
  * </p>
  * <p>
- * ”äŠr‚ª“¯’l‚Å‚ ‚Á‚½ê‡‚É‚ÍC <strong>•›ì—p </strong>‚Æ‚µ‚Ä <code>managedConnection</code> ‚¨‚æ‚Ñ
- * <code>logicalConnectionHandle</code> ƒvƒƒpƒeƒB‚Ì’l‚ğƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å“n‚³‚ê‚½’l‚É’uŠ·‚·‚éD <br>
- * ‚±‚ê‚Í EasyMock ‚ª’ñ‹Ÿ‚·‚éƒ‚ƒbƒN‚Ìƒ‰ƒbƒp[‚Æ‚µ‚Äg—p‚·‚é‚±‚Æ‚ÅC–ß‚è’lˆÈŠO‚ÌU‚é•‘‚¢‚ğ§Œä‚µ‚½‚¢ê‡‚Ég—p‚·‚éD
+ * æ¯”è¼ƒãŒåŒå€¤ã§ã‚ã£ãŸå ´åˆã«ã¯ï¼Œ <strong>å‰¯ä½œç”¨ </strong>ã¨ã—ã¦ <code>managedConnection</code> ãŠã‚ˆã³
+ * <code>logicalConnectionHandle</code> ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å€¤ã‚’ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§æ¸¡ã•ã‚ŒãŸå€¤ã«ç½®æ›ã™ã‚‹ï¼ <br>
+ * ã“ã‚Œã¯ EasyMock ãŒæä¾›ã™ã‚‹ãƒ¢ãƒƒã‚¯ã®ãƒ©ãƒƒãƒ‘ãƒ¼ã¨ã—ã¦ä½¿ç”¨ã™ã‚‹ã“ã¨ã§ï¼Œæˆ»ã‚Šå€¤ä»¥å¤–ã®æŒ¯ã‚‹èˆã„ã‚’åˆ¶å¾¡ã—ãŸã„å ´åˆã«ä½¿ç”¨ã™ã‚‹ï¼
  * </p>
  * 
  * @author koichik

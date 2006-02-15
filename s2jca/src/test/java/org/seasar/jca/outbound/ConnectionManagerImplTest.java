@@ -72,10 +72,10 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
     }
 
     /**
-     * <code>ConnectionManagerPolicy</code> ‚ğ’Ç‰Á‚·‚éƒeƒXƒgD <br>
-     * ’Ç‰Á‚³‚ê‚½policy‚É‘O‚Ìpolicy‚ª“n‚³‚ê‚é‚±‚Æ‚ğŠm”F‚·‚éD <br>
+     * <code>ConnectionManagerPolicy</code> ã‚’è¿½åŠ ã™ã‚‹ãƒ†ã‚¹ãƒˆï¼ <br>
+     * è¿½åŠ ã•ã‚ŒãŸpolicyã«å‰ã®policyãŒæ¸¡ã•ã‚Œã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ï¼ <br>
      * <code>ConnectionManager#allocateConnection()</code>
-     * ‚ÌŒÄ‚Ño‚µ‚Å’Ç‰Á‚³‚ê‚½policy‚ªŒÄ‚Ño‚³‚ê‚é‚±‚Æ‚ğŠm”F‚·‚éD
+     * ã®å‘¼ã³å‡ºã—ã§è¿½åŠ ã•ã‚ŒãŸpolicyãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ï¼
      * 
      * @throws Exception
      */
@@ -89,7 +89,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ’Ç‰Á‚³‚ê‚½policy‚ÉŠù‘¶‚Ìpolicy‚ª“n‚³‚ê‚éD
+                // è¿½åŠ ã•ã‚ŒãŸpolicyã«æ—¢å­˜ã®policyãŒæ¸¡ã•ã‚Œã‚‹ï¼
                 policy.initialize(mcf, target.policy);
             }
         }.doTest();
@@ -102,10 +102,10 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ’Ç‰Á‚³‚ê‚½policy‚ªŒÄ‚Ño‚³‚ê‚éD
+                // è¿½åŠ ã•ã‚ŒãŸpolicyãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ï¼
                 policy.allocate(context);
                 policyControl.setMatcher(new ConnectionManagementContextMatcher(mc, null));
-                // ˜_—ƒRƒlƒNƒVƒ‡ƒ“ƒnƒ“ƒhƒ‹‚ğæ“¾D
+                // è«–ç†ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—ï¼
                 mc.getConnection(null, info);
                 mcControl.setReturnValue(lch);
             }
@@ -113,8 +113,8 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
     }
 
     /**
-     * allocate()‚Ìˆø”‚ÉƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å“n‚³‚ê‚½ <code>ManagedConnectionFactory</code> ‚Æ‚Í ˆÙ‚È‚é
-     * <code>ManagedConnectionFactory</code> ‚ª“n‚³‚ê‚½ê‡‚ÌƒeƒXƒgD
+     * allocate()ã®å¼•æ•°ã«ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§æ¸¡ã•ã‚ŒãŸ <code>ManagedConnectionFactory</code> ã¨ã¯ ç•°ãªã‚‹
+     * <code>ManagedConnectionFactory</code> ãŒæ¸¡ã•ã‚ŒãŸå ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      * @throws Exception
      */
@@ -126,7 +126,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
         new Subsequence() {
             @Override
             public void replay() throws Exception {
-                // —áŠO‚ªƒXƒ[‚³‚ê‚éD
+                // ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ï¼
                 try {
                     target.allocateConnection(illegalMCF, info);
                     fail("0");
@@ -137,7 +137,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
     }
 
     /**
-     * ƒRƒlƒNƒVƒ‡ƒ“æ“¾‚ÌƒeƒXƒgD
+     * ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³å–å¾—ã®ãƒ†ã‚¹ãƒˆï¼
      * 
      * @throws Exception
      */
@@ -145,18 +145,18 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
         new Subsequence() {
             @Override
             public void replay() throws Exception {
-                // ƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾D
+                // ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ï¼
                 assertEquals("0", lch, target.allocateConnection(mcf, info));
             }
 
             @Override
             public void verify() throws Exception {
-                // ManagedConnectionFactory‚©‚çManagedConnection‚ğæ“¾‚·‚éD
+                // ManagedConnectionFactoryã‹ã‚‰ManagedConnectionã‚’å–å¾—ã™ã‚‹ï¼
                 mcf.createManagedConnection(null, info);
                 mcfControl.setReturnValue(mc);
-                // ManagedConnection‚ÉConnectionManagerImpl.listener‚ªƒŠƒXƒi[‚Æ‚µ‚Ä“o˜^‚³‚ê‚éD
+                // ManagedConnectionã«ConnectionManagerImpl.listenerãŒãƒªã‚¹ãƒŠãƒ¼ã¨ã—ã¦ç™»éŒ²ã•ã‚Œã‚‹ï¼
                 mc.addConnectionEventListener(target.listener);
-                // ManagedConnection‚©‚çƒRƒlƒNƒVƒ‡ƒ“‚ğæ“¾‚·‚éD
+                // ManagedConnectionã‹ã‚‰ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã™ã‚‹ï¼
                 mc.getConnection(null, info);
                 mcControl.setReturnValue(lch);
             }
@@ -164,14 +164,14 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
     }
 
     /**
-     * ƒRƒlƒNƒVƒ‡ƒ“‚ÌƒNƒ[ƒY‚ªŒÄ‚Ño‚³‚ê‚½ƒCƒxƒ“ƒg‚ğó‚¯‚½ê‡‚ÌƒeƒXƒgD
+     * ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã®ã‚¯ãƒ­ãƒ¼ã‚ºãŒå‘¼ã³å‡ºã•ã‚ŒãŸã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ã‘ãŸå ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      * @throws Exception
      */
     public void testCloseConnection() throws Exception {
         new Subsequence() {
             /**
-             * ConnectionClosedƒCƒxƒ“ƒg‚ğóMD
+             * ConnectionClosedã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ä¿¡ï¼
              */
             @Override
             public void replay() throws Exception {
@@ -181,16 +181,16 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ManagedConnection‚É“o˜^‚µ‚½ƒŠƒXƒi[‚ªíœ‚³‚ê‚éD
+                // ManagedConnectionã«ç™»éŒ²ã—ãŸãƒªã‚¹ãƒŠãƒ¼ãŒå‰Šé™¤ã•ã‚Œã‚‹ï¼
                 mc.removeConnectionEventListener(target.listener);
-                // ManagedConnection‚Ìdestroy()‚ªŒÄ‚Ño‚³‚ê‚éD
+                // ManagedConnectionã®destroy()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ï¼
                 mc.destroy();
             }
         }.doTest();
     }
 
     /**
-     * ƒRƒlƒNƒVƒ‡ƒ“‚ÉƒGƒ‰[‚ª”­¶‚µ‚½ƒCƒxƒ“ƒg‚ğó‚¯‚½ê‡‚ÌƒeƒXƒgD
+     * ã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ãŸã‚¤ãƒ™ãƒ³ãƒˆã‚’å—ã‘ãŸå ´åˆã®ãƒ†ã‚¹ãƒˆï¼
      * 
      * @throws Exception
      */
@@ -205,9 +205,9 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                // ManagedConnection‚É“o˜^‚µ‚½ƒŠƒXƒi[‚ªíœ‚³‚ê‚éD
+                // ManagedConnectionã«ç™»éŒ²ã—ãŸãƒªã‚¹ãƒŠãƒ¼ãŒå‰Šé™¤ã•ã‚Œã‚‹ï¼
                 mc.removeConnectionEventListener(target.listener);
-                // ManagedConnection‚Ìdestroy()‚ªŒÄ‚Ño‚³‚ê‚éD
+                // ManagedConnectionã®destroy()ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ï¼
                 mc.destroy();
             }
         }.doTest();
