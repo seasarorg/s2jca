@@ -27,7 +27,7 @@ import org.seasar.extension.unit.S2TestCase;
 
 /**
  * <p>
- * ActiveMQ ‚Ì’ñ‹Ÿ‚·‚éƒŠƒ\[ƒXƒAƒ_ƒvƒ^‚ğg‚Á‚½ƒeƒXƒgD
+ * ActiveMQ ã®æä¾›ã™ã‚‹ãƒªã‚½ãƒ¼ã‚¹ã‚¢ãƒ€ãƒ—ã‚¿ã‚’ä½¿ã£ãŸãƒ†ã‚¹ãƒˆï¼
  * </p>
  * 
  * @author koichik
