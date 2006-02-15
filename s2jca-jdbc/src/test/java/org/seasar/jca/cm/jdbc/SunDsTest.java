@@ -17,7 +17,7 @@ package org.seasar.jca.cm.jdbc;
 
 /**
  * <p>
- * Sun ‚Ì JDBC Connector ‚Æ DataSource ‚ğ‘g‚İ‡‚í‚¹‚½ƒeƒXƒgD
+ * Sun ã® JDBC Connector ã¨ DataSource ã‚’çµ„ã¿åˆã‚ã›ãŸãƒ†ã‚¹ãƒˆï¼
  * </p>
  * 
  * @author koichik

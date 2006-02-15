@@ -17,11 +17,11 @@ package org.seasar.jca.cm.jdbc;
 
 /**
  * <p>
- * Sun �� JDBC Connector �� ConnectionPoolDataSource ��g�ݍ��킹���e�X�g�D HSQLDB ��
- * ConnectionPoolDataSource ���T�|�[�g���Ă��Ȃ����߁CDBMS �ɂ� Oracle ���g�p����D
+ * Sun の JDBC Connector と ConnectionPoolDataSource を組み合わせたテスト． HSQLDB は
+ * ConnectionPoolDataSource をサポートしていないため，DBMS には Oracle を使用する．
  * </p>
  * <p>
- * �ʏ�͎��s���Ȃ����ߒ��ۃN���X�ɂ��Ă���D
+ * 通常は実行しないため抽象クラスにしてある．
  * </p>
  * 
  * @author koichik

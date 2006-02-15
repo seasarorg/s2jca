@@ -17,11 +17,11 @@ package org.seasar.jca.cm.jdbc;
 
 /**
  * <p>
- * Oracle �̒񋟂��� ManagedConnectionFactory ���g�����e�X�g�D �ʏ�͎��s���Ȃ����ߒ��ۃN���X�ɂ��Ă���D
+ * Oracle の提供する ManagedConnectionFactory を使ったテスト． 通常は実行しないため抽象クラスにしてある．
  * </p>
  * <p>
- * Oracle �� ManagedConnectionFactory �� ConnectionManager ���g��Ȃ��炵���D
- * ���̂��߁C���̃e�X�g�����s���Ă� S2JCA �ɂ͐��䂪�n���Ă��Ȃ��D
+ * Oracle の ManagedConnectionFactory は ConnectionManager を使わないらしい．
+ * そのため，このテストを実行しても S2JCA には制御が渡ってこない．
  * </p>
  * 
  * @author koichik
