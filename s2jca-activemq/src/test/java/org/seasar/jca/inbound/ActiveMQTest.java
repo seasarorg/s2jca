@@ -40,6 +40,13 @@ public class ActiveMQTest extends S2TestCase {
     protected TransactionManager tm;
     protected ConnectionFactory cf;
 
+    public ActiveMQTest() {
+    }
+
+    public ActiveMQTest(String name) {
+        super(name);
+    }
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
