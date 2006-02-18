@@ -27,9 +27,9 @@ import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
 
-import org.easymock.MockControl;
-import org.seasar.jca.inbound.AbstractMessageEndpointImpl;
 import org.seasar.jca.unit.EasyMockTestCase;
+
+import static org.easymock.EasyMock.expect;
 
 /**
  * @author koichik
@@ -37,13 +37,9 @@ import org.seasar.jca.unit.EasyMockTestCase;
 public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
     AbstractMessageEndpointImpl target;
     MessageEndpointFactory mef;
-    MockControl mefControl;
     TransactionManager tm;
-    MockControl tmControl;
     Transaction tx;
-    MockControl txControl;
     XAResource xar;
-    MockControl xarControl;
     ClassLoader cl;
     Method method;
 
@@ -57,14 +53,10 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mefControl = createStrictControl(MessageEndpointFactory.class);
-        mef = MessageEndpointFactory.class.cast(mefControl.getMock());
-        tmControl = createStrictControl(TransactionManager.class);
-        tm = TransactionManager.class.cast(tmControl.getMock());
-        txControl = createStrictControl(Transaction.class);
-        tx = Transaction.class.cast(txControl.getMock());
-        xarControl = createStrictControl(XAResource.class);
-        xar = XAResource.class.cast(xarControl.getMock());
+        mef = createStrictMock(MessageEndpointFactory.class);
+        tm = createStrictMock(TransactionManager.class);
+        tx = createStrictMock(Transaction.class);
+        xar = createStrictMock(XAResource.class);
 
         cl = new URLClassLoader(new URL[0]);
         method = MessageListener.class.getMethod("onMessage", new Class[] { Message.class });
@@ -82,13 +74,10 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                mef.isDeliveryTransacted(method);
-                mefControl.setReturnValue(true);
+                expect(mef.isDeliveryTransacted(method)).andReturn(true);
                 tm.begin();
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
-                tx.enlistResource(xar);
-                txControl.setReturnValue(true);
+                expect(tm.getTransaction()).andReturn(tx);
+                expect(tx.enlistResource(xar)).andReturn(true);
             }
         }.doTest();
 
@@ -103,8 +92,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                tx.getStatus();
-                txControl.setReturnValue(Status.STATUS_ACTIVE);
+                expect(tx.getStatus()).andReturn(Status.STATUS_ACTIVE);
                 tx.commit();
             }
         }.doTest();
@@ -122,13 +110,10 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                mef.isDeliveryTransacted(method);
-                mefControl.setReturnValue(true);
+                expect(mef.isDeliveryTransacted(method)).andReturn(true);
                 tm.begin();
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
-                tx.enlistResource(xar);
-                txControl.setReturnValue(true);
+                expect(tm.getTransaction()).andReturn(tx);
+                expect(tx.enlistResource(xar)).andReturn(true);
             }
         }.doTest();
 
@@ -161,13 +146,10 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                mef.isDeliveryTransacted(method);
-                mefControl.setReturnValue(true);
+                expect(mef.isDeliveryTransacted(method)).andReturn(true);
                 tm.begin();
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
-                tx.enlistResource(xar);
-                txControl.setReturnValue(true);
+                expect(tm.getTransaction()).andReturn(tx);
+                expect(tx.enlistResource(xar)).andReturn(true);
             }
         }.doTest();
 
@@ -182,8 +164,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                tx.getStatus();
-                txControl.setReturnValue(Status.STATUS_MARKED_ROLLBACK);
+                expect(tx.getStatus()).andReturn(Status.STATUS_MARKED_ROLLBACK);
                 tx.rollback();
             }
         }.doTest();
@@ -201,8 +182,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
             @Override
             public void verify() throws Exception {
-                mef.isDeliveryTransacted(method);
-                mefControl.setReturnValue(false);
+                expect(mef.isDeliveryTransacted(method)).andReturn(false);
             }
         }.doTest();
 

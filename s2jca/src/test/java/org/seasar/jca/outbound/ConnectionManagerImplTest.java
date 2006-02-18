@@ -23,11 +23,12 @@ import javax.resource.spi.ConnectionRequestInfo;
 import javax.resource.spi.ManagedConnection;
 import javax.resource.spi.ManagedConnectionFactory;
 
-import org.easymock.MockControl;
 import org.seasar.jca.outbound.policy.ConnectionManagementPolicy;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 import org.seasar.jca.outbound.support.ConnectionManagementContextMatcher;
 import org.seasar.jca.unit.EasyMockTestCase;
+
+import static org.easymock.EasyMock.expect;
 
 /**
  * @author koichik
@@ -35,15 +36,10 @@ import org.seasar.jca.unit.EasyMockTestCase;
 public class ConnectionManagerImplTest extends EasyMockTestCase {
     private ConnectionManagerImpl target;
     private ManagedConnectionFactory mcf;
-    private MockControl mcfControl;
     private ManagedConnection mc;
-    private MockControl mcControl;
     private Connection lch;
-    private MockControl lchControl;
     private ConnectionManagementPolicy policy;
-    private MockControl policyControl;
     private ConnectionRequestInfo info;
-    private MockControl infoControl;
     private ConnectionManagementContext context;
 
     public ConnectionManagerImplTest() {
@@ -56,16 +52,11 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mcfControl = createStrictControl(ManagedConnectionFactory.class);
-        mcf = (ManagedConnectionFactory) mcfControl.getMock();
-        mcControl = createStrictControl(ManagedConnection.class);
-        mc = (ManagedConnection) mcControl.getMock();
-        lchControl = createStrictControl(Connection.class);
-        lch = (Connection) lchControl.getMock();
-        policyControl = createStrictControl(ConnectionManagementPolicy.class);
-        policy = (ConnectionManagementPolicy) policyControl.getMock();
-        infoControl = createStrictControl(ConnectionRequestInfo.class);
-        info = (ConnectionRequestInfo) infoControl.getMock();
+        mcf = createStrictMock(ManagedConnectionFactory.class);
+        mc = createStrictMock(ManagedConnection.class);
+        lch = createStrictMock(Connection.class);
+        policy = createStrictMock(ConnectionManagementPolicy.class);
+        info = createStrictMock(ConnectionRequestInfo.class);
         context = new ConnectionManagementContext(null, info, mcf);
 
         target = new ConnectionManagerImpl(mcf);
@@ -103,11 +94,9 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // 追加されたpolicyが呼び出される．
-                policy.allocate(context);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc, null));
+                policy.allocate(ConnectionManagementContextMatcher.eqContext(context, mc, null));
                 // 論理コネクションハンドルを取得．
-                mc.getConnection(null, info);
-                mcControl.setReturnValue(lch);
+                expect(mc.getConnection(null, info)).andReturn(lch);
             }
         }.doTest();
     }
@@ -119,9 +108,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
      * @throws Exception
      */
     public void testIllegalMCF() throws Exception {
-        MockControl illegalMCFControl = createControl(ManagedConnectionFactory.class);
-        final ManagedConnectionFactory illegalMCF = (ManagedConnectionFactory) illegalMCFControl
-                .getMock();
+        final ManagedConnectionFactory illegalMCF = createMock(ManagedConnectionFactory.class);
 
         new Subsequence() {
             @Override
@@ -152,13 +139,11 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // ManagedConnectionFactoryからManagedConnectionを取得する．
-                mcf.createManagedConnection(null, info);
-                mcfControl.setReturnValue(mc);
+                expect(mcf.createManagedConnection(null, info)).andReturn(mc);
                 // ManagedConnectionにConnectionManagerImpl.listenerがリスナーとして登録される．
                 mc.addConnectionEventListener(target.listener);
                 // ManagedConnectionからコネクションを取得する．
-                mc.getConnection(null, info);
-                mcControl.setReturnValue(lch);
+                expect(mc.getConnection(null, info)).andReturn(lch);
             }
         }.doTest();
     }

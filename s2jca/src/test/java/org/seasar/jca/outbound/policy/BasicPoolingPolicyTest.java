@@ -24,10 +24,12 @@ import javax.resource.spi.ConnectionRequestInfo;
 import javax.resource.spi.ManagedConnection;
 import javax.resource.spi.ManagedConnectionFactory;
 
-import org.easymock.MockControl;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
-import org.seasar.jca.outbound.support.ConnectionManagementContextMatcher;
 import org.seasar.jca.unit.EasyMockTestCase;
+
+import static org.easymock.EasyMock.expect;
+
+import static org.seasar.jca.outbound.support.ConnectionManagementContextMatcher.eqContext;
 
 /**
  * @author koichik
@@ -37,15 +39,10 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
     private int status;
     private Timer timer;
     private BootstrapContext bc;
-    private MockControl bcControl;
     private ConnectionManagementPolicy policy;
-    private MockControl policyControl;
     private ManagedConnectionFactory mcf;
-    private MockControl mcfControl;
     private ManagedConnection[] mc = new ManagedConnection[3];
-    private MockControl[] mcControl = new MockControl[3];
     private ConnectionRequestInfo info;
-    private MockControl infoControl;
     private Object[] lch = new Object[3];
     private ConnectionManagementContext context[] = new ConnectionManagementContext[3];
     private Set<ManagedConnection> set1;
@@ -64,20 +61,15 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
         status = 0;
         timer = new Timer(true);
 
-        bcControl = createStrictControl(BootstrapContext.class);
-        bc = (BootstrapContext) bcControl.getMock();
-        mcfControl = createStrictControl(ManagedConnectionFactory.class);
-        mcf = (ManagedConnectionFactory) mcfControl.getMock();
-        infoControl = createStrictControl(ConnectionRequestInfo.class);
-        info = (ConnectionRequestInfo) infoControl.getMock();
+        bc = createStrictMock(BootstrapContext.class);
+        mcf = createStrictMock(ManagedConnectionFactory.class);
+        info = createStrictMock(ConnectionRequestInfo.class);
         for (int i = 0; i < 3; ++i) {
-            mcControl[i] = createStrictControl(ManagedConnection.class);
-            mc[i] = (ManagedConnection) mcControl[i].getMock();
+            mc[i] = createStrictMock(ManagedConnection.class);
             lch[i] = new Object();
             context[i] = new ConnectionManagementContext(null, info, mcf);
         }
-        policyControl = createStrictControl(ConnectionManagementPolicy.class);
-        policy = (ConnectionManagementPolicy) policyControl.getMock();
+        policy = createStrictMock(ConnectionManagementPolicy.class);
 
         set1 = new HashSet<ManagedConnection>();
         set1.add(mc[0]);
@@ -99,8 +91,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             public void verify() throws Exception {
                 // 最初の一回だけタイマーが作成される．
                 if (BasicPoolingPolicy.timer == null) {
-                    bc.createTimer();
-                    bcControl.setReturnValue(timer);
+                    expect(bc.createTimer()).andReturn(timer);
                 }
             }
         }.doTest();
@@ -131,8 +122,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // 後続のpolicyからコネクションを取得，mc0が返される．
-                policy.allocate(context[0]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+                policy.allocate(eqContext(context[0], mc[0], null));
             }
         }.doTest();
 
@@ -195,8 +185,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // 後続のpolicyからコネクションが取得される，mc0が返される．
-                policy.allocate(context[0]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+                policy.allocate(eqContext(context[0], mc[0], null));
             }
         }.doTest();
 
@@ -212,8 +201,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // 後続のpolicyからコネクションが取得され，mc1が返される．
-                policy.allocate(context[1]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
+                policy.allocate(eqContext(context[1], mc[1], null));
             }
         }.doTest();
 
@@ -261,8 +249,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // フリープールのコネクションとマッチング，mc1が返される．
-                mcf.matchManagedConnections(set2, null, info);
-                mcfControl.setReturnValue(mc[1]);
+                expect(mcf.matchManagedConnections(set2, null, info)).andReturn(mc[1]);
             }
         }.doTest();
 
@@ -278,8 +265,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // フリープールのコネクションとマッチング，mc0がマッチ．
-                mcf.matchManagedConnections(set1, null, info);
-                mcfControl.setReturnValue(mc[0]);
+                expect(mcf.matchManagedConnections(set1, null, info)).andReturn(mc[0]);
             }
         }.doTest();
 
@@ -340,8 +326,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // 後続のpolicyからコネクションを取得，mc0が返される．
-                policy.allocate(context[0]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+                policy.allocate(eqContext(context[0], mc[0], null));
             }
         }.doTest();
 
@@ -355,8 +340,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // 後続のpolicyからコネクションを取得，mc1が返される．
-                policy.allocate(context[1]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
+                policy.allocate(eqContext(context[1], mc[1], null));
             }
         }.doTest();
 
@@ -390,13 +374,11 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // フリープールのコネクションとマッチング，どれもマッチしない．
-                mcf.matchManagedConnections(set2, null, info);
-                mcfControl.setReturnValue(null);
+                expect(mcf.matchManagedConnections(set2, null, info)).andReturn(null);
                 // フリープールのコネクションが一つリリースされる．
                 policy.release(mc[0]);
                 // 後続のpolicyから新しいコネクションを取得．
-                policy.allocate(context[2]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[2], null));
+                policy.allocate(eqContext(context[2], mc[2], null));
             }
         }.doTest();
 
@@ -474,8 +456,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
                 // コネクションのクリーンナップ
                 mc[0].cleanup();
                 // フリープールのコネクションとマッチング，mc0が返される．
-                mcf.matchManagedConnections(set1, null, info);
-                mcfControl.setReturnValue(mc[0]);
+                expect(mcf.matchManagedConnections(set1, null, info)).andReturn(mc[0]);
             }
         }.doTest();
     }
@@ -501,8 +482,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // 後続のpolicyからコネクションを取得，mc0が返される．
-                policy.allocate(context[0]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+                policy.allocate(eqContext(context[0], mc[0], null));
             }
         }.doTest();
 
@@ -516,8 +496,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // 後続のpolicyからコネクションを取得，mc1が返される．
-                policy.allocate(context[1]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
+                policy.allocate(eqContext(context[1], mc[1], null));
             }
         }.doTest();
 

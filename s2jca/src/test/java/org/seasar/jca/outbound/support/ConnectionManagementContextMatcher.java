@@ -17,7 +17,8 @@ package org.seasar.jca.outbound.support;
 
 import javax.resource.spi.ManagedConnection;
 
-import org.easymock.ArgumentsMatcher;
+import org.easymock.EasyMock;
+import org.easymock.IArgumentMatcher;
 
 /**
  * <p>
@@ -32,35 +33,39 @@ import org.easymock.ArgumentsMatcher;
  * 
  * @author koichik
  */
-public class ConnectionManagementContextMatcher implements ArgumentsMatcher {
-    protected boolean sideEffect;
+public class ConnectionManagementContextMatcher implements IArgumentMatcher {
+    protected ConnectionManagementContext expected;
     protected ManagedConnection mc;
     protected Object lch;
 
-    public ConnectionManagementContextMatcher() {
+    public static ConnectionManagementContext eqContext(final ConnectionManagementContext expected,
+            final ManagedConnection mc, final Object lch) {
+        EasyMock.reportMatcher(new ConnectionManagementContextMatcher(expected, mc, lch));
+        return null;
     }
 
-    public ConnectionManagementContextMatcher(final ManagedConnection mc, final Object lch) {
-        this.sideEffect = true;
+    public ConnectionManagementContextMatcher(final ConnectionManagementContext expected,
+            final ManagedConnection mc, final Object lch) {
+        this.expected = expected;
         this.mc = mc;
         this.lch = lch;
     }
 
-    public boolean matches(final Object[] arg0, final Object[] arg1) {
-        final ConnectionManagementContext expected = (ConnectionManagementContext) arg0[0];
-        final ConnectionManagementContext actual = (ConnectionManagementContext) arg1[0];
-
-        boolean result = equals(expected.getSubject(), actual.getSubject())
-                && equals(expected.getRequestInfo(), actual.getRequestInfo())
-                && equals(expected.getManagedConnectionFactory(), actual
-                        .getManagedConnectionFactory())
-                && equals(expected.getManagedConnection(), actual.getManagedConnection())
-                && equals(expected.getLogicalConnectionHandle(), actual
-                        .getLogicalConnectionHandle());
-        if (result && sideEffect) {
-            actual.setManagedConnection(mc);
-            actual.setLogicalConnectionHandle(lch);
+    public boolean matches(final Object actual) {
+        if (!(actual instanceof ConnectionManagementContext)) {
+            return false;
         }
+        final ConnectionManagementContext context = ConnectionManagementContext.class.cast(actual);
+
+        boolean result = equals(expected.getSubject(), context.getSubject())
+                && equals(expected.getRequestInfo(), context.getRequestInfo())
+                && equals(expected.getManagedConnectionFactory(), context
+                        .getManagedConnectionFactory())
+                && equals(expected.getManagedConnection(), context.getManagedConnection())
+                && equals(expected.getLogicalConnectionHandle(), context
+                        .getLogicalConnectionHandle());
+        context.setManagedConnection(mc);
+        context.setLogicalConnectionHandle(lch);
         return result;
     }
 
@@ -74,7 +79,7 @@ public class ConnectionManagementContextMatcher implements ArgumentsMatcher {
         return expected != null && expected.equals(actual);
     }
 
-    public String toString(Object[] arg0) {
-        return arg0[0].toString();
+    public void appendTo(final StringBuffer buf) {
+        buf.append("ConnectionManagementMatcher");
     }
 }

@@ -19,7 +19,6 @@ import javax.resource.spi.LocalTransaction;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
-import org.easymock.MockControl;
 import org.seasar.extension.jta.xa.XidImpl;
 import org.seasar.jca.unit.EasyMockTestCase;
 
@@ -28,7 +27,6 @@ import org.seasar.jca.unit.EasyMockTestCase;
  */
 public class LocalTransactionXAResourceTest extends EasyMockTestCase {
     private LocalTransactionXAResource target;
-    private MockControl ltxControl;
     private LocalTransaction ltx;
     private Xid xid;
 
@@ -42,8 +40,7 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        ltxControl = createStrictControl(LocalTransaction.class);
-        ltx = (LocalTransaction) ltxControl.getMock();
+        ltx = createStrictMock(LocalTransaction.class);
         xid = new XidImpl();
         target = new LocalTransactionXAResource(ltx);
     }

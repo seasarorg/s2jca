@@ -16,10 +16,9 @@
 package org.seasar.jca.unit;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.easymock.MockControl;
+import org.easymock.EasyMock;
 import org.seasar.extension.unit.S2TestCase;
 
 /**
@@ -27,7 +26,7 @@ import org.seasar.extension.unit.S2TestCase;
  */
 public abstract class S2EasyMockTestCase extends S2TestCase {
     // instance fields
-    private List<MockControl> mockControls = new ArrayList<MockControl>();
+    private List<Object> mocks = new ArrayList<Object>();
 
     public S2EasyMockTestCase() {
     }
@@ -36,42 +35,39 @@ public abstract class S2EasyMockTestCase extends S2TestCase {
         super(name);
     }
 
-    protected MockControl createControl(final Class clazz) {
-        final MockControl control = MockControl.createControl(clazz);
-        mockControls.add(control);
-        return control;
+    protected <T> T createMock(final Class<T> clazz) {
+        final T mock = EasyMock.createMock(clazz);
+        mocks.add(mock);
+        return mock;
     }
 
-    protected MockControl createStrictControl(final Class clazz) {
-        final MockControl control = MockControl.createStrictControl(clazz);
-        mockControls.add(control);
-        return control;
+    protected <T> T createStrictMock(final Class<T> clazz) {
+        final T mock = EasyMock.createStrictMock(clazz);
+        mocks.add(mock);
+        return mock;
     }
 
     protected void replay() {
-        final Iterator it = mockControls.iterator();
-        while (it.hasNext()) {
-            ((MockControl) it.next()).replay();
+        for (final Object mock : mocks) {
+            EasyMock.replay(mock);
         }
     }
 
     protected void verify() {
-        final Iterator it = mockControls.iterator();
-        while (it.hasNext()) {
-            ((MockControl) it.next()).verify();
+        for (final Object mock : mocks) {
+            EasyMock.verify(mock);
         }
     }
 
     protected void reset() {
-        final Iterator it = mockControls.iterator();
-        while (it.hasNext()) {
-            ((MockControl) it.next()).reset();
+        for (final Object mock : mocks) {
+            EasyMock.reset(mock);
         }
     }
 
     @Override
     public void runBare() throws Throwable {
-        mockControls.clear();
+        mocks.clear();
         super.runBare();
     }
 

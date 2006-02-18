@@ -26,11 +26,15 @@ import javax.resource.spi.ManagedConnectionFactory;
 import javax.transaction.Status;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
+import javax.transaction.xa.XAResource;
 
-import org.easymock.MockControl;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
-import org.seasar.jca.outbound.support.ConnectionManagementContextMatcher;
 import org.seasar.jca.unit.EasyMockTestCase;
+
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.expect;
+
+import static org.seasar.jca.outbound.support.ConnectionManagementContextMatcher.eqContext;
 
 /**
  * @author koichik
@@ -38,19 +42,12 @@ import org.seasar.jca.unit.EasyMockTestCase;
 public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
     private LocalTransactionBoundedPoolingPolicy target;
     private TransactionManager tm;
-    private MockControl tmControl;
     private Transaction tx;
-    private MockControl txControl;
     private LocalTransaction localTx;
-    private MockControl localTxControl;
     private ConnectionManagementPolicy policy;
-    private MockControl policyControl;
     private ManagedConnectionFactory mcf;
-    private MockControl mcfControl;
     private ManagedConnection[] mc = new ManagedConnection[3];
-    private MockControl[] mcControl = new MockControl[3];
     private ConnectionRequestInfo info;
-    private MockControl infoControl;
     private ConnectionManagementContext[] context = new ConnectionManagementContext[3];
     private Object[] lch = new Object[3];
     private Set<ManagedConnection> set1;
@@ -67,24 +64,17 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        tmControl = createStrictControl(TransactionManager.class);
-        tm = (TransactionManager) tmControl.getMock();
-        txControl = createStrictControl(Transaction.class);
-        tx = (Transaction) txControl.getMock();
-        localTxControl = createStrictControl(LocalTransaction.class);
-        localTx = (LocalTransaction) localTxControl.getMock();
-        mcfControl = createStrictControl(ManagedConnectionFactory.class);
-        mcf = (ManagedConnectionFactory) mcfControl.getMock();
-        infoControl = createStrictControl(ConnectionRequestInfo.class);
-        info = (ConnectionRequestInfo) infoControl.getMock();
+        tm = createStrictMock(TransactionManager.class);
+        tx = createStrictMock(Transaction.class);
+        localTx = createStrictMock(LocalTransaction.class);
+        mcf = createStrictMock(ManagedConnectionFactory.class);
+        info = createStrictMock(ConnectionRequestInfo.class);
         for (int i = 0; i < 3; ++i) {
-            mcControl[i] = createStrictControl(ManagedConnection.class);
-            mc[i] = (ManagedConnection) mcControl[i].getMock();
+            mc[i] = createStrictMock(ManagedConnection.class);
             lch[i] = new Object();
             context[i] = new ConnectionManagementContext(null, info, mcf);
         }
-        policyControl = createStrictControl(ConnectionManagementPolicy.class);
-        policy = (ConnectionManagementPolicy) policyControl.getMock();
+        policy = createStrictMock(ConnectionManagementPolicy.class);
 
         set1 = new HashSet<ManagedConnection>();
         set1.add(mc[0]);
@@ -118,8 +108,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されていない．
-                tm.getTransaction();
-                tmControl.setReturnValue(null);
+                expect(tm.getTransaction()).andReturn(null);
             }
         }.doTest();
     }
@@ -143,11 +132,9 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されていない．
-                tm.getTransaction();
-                tmControl.setReturnValue(null);
+                expect(tm.getTransaction()).andReturn(null);
                 // allowLocalTxが設定されているのでそれでもコネクションが取得される．
-                policy.allocate(context[0]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+                policy.allocate(eqContext(context[0], mc[0], null));
             }
         }.doTest();
 
@@ -161,8 +148,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されていない．
-                tm.getTransaction();
-                tmControl.setReturnValue(null);
+                expect(tm.getTransaction()).andReturn(null);
                 // コネクションがリリースされる．
                 policy.release(mc[0]);
             }
@@ -187,27 +173,21 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // 後続のpolicyからコネクションを取得，mc0が返される．
-                policy.allocate(context[0]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+                policy.allocate(eqContext(context[0], mc[0], null));
                 // 論理コネクションハンドルが取得される．
                 // これはLocalTransactionの取得前に行う必要がある．
                 // 「J2EE Connector Architecture Specification Version
                 // 1.5」P7-43参照．
                 // Sun JDBC Connector + Oracle PooledConnection
                 // ではこの順序を守らないと例外がスローされる．
-                mc[0].getConnection(null, info);
-                mcControl[0].setReturnValue(lch[0]);
+                expect(mc[0].getConnection(null, info)).andReturn(lch[0]);
                 // ローカルトランザクションが取得される．
-                mc[0].getLocalTransaction();
-                mcControl[0].setReturnValue(localTx);
+                expect(mc[0].getLocalTransaction()).andReturn(localTx);
                 // XAResourceがTransactionに登録される．
                 // XAResouceは新しいインスタンスが作成され検証できないのでALWAYS_MATCHERを使用する．
-                tx.enlistResource(null);
-                txControl.setMatcher(MockControl.ALWAYS_MATCHER);
-                txControl.setReturnValue(true);
+                expect(tx.enlistResource(XAResource.class.cast(anyObject()))).andReturn(true);
                 // TransactionにSynchronizationとしてターゲットが登録される．
                 tx.registerSynchronization(target);
             }
@@ -223,8 +203,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
             }
         }.doTest();
@@ -240,25 +219,18 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // フリープールのコネクションとマッチング，どれともマッチしない．
-                mcf.matchManagedConnections(set1, null, info);
-                mcfControl.setReturnValue(null);
+                expect(mcf.matchManagedConnections(set1, null, info)).andReturn(null);
                 // 後続のpolicyからコネクション取得．
-                policy.allocate(context[1]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
+                policy.allocate(eqContext(context[1], mc[1], null));
                 // 論理コネクションハンドルが取得される．
-                mc[1].getConnection(null, info);
-                mcControl[1].setReturnValue(lch[1]);
+                expect(mc[1].getConnection(null, info)).andReturn(lch[1]);
                 // ローカルトランザクションが取得される．
-                mc[1].getLocalTransaction();
-                mcControl[1].setReturnValue(localTx);
+                expect(mc[1].getLocalTransaction()).andReturn(localTx);
                 // XAResourceがTransactionに登録される．
                 // XAResouceは新しいインスタンスが作成され検証できないのでALWAYS_MATCHERを使用する．
-                tx.enlistResource(null);
-                txControl.setMatcher(MockControl.ALWAYS_MATCHER);
-                txControl.setReturnValue(true);
+                expect(tx.enlistResource(XAResource.class.cast(anyObject()))).andReturn(true);
                 // Synchronizationの登録は行われない．
             }
         }.doTest();
@@ -273,8 +245,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
             }
         }.doTest();
@@ -289,11 +260,9 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // フリープールのコネクションとマッチング，mc0が返される．
-                mcf.matchManagedConnections(set2, null, info);
-                mcfControl.setReturnValue(mc[0]);
+                expect(mcf.matchManagedConnections(set2, null, info)).andReturn(mc[0]);
             }
         }.doTest();
 
@@ -307,8 +276,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
             }
         }.doTest();
@@ -323,8 +291,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // 後続のpolicyにmc1がリリースされる．
                 policy.release(mc[1]);
                 // 後続のpolicyにmc0がリリースされる．
@@ -351,22 +318,16 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // 後続のpolicyからコネクションを取得，mc0が返される．
-                policy.allocate(context[0]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[0], null));
+                policy.allocate(eqContext(context[0], mc[0], null));
                 // 論理コネクションハンドルが取得される．
-                mc[0].getConnection(null, info);
-                mcControl[0].setReturnValue(lch[0]);
+                expect(mc[0].getConnection(null, info)).andReturn(lch[0]);
                 // ローカルトランザクションが取得される．
-                mc[0].getLocalTransaction();
-                mcControl[0].setReturnValue(localTx);
+                expect(mc[0].getLocalTransaction()).andReturn(localTx);
                 // XAResourceがTransactionに登録される．
                 // XAResouceは新しいインスタンスが作成され検証できないのでALWAYS_MATCHERを使用する．
-                tx.enlistResource(null);
-                txControl.setMatcher(MockControl.ALWAYS_MATCHER);
-                txControl.setReturnValue(true);
+                expect(tx.enlistResource(XAResource.class.cast(anyObject()))).andReturn(true);
                 // TransactionにSynchronizationとしてターゲットが登録される．
                 tx.registerSynchronization(target);
             }
@@ -382,8 +343,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
             }
         }.doTest();
@@ -399,25 +359,18 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // フリープールのコネクションをマッチング，どれともマッチしない．
-                mcf.matchManagedConnections(set1, null, info);
-                mcfControl.setReturnValue(null);
+                expect(mcf.matchManagedConnections(set1, null, info)).andReturn(null);
                 // 後続のpolicyからコネクション取得，mc1が返される．
-                policy.allocate(context[1]);
-                policyControl.setMatcher(new ConnectionManagementContextMatcher(mc[1], null));
+                policy.allocate(eqContext(context[1], mc[1], null));
                 // 論理コネクションハンドルが取得される．
-                mc[1].getConnection(null, info);
-                mcControl[1].setReturnValue(lch[1]);
+                expect(mc[1].getConnection(null, info)).andReturn(lch[1]);
                 // ローカルトランザクションが取得される．
-                mc[1].getLocalTransaction();
-                mcControl[1].setReturnValue(localTx);
+                expect(mc[1].getLocalTransaction()).andReturn(localTx);
                 // XAResourceがTransactionに登録される．
                 // XAResouceは新しいインスタンスが作成され検証できないのでALWAYS_MATCHERを使用する．
-                tx.enlistResource(null);
-                txControl.setMatcher(MockControl.ALWAYS_MATCHER);
-                txControl.setReturnValue(true);
+                expect(tx.enlistResource(XAResource.class.cast(anyObject()))).andReturn(true);
                 // Synchronizationの登録は行われない．
             }
         }.doTest();
@@ -432,8 +385,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
             }
         }.doTest();
@@ -448,8 +400,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // 後続のpolicyにエラーが通知される．
                 policy.connectionErrorOccurred(mc[0]);
             }
@@ -465,8 +416,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             @Override
             public void verify() throws Exception {
                 // トランザクションが開始されている．
-                tm.getTransaction();
-                tmControl.setReturnValue(tx);
+                expect(tm.getTransaction()).andReturn(tx);
                 // コネクションがリリースされる．
                 policy.release(mc[1]);
             }
