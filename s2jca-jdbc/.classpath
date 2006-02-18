@@ -4,8 +4,8 @@
 	<classpathentry output="target/test-classes" kind="src" path="src/test/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2jca"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
 	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="lib/orai18n.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
