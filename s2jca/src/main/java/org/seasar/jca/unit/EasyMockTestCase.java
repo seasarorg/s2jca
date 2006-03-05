@@ -42,6 +42,12 @@ public abstract class EasyMockTestCase extends TestCase {
         return mock;
     }
 
+    protected <T> T createNiceMock(final Class<T> clazz) {
+        final T mock = EasyMock.createNiceMock(clazz);
+        mocks.add(mock);
+        return mock;
+    }
+
     protected <T> T createStrictMock(final Class<T> clazz) {
         final T mock = EasyMock.createStrictMock(clazz);
         mocks.add(mock);
