@@ -55,7 +55,7 @@ public class ActiveMQTest extends S2TestCase {
             }
         });
         thread.start();
-        Thread.sleep(1000);
+        Thread.yield();
         sendMessage();
         sendMessage();
         thread.join();

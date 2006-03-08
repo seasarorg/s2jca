@@ -50,8 +50,8 @@ public class ActiveMQTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        include("jms-activemq-inbound.dicon");
         include("jms-activemq-outbound.dicon");
+        include("jms-activemq-inbound.dicon");
         receiveMessages = 0;
     }
 
@@ -59,8 +59,12 @@ public class ActiveMQTest extends S2TestCase {
         for (int i = 0; i < 100; ++i) {
             sendMessage(i);
         }
-        Thread.sleep(3000);
+        int prevCount = 0;
         synchronized (ActiveMQTest.class) {
+            while (receiveMessages != prevCount) {
+                prevCount = receiveMessages;
+                ActiveMQTest.class.wait(100);
+            }
             assertEquals("0", 100, receiveMessages);
         }
     }

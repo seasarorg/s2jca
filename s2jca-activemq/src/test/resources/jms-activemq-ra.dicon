@@ -16,7 +16,5 @@
 			<arg>"ServerUrl"</arg>
 			<arg>"tcp://localhost:61616?trace=true"</arg>
 		</initMethod>
-		<initMethod name="start"/>
-		<destroyMethod name="stop"/>
 	</component>
 </components>
