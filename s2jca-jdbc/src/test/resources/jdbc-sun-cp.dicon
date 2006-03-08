@@ -16,8 +16,6 @@
 			@org.seasar.framework.util.EclipseUtil@getProjectRoot("s2jca-jdbc")
 				.getAbsolutePath() + "/ra/spi_15_cp"
 		</property>
-		<initMethod name="start"/>
-		<destroyMethod name="stop"/>
 	</component>
 
 	<component name="mcfDeployer"
