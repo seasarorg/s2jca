@@ -15,8 +15,12 @@
  */
 package org.seasar.jca.deploy.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import javax.resource.ResourceException;
 import javax.resource.spi.BootstrapContext;
@@ -36,6 +40,7 @@ import org.seasar.jca.deploy.ResourceAdapterDeployer;
 import org.seasar.jca.deploy.config.ConnectionDefConfig;
 import org.seasar.jca.deploy.config.OutboundAdapterConfig;
 import org.seasar.jca.deploy.config.ResourceAdapterConfig;
+import org.seasar.jca.exception.SResourceException;
 import org.seasar.jca.util.ReflectionUtil;
 
 /**
@@ -105,7 +110,24 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         return new SaxHandlerParser(handler, saxParser);
     }
 
-    protected abstract ClassLoader createClassLoader() throws ResourceException;
+    protected ClassLoader createClassLoader() throws ResourceException {
+        try {
+            final URL[] urls = toURL(getJarFiles());
+            return new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
+        } catch (final MalformedURLException e) {
+            throw new SResourceException("EJCA0000", e);
+        }
+    }
+
+    protected URL[] toURL(final File[] jars) throws MalformedURLException {
+        final URL[] urls = new URL[jars.length];
+        for (int i = 0; i < jars.length; ++i) {
+            urls[i] = jars[i].toURL();
+        }
+        return urls;
+    }
+
+    protected abstract File[] getJarFiles();
 
     protected abstract InputStream getDeploymentDescripterAsInputStream() throws ResourceException;
 

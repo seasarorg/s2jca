@@ -20,11 +20,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 import javax.resource.ResourceException;
 
@@ -38,19 +33,6 @@ public class FsResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
     }
 
     @Override
-    protected ClassLoader createClassLoader() throws ResourceException {
-        try {
-            final URL[] urls = toURL(getJarFiles());
-            return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
-                public ClassLoader run() {
-                    return new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
-                }
-            });
-        } catch (final MalformedURLException e) {
-            throw new SResourceException("EJCA0000", e);
-        }
-    }
-
     protected File[] getJarFiles() {
         final File baseDir = new File(path);
         final File[] jars = baseDir.listFiles(new FilenameFilter() {
@@ -59,14 +41,6 @@ public class FsResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
             }
         });
         return jars;
-    }
-
-    protected URL[] toURL(final File[] jars) throws MalformedURLException {
-        final URL[] urls = new URL[jars.length];
-        for (int i = 0; i < jars.length; ++i) {
-            urls[i] = jars[i].toURL();
-        }
-        return urls;
     }
 
     @Override
