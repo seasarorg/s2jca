@@ -23,6 +23,8 @@ import javax.resource.spi.endpoint.MessageEndpointFactory;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
+import org.seasar.framework.container.annotation.tiger.DestroyMethod;
+import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.log.Logger;
 import org.seasar.jca.deploy.ResourceAdapterDeployer;
 import org.seasar.jca.exception.SResourceException;
@@ -54,6 +56,7 @@ public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
         this.activationSpecClassName = activationSpecClassName;
     }
 
+    @InitMethod
     public void activate() throws ResourceException {
         assertInboundResourceAdapter();
         activationSpec = createActivationSpec();
@@ -64,6 +67,7 @@ public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
         }
     }
 
+    @DestroyMethod
     public void deactivate() throws ResourceException {
         assertInboundResourceAdapter();
         raDeployer.getResourceAdapter()

@@ -31,6 +31,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
+import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.SAXParserFactoryUtil;
@@ -78,6 +79,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         }
     }
 
+    @DestroyMethod
     public void stop() {
         ra.stop();
         if (logger.isDebugEnabled()) {
