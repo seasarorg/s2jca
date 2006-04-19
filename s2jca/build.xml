@@ -1,0 +1,24 @@
+<project name="S2JCA" default="dist" basedir=".">
+	<property name="ver" value="1.0.0-M1-SNAPSHOT"/>
+
+	<target name="dist">
+		<zip zipfile="target/S2JCA-${ver}.zip">
+			<zipfileset prefix="s2jca" dir=".">
+				<exclude name="**/target/**"/>
+			</zipfileset>
+			<zipfileset prefix="s2jca/lib" dir="target">
+				<include name="s2jca-${ver}.jar"/>
+			</zipfileset>
+			<zipfileset prefix="s2jca/resources" dir="src/test/resources">
+				<include name="jca.dicon"/>
+				<include name="j2ee.dicon"/>
+				<include name="log4j.properties"/>
+			</zipfileset>
+			<zipfileset prefix="s2jca/doc" dir="../s2jca-www">
+				<exclude name="**/download/**"/>
+				<exclude name=".project"/>
+			</zipfileset>
+		</zip>
+	</target>
+</project>
+
