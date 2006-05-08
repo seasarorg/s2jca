@@ -10,7 +10,7 @@
 	>
 		<property name="path">
 			@org.seasar.framework.util.EclipseUtil@getProjectRoot("s2jca-activemq")
-				.getAbsolutePath() +"/ra/activemq-ra-3.2.1.rar"
+				.getAbsolutePath() +"/ra/activemq-ra-3.2.2.rar"
 		</property>
 		<initMethod name="setProperty">
 			<arg>"ServerUrl"</arg>
