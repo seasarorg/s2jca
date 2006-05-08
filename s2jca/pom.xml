@@ -8,7 +8,7 @@
   <artifactId>s2jca</artifactId>
   <packaging>jar</packaging>
   <name>S2JCA Project</name>
-  <version>1.0.0-M1-SNAPSHOT</version>
+  <version>1.0.0-M1</version>
   <description></description>
   <url>http://s2jca.sandbox.seasar.org/</url>
   <inceptionYear>2005</inceptionYear>
