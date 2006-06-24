@@ -22,9 +22,9 @@ import javax.resource.spi.ConnectionRequestInfo;
 import javax.resource.spi.ManagedConnection;
 import javax.resource.spi.ManagedConnectionFactory;
 
+import org.seasar.framework.unit.EasyMockTestCase;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 import org.seasar.jca.outbound.support.ManagedConnectionPool;
-import org.seasar.jca.unit.EasyMockTestCase;
 
 import static org.easymock.EasyMock.expect;
 
@@ -95,7 +95,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // 後続のpolicyからコネクションを取得，mc0が返される．
                 policy.allocate(eqContext(context[0], mc[0], null));
             }
@@ -123,7 +123,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // フリープールのコネクションが後続がpolicyへ渡される．
                 policy.release(mc[0]);
             }
@@ -155,7 +155,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // 後続のpolicyからコネクションを取得，mc0が返される．
                 policy.allocate(eqContext(context[0], mc[0], null));
             }
@@ -188,7 +188,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // フリープールのコネクションとマッチング，mc0が返される．
                 expect(mcf.matchManagedConnections(set1, null, info)).andReturn(mc[0]);
             }
@@ -228,7 +228,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // コネクションがリリースされる．
                 policy.release(mc[0]);
             }
@@ -261,7 +261,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // 後続のpolicyからコネクションを取得，mc0が返される．
                 policy.allocate(eqContext(context[0], mc[0], null));
             }
@@ -294,7 +294,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // フリープールのコネクションとマッチング，どれもマッチしない．
                 expect(mcf.matchManagedConnections(set1, null, info)).andReturn(null);
                 // 後続のpolicyから新しいコネクションを取得．
@@ -324,7 +324,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // 後続のpolicyにコネクションがリリースされる．
                 policy.release(mc[1]);
             }
@@ -341,7 +341,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // 後続のpolicyにコネクションがリリースされる．
                 policy.release(mc[0]);
             }

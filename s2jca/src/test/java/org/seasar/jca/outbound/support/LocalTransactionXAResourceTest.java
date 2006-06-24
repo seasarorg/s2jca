@@ -20,7 +20,7 @@ import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
 import org.seasar.extension.jta.xa.XidImpl;
-import org.seasar.jca.unit.EasyMockTestCase;
+import org.seasar.framework.unit.EasyMockTestCase;
 
 /**
  * @author koichik
@@ -53,7 +53,7 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 target.setReadOnly(true);
                 target.start(xid, XAResource.TMNOFLAGS);
                 target.end(xid, XAResource.TMSUCCESS);
@@ -73,7 +73,7 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 ltx.begin();
                 ltx.commit();
             }
@@ -90,7 +90,7 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 ltx.begin();
                 ltx.commit();
             }
@@ -107,7 +107,7 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 ltx.begin();
                 ltx.rollback();
             }
@@ -125,7 +125,7 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 ltx.begin();
                 ltx.rollback();
             }

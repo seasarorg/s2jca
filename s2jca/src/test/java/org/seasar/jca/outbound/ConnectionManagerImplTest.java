@@ -23,10 +23,10 @@ import javax.resource.spi.ConnectionRequestInfo;
 import javax.resource.spi.ManagedConnection;
 import javax.resource.spi.ManagedConnectionFactory;
 
+import org.seasar.framework.unit.EasyMockTestCase;
 import org.seasar.jca.outbound.policy.ConnectionManagementPolicy;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 import org.seasar.jca.outbound.support.ConnectionManagementContextMatcher;
-import org.seasar.jca.unit.EasyMockTestCase;
 
 import static org.easymock.EasyMock.expect;
 
@@ -79,7 +79,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // 追加されたpolicyに既存のpolicyが渡される．
                 policy.initialize(mcf, target.policy);
             }
@@ -92,7 +92,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // 追加されたpolicyが呼び出される．
                 policy.allocate(ConnectionManagementContextMatcher.eqContext(context, mc, null));
                 // 論理コネクションハンドルを取得．
@@ -137,7 +137,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // ManagedConnectionFactoryからManagedConnectionを取得する．
                 expect(mcf.createManagedConnection(null, info)).andReturn(mc);
                 // ManagedConnectionにConnectionManagerImpl.listenerがリスナーとして登録される．
@@ -165,7 +165,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // ManagedConnectionに登録したリスナーが削除される．
                 mc.removeConnectionEventListener(target.listener);
                 // ManagedConnectionのdestroy()が呼び出される．
@@ -189,7 +189,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // ManagedConnectionに登録したリスナーが削除される．
                 mc.removeConnectionEventListener(target.listener);
                 // ManagedConnectionのdestroy()が呼び出される．

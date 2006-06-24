@@ -27,7 +27,7 @@ import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
 
-import org.seasar.jca.unit.EasyMockTestCase;
+import org.seasar.framework.unit.EasyMockTestCase;
 
 import static org.easymock.EasyMock.expect;
 
@@ -42,13 +42,6 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
     XAResource xar;
     ClassLoader cl;
     Method method;
-
-    public AbstractMessageEndpointImplTest() {
-    }
-
-    public AbstractMessageEndpointImplTest(String name) {
-        super(name);
-    }
 
     @Override
     protected void setUp() throws Exception {
@@ -73,7 +66,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 expect(mef.isDeliveryTransacted(method)).andReturn(true);
                 tm.begin();
                 expect(tm.getTransaction()).andReturn(tx);
@@ -91,7 +84,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 expect(tx.getStatus()).andReturn(Status.STATUS_ACTIVE);
                 tx.commit();
             }
@@ -109,7 +102,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 expect(mef.isDeliveryTransacted(method)).andReturn(true);
                 tm.begin();
                 expect(tm.getTransaction()).andReturn(tx);
@@ -128,7 +121,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 tx.rollback();
             }
         }.doTest();
@@ -145,7 +138,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 expect(mef.isDeliveryTransacted(method)).andReturn(true);
                 tm.begin();
                 expect(tm.getTransaction()).andReturn(tx);
@@ -163,7 +156,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 expect(tx.getStatus()).andReturn(Status.STATUS_MARKED_ROLLBACK);
                 tx.rollback();
             }
@@ -181,7 +174,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 expect(mef.isDeliveryTransacted(method)).andReturn(false);
             }
         }.doTest();
@@ -196,7 +189,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
             }
         }.doTest();
     }

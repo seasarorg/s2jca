@@ -28,8 +28,8 @@ import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
 
+import org.seasar.framework.unit.EasyMockTestCase;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
-import org.seasar.jca.unit.EasyMockTestCase;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
@@ -106,7 +106,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されていない．
                 expect(tm.getTransaction()).andReturn(null);
             }
@@ -130,7 +130,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されていない．
                 expect(tm.getTransaction()).andReturn(null);
                 // allowLocalTxが設定されているのでそれでもコネクションが取得される．
@@ -146,7 +146,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されていない．
                 expect(tm.getTransaction()).andReturn(null);
                 // コネクションがリリースされる．
@@ -171,7 +171,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // 後続のpolicyからコネクションを取得，mc0が返される．
@@ -201,7 +201,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
@@ -217,7 +217,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // フリープールのコネクションとマッチング，どれともマッチしない．
@@ -243,7 +243,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
@@ -258,7 +258,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // フリープールのコネクションとマッチング，mc0が返される．
@@ -274,7 +274,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
@@ -289,7 +289,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // 後続のpolicyにmc1がリリースされる．
@@ -316,7 +316,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // 後続のpolicyからコネクションを取得，mc0が返される．
@@ -341,7 +341,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
@@ -357,7 +357,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // フリープールのコネクションをマッチング，どれともマッチしない．
@@ -383,7 +383,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // リリースされない．
@@ -398,7 +398,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // 後続のpolicyにエラーが通知される．
@@ -414,7 +414,7 @@ public class LocalTransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
 
             @Override
-            public void verify() throws Exception {
+            public void record() throws Exception {
                 // トランザクションが開始されている．
                 expect(tm.getTransaction()).andReturn(tx);
                 // コネクションがリリースされる．
