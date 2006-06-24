@@ -92,7 +92,11 @@ public class ResourceAdapterConfig extends ConfigPropertyContainer {
     }
 
     public ConnectionDefConfig getConnectionDef(final String mcf, int index) {
-        return getConnectionDef(mcf)[index];
+        ConnectionDefConfig[] config = getConnectionDef(mcf);
+        if (index >= config.length) {
+            return null;
+        }
+        return config[index];
     }
 
     public ConnectionDefConfig[] getConnectionDef(final String mcf) {
@@ -104,11 +108,11 @@ public class ResourceAdapterConfig extends ConfigPropertyContainer {
         }
         return result.toArray(new ConnectionDefConfig[result.size()]);
     }
-    
+
     public InboundAdapterConfig getInboundAdapter() {
         return inboundAdapter;
     }
-    
+
     public void setInboundAdapter(final InboundAdapterConfig inboundAdapter) {
         this.inboundAdapter = inboundAdapter;
     }
