@@ -10,7 +10,7 @@
 		class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer"
 	>
 		<property name="managedConnectionFactoryClass">
-			"org.activemq.ra.ActiveMQManagedConnectionFactory"
+			"org.apache.activemq.ra.ActiveMQManagedConnectionFactory"
 		</property>
 	</component>
 

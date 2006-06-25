@@ -9,7 +9,9 @@
 	<component
 		class="org.seasar.jca.deploy.impl.MessageEndpointDeployer"
 	>
-		<property name="activationSpecClassName">"org.activemq.ra.ActiveMQActivationSpec"</property>
+		<property name="activationSpecClassName">
+			"org.apache.activemq.ra.ActiveMQActivationSpec"
+		</property>
 		<initMethod name="setProperty">
 			<arg>"destination"</arg>
 			<arg>"foo"</arg>
