@@ -24,8 +24,8 @@ import java.util.Map;
 
 import org.seasar.framework.beans.BeanDesc;
 import org.seasar.framework.beans.PropertyDesc;
+import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.jca.deploy.config.ConfigProperty;
-import org.seasar.jca.util.ReflectionUtil;
 
 /**
  * @author koichik

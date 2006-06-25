@@ -35,6 +35,7 @@ import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.SAXParserFactoryUtil;
+import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.framework.xml.SaxHandler;
 import org.seasar.framework.xml.SaxHandlerParser;
 import org.seasar.jca.deploy.ResourceAdapterDeployer;
@@ -42,7 +43,6 @@ import org.seasar.jca.deploy.config.ConnectionDefConfig;
 import org.seasar.jca.deploy.config.OutboundAdapterConfig;
 import org.seasar.jca.deploy.config.ResourceAdapterConfig;
 import org.seasar.jca.exception.SResourceException;
-import org.seasar.jca.util.ReflectionUtil;
 
 /**
  * @author koichik

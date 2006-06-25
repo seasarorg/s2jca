@@ -33,7 +33,7 @@ import org.seasar.framework.container.annotation.tiger.Component;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.exception.SIllegalArgumentException;
 import org.seasar.framework.log.Logger;
-import org.seasar.jca.util.ReflectionUtil;
+import org.seasar.framework.util.tiger.ReflectionUtil;
 
 /**
  * @author koichik

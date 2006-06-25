@@ -26,9 +26,9 @@ import org.seasar.framework.container.annotation.tiger.BindingType;
 import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.log.Logger;
+import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.jca.deploy.ResourceAdapterDeployer;
 import org.seasar.jca.exception.SResourceException;
-import org.seasar.jca.util.ReflectionUtil;
 
 /**
  * @author koichik
