@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
+	"http://www.seasar.org/dtd/components23.dtd">
+<components>
+	<include path="j2ee.dicon"/>
+	<include path="jca.dicon"/>
+
+	<component
+		class="org.seasar.jca.deploy.impl.RarResourceAdapterDeployer"
+	>
+		<property name="path">
+			"ra/genericra-1.5.rar"
+		</property>
+		<initMethod name="setProperty">
+			<arg>"supportsXA"</arg>
+			<arg>"true"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"ProviderIntegrationMode"</arg>
+			<arg>"javabean"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"connectionFactoryClassName"</arg>
+			<arg>"org.apache.activemq.ra.ActiveMQConnectionFactory"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"queueConnectionFactoryClassName"</arg>
+			<arg>"org.apache.activemq.ra.ActiveMQConnectionFactory"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"topicConnectionFactoryClassName"</arg>
+			<arg>"org.apache.activemq.ra.ActiveMQConnectionFactory"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"XAConnectionFactoryClassName"</arg>
+			<arg>"org.apache.activemq.ActiveMQXAConnectionFactory"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"XAQueueConnectionFactoryClassName"</arg>
+			<arg>"org.apache.activemq.ActiveMQXAConnectionFactory"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"XATopicConnectionFactoryClassName"</arg>
+			<arg>"org.apache.activemq.ActiveMQXAConnectionFactory"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"queueClassName"</arg>
+			<arg>"org.apache.activemq.command.ActiveMQQueue"</arg>
+		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"topicClassName"</arg>
+			<arg>"org.apache.activemq.command.ActiveMQTopic"</arg>
+		</initMethod>
+	</component>
+</components>

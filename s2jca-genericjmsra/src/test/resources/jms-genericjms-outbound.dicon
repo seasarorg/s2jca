@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
+	"http://www.seasar.org/dtd/components23.dtd">
+<components namespace="jms-genericjms-cf">
+	<include path="j2ee.dicon"/>
+	<include path="jca.dicon"/>
+	<include path="jms-genericjms-ra.dicon"/>
+
+	<component name="mcfDeployer"
+		class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer"
+	>
+		<property name="managedConnectionFactoryClass">
+			"com.sun.genericra.outbound.ManagedJMSConnectionFactory"
+		</property>
+		<initMethod name="setProperty">
+			<arg>"connectionFactoryProperties"</arg>
+			<arg>"BrokerURL=tcp://localhost:61616"</arg>
+		</initMethod>
+	</component>
+
+	<component name="connectionFactory" class="javax.jms.ConnectionFactory">
+		mcfDeployer.createConnectionFactory()
+	</component>
+</components>
