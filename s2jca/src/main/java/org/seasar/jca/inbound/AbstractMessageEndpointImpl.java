@@ -108,10 +108,10 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
 
     protected void endTransaction() throws ResourceException {
         try {
-            if (succeeded && transaction.getStatus() == Status.STATUS_ACTIVE) {
-                transaction.commit();
+            if (succeeded && transactionManager.getStatus() == Status.STATUS_ACTIVE) {
+                transactionManager.commit();
             } else {
-                transaction.rollback();
+                transactionManager.rollback();
             }
         } catch (final Exception e) {
             throw new SResourceException("EJCA0000", e);

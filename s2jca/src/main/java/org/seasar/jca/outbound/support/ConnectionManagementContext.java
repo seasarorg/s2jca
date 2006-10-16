@@ -71,7 +71,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB subject ‚Ì’l‚ğ•Ô‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B subject ï¿½Ì’lï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @return Returns the subject.
      */
@@ -80,7 +80,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB subject ‚Ì’l‚ğİ’è‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B subject ï¿½Ì’lï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
      * 
      * @param subject
      *            The subject to set.
@@ -91,7 +91,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB requestInfo ‚Ì’l‚ğ•Ô‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B requestInfo ï¿½Ì’lï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @return Returns the requestInfo.
      */
@@ -100,7 +100,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB requestInfo ‚Ì’l‚ğİ’è‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B requestInfo ï¿½Ì’lï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
      * 
      * @param requestInfo
      *            The requestInfo to set.
@@ -111,7 +111,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB managedConnectionFactory ‚Ì’l‚ğ•Ô‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B managedConnectionFactory ï¿½Ì’lï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @return Returns the managedConnectionFactory.
      */
@@ -120,7 +120,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB managedConnectionFactory ‚Ì’l‚ğİ’è‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B managedConnectionFactory ï¿½Ì’lï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
      * 
      * @param managedConnectionFactory
      *            The managedConnectionFactory to set.
@@ -132,7 +132,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB managedConnection ‚Ì’l‚ğ•Ô‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B managedConnection ï¿½Ì’lï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @return Returns the managedConnection.
      */
@@ -141,7 +141,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB managedConnection ‚Ì’l‚ğİ’è‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B managedConnection ï¿½Ì’lï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
      * 
      * @param managedConnection
      *            The managedConnection to set.
@@ -153,7 +153,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB logicalConnectionHandle ‚Ì’l‚ğ•Ô‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B logicalConnectionHandle ï¿½Ì’lï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @return Returns the logicalConnectionHandle.
      */
@@ -162,7 +162,7 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * ƒvƒƒpƒeƒB logicalConnectionHandle ‚Ì’l‚ğİ’è‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B logicalConnectionHandle ï¿½Ì’lï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
      * 
      * @param logicalConnectionHandle
      *            The logicalConnectionHandle to set.

@@ -48,7 +48,7 @@ public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer 
     }
 
     @Binding(bindingType = BindingType.MAY)
-    public void setTempDir(String tempDir) {
+    public void setTempDir(final String tempDir) {
         this.tempDirName = tempDir;
     }
 
@@ -57,7 +57,7 @@ public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer 
         try {
             createTempDir();
             createRarFile();
-            List<File> jarFiles = new ArrayList<File>();
+            final List<File> jarFiles = new ArrayList<File>();
             for (final Enumeration enumeration = rar.entries(); enumeration.hasMoreElements();) {
                 final JarEntry entry = (JarEntry) enumeration.nextElement();
                 final String entryName = entry.getName();

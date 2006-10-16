@@ -163,7 +163,7 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
     }
 
     /**
-     * ƒvƒƒpƒeƒB allowLocalTx ‚Ì’l‚ğ•Ô‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B allowLocalTx ï¿½Ì’lï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @return Returns the allowLocalTx.
      */
@@ -172,7 +172,7 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
     }
 
     /**
-     * ƒvƒƒpƒeƒB allowLocalTx ‚Ì’l‚ğİ’è‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B allowLocalTx ï¿½Ì’lï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
      * 
      * @param allowLocalTx
      *            The allowLocalTx to set.

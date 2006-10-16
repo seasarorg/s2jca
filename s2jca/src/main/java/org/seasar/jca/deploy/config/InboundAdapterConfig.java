@@ -34,11 +34,11 @@ public class InboundAdapterConfig {
     public void addMessageListenerType(final String messageListenerType) {
         messageListenerTypes.add(messageListenerType);
     }
-    
+
     public void setActivationspecClass(final String activationspecClass) {
         this.activationspecClass = activationspecClass;
     }
-    
+
     public void addRequiredConfigProperty(final String requiredConfigProperty) {
         requiredConfigProperties.add(requiredConfigProperty);
     }

@@ -90,7 +90,7 @@ public class WorkManagerImpl implements WorkManager {
         try {
             return work.execute(pool);
         } catch (final InterruptedException e) {
-            WorkException we = new WorkException(e);
+            final WorkException we = new WorkException(e);
             we.setErrorCode(WorkException.INTERNAL);
             throw we;
         }

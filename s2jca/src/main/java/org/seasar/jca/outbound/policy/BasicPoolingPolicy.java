@@ -102,7 +102,7 @@ public class BasicPoolingPolicy extends AbstractPolicy {
     protected void checkOut(final ConnectionManagementContext context) throws ResourceException {
         synchronized (lock) {
             waitForFreePool();
-            ManagedConnection mc = allocateFromFreePool(context);
+            final ManagedConnection mc = allocateFromFreePool(context);
             if (mc != null) {
                 context.setManagedConnection(mc);
                 return;
@@ -131,7 +131,7 @@ public class BasicPoolingPolicy extends AbstractPolicy {
         final ManagedConnection mc = pool.getMatched(context.getSubject(),
                 context.getRequestInfo(), mcf);
         if (mc != null) {
-            ExpireTask task = pool.moveFreeToActivePool(mc);
+            final ExpireTask task = pool.moveFreeToActivePool(mc);
             task.cancel();
             if (logger.isDebugEnabled()) {
                 logger.log("DJCA1006", new Object[] { mc });

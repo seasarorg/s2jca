@@ -47,12 +47,12 @@ public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
     }
 
     @Binding(bindingType = BindingType.MUST)
-    public void setMessageEndpointFactory(MessageEndpointFactory messageEndpointFactory) {
+    public void setMessageEndpointFactory(final MessageEndpointFactory messageEndpointFactory) {
         this.messageEndpointFactory = messageEndpointFactory;
     }
 
     @Binding(bindingType = BindingType.MUST)
-    public void setActivationSpecClassName(String activationSpecClassName) {
+    public void setActivationSpecClassName(final String activationSpecClassName) {
         this.activationSpecClassName = activationSpecClassName;
     }
 
@@ -80,7 +80,7 @@ public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
     protected ActivationSpec createActivationSpec() throws ResourceException {
         final Class<? extends ActivationSpec> activationSpecClass = ReflectionUtil.forName(
                 activationSpecClassName, getClassLoader()).asSubclass(ActivationSpec.class);
-        ActivationSpec activationSpec = ReflectionUtil.newInstance(activationSpecClass);
+        final ActivationSpec activationSpec = ReflectionUtil.newInstance(activationSpecClass);
         ResourceAdapterAssociation.class.cast(activationSpec).setResourceAdapter(
                 raDeployer.getResourceAdapter());
 

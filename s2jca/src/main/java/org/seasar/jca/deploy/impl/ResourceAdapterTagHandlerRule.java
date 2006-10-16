@@ -225,7 +225,8 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
 
             @Override
             public void end(final TagHandlerContext context, final String body) {
-                final OutboundAdapterConfig outboundConfig = peek(context, OutboundAdapterConfig.class);
+                final OutboundAdapterConfig outboundConfig = peek(context,
+                        OutboundAdapterConfig.class);
                 outboundConfig.setTransactionSupport(body);
             }
         });
@@ -287,18 +288,18 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
         });
     }
 
-    protected <T> T pop(final TagHandlerContext context, Class<T> clazz) {
+    protected <T> T pop(final TagHandlerContext context, final Class<T> clazz) {
         return clazz.cast(context.pop());
     }
 
-    protected <T> T peek(final TagHandlerContext context, Class<T> clazz) {
+    protected <T> T peek(final TagHandlerContext context, final Class<T> clazz) {
         return clazz.cast(context.peek());
     }
-    
+
     protected ConnectionDefConfig peekConnectionDefConfig(final TagHandlerContext context) {
         return peek(context, ConnectionDefConfig.class);
     }
-    
+
     protected InboundAdapterConfig peekInboundAdapterConfig(final TagHandlerContext context) {
         return peek(context, InboundAdapterConfig.class);
     }

@@ -21,7 +21,6 @@ import javax.resource.spi.endpoint.MessageEndpoint;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 
 import org.seasar.extension.unit.S2TestCase;
-import org.seasar.jca.inbound.MessageEndpointFactoryImpl;
 
 /**
  * @author koichik

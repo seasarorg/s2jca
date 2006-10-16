@@ -85,8 +85,8 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
             @Override
             public void record() throws Exception {
-                expect(tx.getStatus()).andReturn(Status.STATUS_ACTIVE);
-                tx.commit();
+                expect(tm.getStatus()).andReturn(Status.STATUS_ACTIVE);
+                tm.commit();
             }
         }.doTest();
     }
@@ -122,7 +122,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
             @Override
             public void record() throws Exception {
-                tx.rollback();
+                tm.rollback();
             }
         }.doTest();
     }
@@ -157,8 +157,8 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
             @Override
             public void record() throws Exception {
-                expect(tx.getStatus()).andReturn(Status.STATUS_MARKED_ROLLBACK);
-                tx.rollback();
+                expect(tm.getStatus()).andReturn(Status.STATUS_MARKED_ROLLBACK);
+                tm.rollback();
             }
         }.doTest();
     }

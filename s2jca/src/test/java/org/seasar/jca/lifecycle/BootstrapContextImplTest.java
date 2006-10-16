@@ -19,8 +19,6 @@ import java.util.Timer;
 
 import javax.resource.spi.BootstrapContext;
 
-import org.seasar.jca.lifecycle.BootstrapContextImpl;
-
 import junit.framework.TestCase;
 
 /**

@@ -75,7 +75,7 @@ public class LocalTransactionXAResource extends DefaultXAResource {
     }
 
     /**
-     * ƒvƒƒpƒeƒB readOnly ‚Ì’l‚ğ•Ô‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B readOnly ï¿½Ì’lï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @return Returns the readOnly.
      */
@@ -84,7 +84,7 @@ public class LocalTransactionXAResource extends DefaultXAResource {
     }
 
     /**
-     * ƒvƒƒpƒeƒB readOnly ‚Ì’l‚ğİ’è‚µ‚Ü‚·B
+     * ï¿½vï¿½ï¿½ï¿½pï¿½eï¿½B readOnly ï¿½Ì’lï¿½ï¿½İ’è‚µï¿½Ü‚ï¿½ï¿½B
      * 
      * @param readOnly
      *            The readOnly to set.

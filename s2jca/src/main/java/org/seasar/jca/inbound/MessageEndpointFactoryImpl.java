@@ -59,7 +59,7 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
     }
 
     @Binding(bindingType = BindingType.MUST)
-    public void setContainer(S2Container container) {
+    public void setContainer(final S2Container container) {
         this.container = container;
     }
 
@@ -68,22 +68,22 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
     }
 
     @Binding(bindingType = BindingType.MAY)
-    public void setTransactionManager(TransactionManager transactionManager) {
+    public void setTransactionManager(final TransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 
     @Binding(bindingType = BindingType.MAY)
-    public void setEndpointClass(Class<? extends AbstractMessageEndpointImpl> endpointClass) {
+    public void setEndpointClass(final Class<? extends AbstractMessageEndpointImpl> endpointClass) {
         this.endpointClass = endpointClass;
     }
 
     @Binding(bindingType = BindingType.MAY)
-    public void setListenerType(Class<?> listenerType) {
+    public void setListenerType(final Class<?> listenerType) {
         this.listenerType = listenerType;
     }
 
     @Binding(bindingType = BindingType.MAY)
-    public void setListenerName(String listenerName) {
+    public void setListenerName(final String listenerName) {
         this.listenerName = listenerName;
     }
 
@@ -109,7 +109,7 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
     }
 
     public MessageEndpoint createEndpoint(final XAResource xaResource) throws UnavailableException {
-        MessageEndpoint messageEndpoint = ReflectionUtil.newInstance(endpointConstructor,
+        final MessageEndpoint messageEndpoint = ReflectionUtil.newInstance(endpointConstructor,
                 new Object[] { this, transactionManager, xaResource, container.getClassLoader(),
                         componentDef.getComponent() });
         if (logger.isDebugEnabled()) {

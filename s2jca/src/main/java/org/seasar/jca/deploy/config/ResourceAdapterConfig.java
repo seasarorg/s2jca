@@ -83,7 +83,7 @@ public class ResourceAdapterConfig extends ConfigPropertyContainer {
         return outboundAdapters.size();
     }
 
-    public OutboundAdapterConfig getOutboundAdapter(int index) {
+    public OutboundAdapterConfig getOutboundAdapter(final int index) {
         return outboundAdapters.get(index);
     }
 
@@ -91,8 +91,8 @@ public class ResourceAdapterConfig extends ConfigPropertyContainer {
         this.outboundAdapters.add(outboundAdapter);
     }
 
-    public ConnectionDefConfig getConnectionDef(final String mcf, int index) {
-        ConnectionDefConfig[] config = getConnectionDef(mcf);
+    public ConnectionDefConfig getConnectionDef(final String mcf, final int index) {
+        final ConnectionDefConfig[] config = getConnectionDef(mcf);
         if (index >= config.length) {
             return null;
         }

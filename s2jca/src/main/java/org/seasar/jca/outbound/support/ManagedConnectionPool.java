@@ -46,7 +46,8 @@ public class ManagedConnectionPool<T> {
         this(nextPolicy, false);
     }
 
-    public ManagedConnectionPool(final ConnectionManagementPolicy nextPolicy, boolean accessOrder) {
+    public ManagedConnectionPool(final ConnectionManagementPolicy nextPolicy,
+            final boolean accessOrder) {
         this.activePool = new HashSet<ManagedConnection>();
         this.freePool = new LinkedHashMap<ManagedConnection, T>(64, 0.75f, accessOrder);
         this.freePoolView = Collections.unmodifiableSet(freePool.keySet());

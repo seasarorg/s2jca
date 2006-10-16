@@ -27,8 +27,6 @@ import javax.resource.spi.work.WorkListener;
 import javax.resource.spi.work.WorkManager;
 import javax.resource.spi.work.WorkRejectedException;
 
-import org.seasar.jca.work.WorkManagerImpl;
-
 import junit.framework.TestCase;
 
 /**
