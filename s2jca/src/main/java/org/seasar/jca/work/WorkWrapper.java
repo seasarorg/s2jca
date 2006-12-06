@@ -32,6 +32,9 @@ import javax.resource.spi.work.WorkRejectedException;
  * @author koichik
  */
 public class WorkWrapper implements Runnable {
+
+    protected static ThreadLocal<Work> currentWork = new ThreadLocal<Work>();
+
     protected WorkManagerImpl workManager;
     protected Work work;
     protected long startTimeout;
@@ -41,6 +44,10 @@ public class WorkWrapper implements Runnable {
     protected long acceptedTime;
     protected boolean started;
     protected WorkException exception;
+
+    public static Work getCurrentWork() {
+        return currentWork.get();
+    }
 
     public WorkWrapper(final WorkManagerImpl workManager, final Work work, final int latchCount) {
         this(workManager, work, WorkManager.INDEFINITE, null, new WorkAdapter(), latchCount);
@@ -72,10 +79,12 @@ public class WorkWrapper implements Runnable {
     public void run() {
         try {
             started = start();
+            currentWork.set(work);
             if (started) {
                 doWork();
             }
         } finally {
+            currentWork.remove();
             complete();
         }
     }
