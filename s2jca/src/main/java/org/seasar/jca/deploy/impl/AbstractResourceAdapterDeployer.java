@@ -45,22 +45,37 @@ import org.seasar.jca.deploy.config.ResourceAdapterConfig;
 import org.seasar.jca.exception.SResourceException;
 
 /**
+ * リソースアダプタをデプロイする抽象クラスです．
+ * 
  * @author koichik
  */
 public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<ResourceAdapter>
         implements ResourceAdapterDeployer {
+
+    // constants
     protected static final String META_INF_RA_XML = "META-INF/ra.xml";
 
+    // static fields
     private static final Logger logger = Logger.getLogger(AbstractResourceAdapterDeployer.class);
 
+    // instance fields
     protected BootstrapContext bc;
     protected String path;
     protected ResourceAdapter ra;
     protected ResourceAdapterConfig raConfig;
 
+    /**
+     * インスタンスを構築します．
+     */
     protected AbstractResourceAdapterDeployer() {
     }
 
+    /**
+     * ブートストラップ・コンテキストを設定します．
+     * 
+     * @param bc
+     *            ブートストラップ・コンテキスト
+     */
     @Binding(bindingType = BindingType.MUST)
     public void setBootstrapContext(final BootstrapContext bc) {
         this.bc = bc;
@@ -87,6 +102,11 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         }
     }
 
+    /**
+     * リソースアダプタを作成してプロパティを設定します．
+     * 
+     * @return リソースアダプタ
+     */
     protected ResourceAdapter createResourceAdapter() {
         final Class<? extends ResourceAdapter> raClass = ReflectionUtil.forName(
                 raConfig.getRaClass(), getClassLoader()).asSubclass(ResourceAdapter.class);
@@ -95,6 +115,14 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         return ra;
     }
 
+    /**
+     * デプロイメント・ディスクリプタを読み込みます．
+     * 
+     * @throws ResourceException
+     *             デプロイメント・ディスクリプタの読み込み中にエラーが発生した場合にスローされます
+     * @throws IOException
+     *             デプロイメント・ディスクリプタの読み込み中にエラーが発生した場合にスローされます
+     */
     protected void loadDeploymentDescripter() throws ResourceException, IOException {
         final SaxHandlerParser parser = createSaxHandlerParser();
         final InputStream is = getDeploymentDescripterAsInputStream();
@@ -105,6 +133,11 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         }
     }
 
+    /**
+     * SAXハンドラ・パーザを作成します．
+     * 
+     * @return SAXハンドラ・パーザ
+     */
     protected SaxHandlerParser createSaxHandlerParser() {
         final SAXParserFactory factory = SAXParserFactoryUtil.newInstance();
         final SAXParser saxParser = SAXParserFactoryUtil.newSAXParser(factory);
@@ -112,6 +145,13 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         return new SaxHandlerParser(handler, saxParser);
     }
 
+    /**
+     * 設定されたJarファイルをクラスパスとして持つクラスローダを作成します．
+     * 
+     * @return クラスローダ
+     * @throws ResourceException
+     *             JarファイルのパスをURLで表現できなかった場合にスローされます
+     */
     protected ClassLoader createClassLoader() throws ResourceException {
         try {
             final URL[] urls = toURL(getJarFiles());
@@ -121,6 +161,15 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         }
     }
 
+    /**
+     * ファイルの配列をURLの配列に変換して返します．
+     * 
+     * @param jars
+     *            ファイルの配列
+     * @return URLの配列
+     * @throws MalformedURLException
+     *             ファイルをURLで表現できなかった場合にスローされます．
+     */
     protected URL[] toURL(final File[] jars) throws MalformedURLException {
         final URL[] urls = new URL[jars.length];
         for (int i = 0; i < jars.length; ++i) {
@@ -129,12 +178,27 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         return urls;
     }
 
+    /**
+     * リソースアダプタが持つJarファイルの配列を返します．
+     * 
+     * @return Jarファイルの配列
+     */
     protected abstract File[] getJarFiles();
 
+    /**
+     * デプロイメント・ディスクリプタを読み込むためのバイトストリームを返します．
+     * 
+     * @return デプロイメント・ディスクリプタを読み込むためのバイトストリーム
+     * @throws ResourceException
+     *             デプロイメント・ディスクリプタを読み込むためのバイトストリームを作成できなかった場合にスローされます
+     */
     protected abstract InputStream getDeploymentDescripterAsInputStream() throws ResourceException;
 
+    /**
+     * リソースアダプタをデプロイした情報をログに出力します．
+     */
     protected void loggingDeployedMessage() {
-        final StringBuilder buf = new StringBuilder();
+        final StringBuilder buf = new StringBuilder(1000);
 
         buf.append("\t").append("display-name : ").append(raConfig.getDisplayName()).append(
                 LINE_SEPARATOR);
@@ -152,6 +216,12 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         logger.log("DJCA1013", new Object[] { new String(buf) });
     }
 
+    /**
+     * outboundなリソースアダプタのデプロイ情報をログ出力する文字列を作成します．
+     * 
+     * @param buf
+     *            ログ情報を作成するバッファ
+     */
     protected void loggingOutboundResourceAdapter(final StringBuilder buf) {
         for (int i = 0; i < raConfig.getOutboundAdapterSize(); ++i) {
             loggingConnectionDefinition(buf, raConfig.getOutboundAdapter(i));
@@ -162,6 +232,14 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         }
     }
 
+    /**
+     * outboundなアダプタ構成のデプロイ情報をログ出力する文字列を作成します．
+     * 
+     * @param buf
+     *            ログ情報を作成するバッファ
+     * @param outboundConfig
+     *            outboundなアダプタ構成
+     */
     protected void loggingConnectionDefinition(final StringBuilder buf,
             final OutboundAdapterConfig outboundConfig) {
         for (final String mcf : outboundConfig.getMcfClassNames()) {
@@ -177,12 +255,23 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         return bc;
     }
 
+    /**
+     * リソースアダプタのパスを返します．
+     * 
+     * @return リソースアダプタのパス
+     */
     public String getPath() {
         return this.path;
     }
 
-    public void setPath(final String baseDir) {
-        this.path = baseDir;
+    /**
+     * リソースアダプタのパスを設定します．
+     * 
+     * @param path
+     *            リソースアダプタのパス
+     */
+    public void setPath(final String path) {
+        this.path = path;
     }
 
     public ResourceAdapter getResourceAdapter() {
@@ -192,4 +281,5 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
     public ResourceAdapterConfig getResourceAdapterConfig() {
         return raConfig;
     }
+
 }

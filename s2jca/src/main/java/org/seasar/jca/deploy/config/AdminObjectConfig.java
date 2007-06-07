@@ -16,6 +16,11 @@
 package org.seasar.jca.deploy.config;
 
 /**
+ * 管理オブジェクトの構成情報を保持するクラスです．
+ * <p>
+ * 管理オブジェクト (Administrative Object) とは，JMSの{@link javax.jms.Queue}などのことです．
+ * </p>
+ * 
  * @author koichik
  */
 public class AdminObjectConfig extends ConfigPropertyContainer {

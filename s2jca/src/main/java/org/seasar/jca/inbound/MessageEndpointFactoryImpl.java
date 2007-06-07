@@ -44,7 +44,7 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
 
     protected S2Container container;
     protected TransactionManager transactionManager;
-    protected Class<? extends AbstractMessageEndpointImpl> endpointClass = JMSMessageEndpointImpl.class;
+    protected Class<? extends AbstractMessageEndpointImpl> endpointClass;
     protected Class<?> listenerType = MessageListener.class;
     protected String listenerName;
     protected boolean deliveryTransacted = true;

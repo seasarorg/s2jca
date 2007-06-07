@@ -24,18 +24,56 @@ import javax.resource.spi.ResourceAdapter;
 import org.seasar.jca.deploy.config.ResourceAdapterConfig;
 
 /**
+ * リソースアダプタをデプロイするコンポーネントのインタフェースです．
+ * 
  * @author koichik
+ * @see javax.resource.spi.ResourceAdapter
  */
 public interface ResourceAdapterDeployer {
+
+    /**
+     * リソースアダプタをデプロイします．
+     * 
+     * @throws ResourceException
+     *             リソースアダプタのデプロイに失敗した場合にスローされます
+     * @throws IOException
+     *             リソースアダプタのデプロイ中に入出力エラーが発生した場合にスローされます
+     * @see javax.resource.spi.ResourceAdapter#start()
+     */
     public void start() throws ResourceException, IOException;
 
+    /**
+     * リソースアダプタをアンデプロイします．
+     * 
+     */
     public void stop();
 
+    /**
+     * ブートストラップコンテキストを返します．
+     * 
+     * @return ブートストラップコンテキスト
+     */
     public BootstrapContext getBootstrapContext();
 
+    /**
+     * リソースアダプタを返します．
+     * 
+     * @return リソースアダプタ
+     */
     public ResourceAdapter getResourceAdapter();
 
+    /**
+     * リソースアダプタの構成を返します．
+     * 
+     * @return リソースアダプタの構成
+     */
     public ResourceAdapterConfig getResourceAdapterConfig();
 
+    /**
+     * リソースアダプタのデプロイに使用するクラスローダを返します．
+     * 
+     * @return リソースアダプタのデプロイに使用するクラスローダ
+     */
     public ClassLoader getClassLoader();
+
 }

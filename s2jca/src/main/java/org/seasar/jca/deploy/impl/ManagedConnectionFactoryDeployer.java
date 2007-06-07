@@ -127,7 +127,7 @@ public class ManagedConnectionFactoryDeployer extends AbstractDeployer<ManagedCo
     }
 
     protected void loggingDeployedMessage() {
-        final StringBuilder buf = new StringBuilder();
+        final StringBuilder buf = new StringBuilder(1000);
 
         buf.append("\t").append("managedconnectionfactory-class : ").append(mcfClassName).append(
                 LINE_SEPARATOR);

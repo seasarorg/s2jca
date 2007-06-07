@@ -28,35 +28,93 @@ import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.jca.deploy.config.ConfigProperty;
 
 /**
+ * リソースアダプタ等をデプロイする抽象基底クラスです．
+ * 
+ * @param TARGET
+ *            デプロイ対象
  * @author koichik
  */
 public abstract class AbstractDeployer<TARGET> {
+
+    // constants
     protected static final String LINE_SEPARATOR = System.getProperty("line.separator");
     protected static final Class[] PARAMETER_TYPE = new Class[] { String.class };
 
+    // instance fields
     protected final List<ConfigProperty> configProperties = new ArrayList<ConfigProperty>();
     protected ClassLoader cl;
 
+    /**
+     * インスタンスを構築します．
+     */
+    public AbstractDeployer() {
+    }
+
+    /**
+     * プロパティを設定します．
+     * 
+     * @param name
+     *            プロパティの名前
+     * @param value
+     *            プロパティの値
+     */
     public void setProperty(final String name, final String value) {
         setProperty(new ConfigProperty(name, value));
     }
 
+    /**
+     * プロパティを設定します．
+     * 
+     * @param name
+     *            プロパティの名前
+     * @param type
+     *            プロパティの型
+     * @param value
+     *            プロパティの値
+     */
     public void setProperty(final String name, final String type, final String value) {
         setProperty(new ConfigProperty(name, type, value));
     }
 
+    /**
+     * プロパティを設定します．
+     * 
+     * @param configProperty
+     *            プロパティ
+     */
     public void setProperty(final ConfigProperty configProperty) {
         configProperties.add(configProperty);
     }
 
+    /**
+     * クラスローダを返します．
+     * 
+     * @return クラスローダ
+     */
     public ClassLoader getClassLoader() {
         return cl;
     }
 
+    /**
+     * クラスローダを設定します．
+     * 
+     * @param cl
+     *            クラスローダ
+     */
     public void setClassLoader(final ClassLoader cl) {
         this.cl = cl;
     }
 
+    /**
+     * デプロイ対象にプロパティのコレクションを設定します．
+     * 
+     * @param beanDesc
+     *            デプロイ対象クラスの<code>BeanDesc</code>
+     * @param target
+     *            デプロイ対象のインスタンス
+     * @param properties
+     *            設定するプロパティのコレクション
+     */
     protected void applyProperties(final BeanDesc beanDesc, final TARGET target,
             final Collection<ConfigProperty> properties) {
         for (final ConfigProperty property : properties) {
@@ -64,6 +122,16 @@ public abstract class AbstractDeployer<TARGET> {
         }
     }
 
+    /**
+     * デプロイ対象にプロパティを設定します．
+     * 
+     * @param beanDesc
+     *            デプロイ対象クラスの<code>BeanDesc</code>
+     * @param target
+     *            デプロイ対象のインスタンス
+     * @param property
+     *            設定するプロパティ
+     */
     protected void applyProperty(final BeanDesc beanDesc, final TARGET target,
             final ConfigProperty property) {
         final PropertyDesc desc = beanDesc.getPropertyDesc(property.getName());
@@ -80,6 +148,16 @@ public abstract class AbstractDeployer<TARGET> {
         }
     }
 
+    /**
+     * デプロイ対象に設定するプロパティのコレクションをログ出力用にフォーマットします．
+     * 
+     * @param properties
+     *            プロパティのコレクション
+     * @param indent
+     *            インデントのレベル
+     * @param buf
+     *            文字列バッファ
+     */
     protected void loggingConfigProperties(final Collection<ConfigProperty> properties,
             final String indent, final StringBuilder buf) {
         final Map<String, ConfigProperty> map = new LinkedHashMap<String, ConfigProperty>();
@@ -99,4 +177,5 @@ public abstract class AbstractDeployer<TARGET> {
             buf.append(LINE_SEPARATOR);
         }
     }
+
 }

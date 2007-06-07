@@ -15,30 +15,61 @@
  */
 package org.seasar.jca.deploy.config;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.resource.spi.ActivationSpec;
+
+import org.seasar.framework.util.tiger.CollectionsUtil;
+
 /**
+ * inboundアダプタの構成情報を保持するクラスです．
+ * 
  * @author koichik
  */
 public class InboundAdapterConfig {
-    protected List<String> messageListenerTypes = new ArrayList<String>();
-    protected String activationspecClass;
-    protected Set<String> requiredConfigProperties = new HashSet<String>();
+    // instance fields
+    /** メッセージリスナのマップ */
+    protected final List<String> messageListenerTypes = CollectionsUtil.newArrayList();
 
+    /** {@link ActivationSpec}の実装クラス名 */
+    protected String activationspecClass;
+
+    /** 必須プロパティの名前のセット */
+    protected final Set<String> requiredConfigProperties = CollectionsUtil.newHashSet();
+
+    /**
+     * インスタンスを構築します．
+     */
     public InboundAdapterConfig() {
     }
 
+    /**
+     * メッセージリスナのインタフェース名を追加します．
+     * 
+     * @param messageListenerType
+     *            メッセージリスナのインタフェース名
+     */
     public void addMessageListenerType(final String messageListenerType) {
         messageListenerTypes.add(messageListenerType);
     }
 
+    /**
+     * アクティベーションスペックの実装クラス名を設定します．
+     * 
+     * @param activationspecClass
+     *            アクティベーションスペックの実装クラス名
+     */
     public void setActivationspecClass(final String activationspecClass) {
         this.activationspecClass = activationspecClass;
     }
 
+    /**
+     * 必須のプロパティ名を追加します．
+     * 
+     * @param requiredConfigProperty
+     *            必須のプロパティ名
+     */
     public void addRequiredConfigProperty(final String requiredConfigProperty) {
         requiredConfigProperties.add(requiredConfigProperty);
     }
