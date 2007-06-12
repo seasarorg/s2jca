@@ -41,15 +41,21 @@ import org.seasar.jca.exception.SResourceException;
  */
 public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
     protected JarFile rar;
+
     protected String tempDirName;
+
     protected File tempDir;
 
     public RarResourceAdapterDeployer() {
     }
 
+    public RarResourceAdapterDeployer(final int maxThreads) {
+        super(maxThreads);
+    }
+
     @Binding(bindingType = BindingType.MAY)
     public void setTempDir(final String tempDir) {
-        this.tempDirName = tempDir;
+        tempDirName = tempDir;
     }
 
     @Override

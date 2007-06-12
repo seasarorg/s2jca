@@ -29,8 +29,8 @@ public class GenericJMSTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        include("jms-genericjms-inbound.dicon");
-        include("jms-genericjms-outbound.dicon");
+        include("jms-inbound.dicon");
+        include("jms-outbound.dicon");
         receiveMessages = 0;
     }
 
@@ -57,16 +57,13 @@ public class GenericJMSTest extends S2TestCase {
                 try {
                     MessageProducer producer = session.createProducer(session.createQueue("foo"));
                     producer.send(session.createTextMessage(Integer.toString(num)));
-                }
-                finally {
+                } finally {
                     session.close();
                 }
-            }
-            finally {
+            } finally {
                 con.close();
             }
-        }
-        finally {
+        } finally {
             tm.commit();
         }
     }

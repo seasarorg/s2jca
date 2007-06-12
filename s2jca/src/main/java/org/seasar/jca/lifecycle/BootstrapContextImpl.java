@@ -27,6 +27,7 @@ import javax.resource.spi.work.WorkManager;
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
 import org.seasar.framework.container.annotation.tiger.Component;
+import org.seasar.jca.work.WorkManagerImpl;
 
 /**
  * @author koichik
@@ -34,6 +35,13 @@ import org.seasar.framework.container.annotation.tiger.Component;
 @Component
 public class BootstrapContextImpl implements BootstrapContext {
     protected WorkManager workManager;
+
+    public BootstrapContextImpl() {
+    }
+
+    public BootstrapContextImpl(final int maxThreads) {
+        workManager = new WorkManagerImpl(maxThreads);
+    }
 
     public Timer createTimer() throws UnavailableException {
         return AccessController.doPrivileged(new PrivilegedAction<Timer>() {
@@ -47,7 +55,7 @@ public class BootstrapContextImpl implements BootstrapContext {
         return workManager;
     }
 
-    @Binding(bindingType = BindingType.MUST)
+    @Binding(bindingType = BindingType.MAY)
     public void setWorkManager(final WorkManager workManager) {
         this.workManager = workManager;
     }

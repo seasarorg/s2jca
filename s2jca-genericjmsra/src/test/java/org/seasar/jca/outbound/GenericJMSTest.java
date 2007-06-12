@@ -13,10 +13,9 @@ import javax.transaction.TransactionManager;
 
 import org.seasar.extension.unit.S2TestCase;
 
-
 /**
  * @author koichik
- *
+ * 
  */
 public class GenericJMSTest extends S2TestCase {
     protected TransactionManager tm;
@@ -33,7 +32,7 @@ public class GenericJMSTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        include("jms-genericjms-outbound.dicon");
+        include("jms-outbound.dicon");
     }
 
     public void test() throws Exception {

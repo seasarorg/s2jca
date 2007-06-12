@@ -32,6 +32,10 @@ public class FsResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
     public FsResourceAdapterDeployer() {
     }
 
+    public FsResourceAdapterDeployer(final int maxThreads) {
+        super(maxThreads);
+    }
+
     @Override
     protected File[] getJarFiles() {
         final File baseDir = new File(path);

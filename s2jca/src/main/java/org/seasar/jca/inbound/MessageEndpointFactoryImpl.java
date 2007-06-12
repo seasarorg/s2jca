@@ -43,12 +43,19 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
     private static final Logger logger = Logger.getLogger(MessageEndpointFactoryImpl.class);
 
     protected S2Container container;
+
     protected TransactionManager transactionManager;
-    protected Class<? extends AbstractMessageEndpointImpl> endpointClass;
+
+    protected Class<? extends AbstractMessageEndpointImpl> endpointClass = JMSMessageEndpointImpl.class;
+
     protected Class<?> listenerType = MessageListener.class;
+
     protected String listenerName;
+
     protected boolean deliveryTransacted = true;
+
     protected Constructor<? extends AbstractMessageEndpointImpl> endpointConstructor;
+
     protected ComponentDef componentDef;
 
     public MessageEndpointFactoryImpl() {

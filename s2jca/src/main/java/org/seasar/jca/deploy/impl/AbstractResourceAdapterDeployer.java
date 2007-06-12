@@ -43,6 +43,7 @@ import org.seasar.jca.deploy.config.ConnectionDefConfig;
 import org.seasar.jca.deploy.config.OutboundAdapterConfig;
 import org.seasar.jca.deploy.config.ResourceAdapterConfig;
 import org.seasar.jca.exception.SResourceException;
+import org.seasar.jca.lifecycle.BootstrapContextImpl;
 
 /**
  * リソースアダプタをデプロイする抽象クラスです．
@@ -60,8 +61,11 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
 
     // instance fields
     protected BootstrapContext bc;
+
     protected String path;
+
     protected ResourceAdapter ra;
+
     protected ResourceAdapterConfig raConfig;
 
     /**
@@ -71,12 +75,22 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
     }
 
     /**
+     * インスタンスを構築します．
+     * 
+     * @param maxThreads
+     *            スレッド数
+     */
+    protected AbstractResourceAdapterDeployer(final int maxThreads) {
+        bc = new BootstrapContextImpl(maxThreads);
+    }
+
+    /**
      * ブートストラップ・コンテキストを設定します．
      * 
      * @param bc
      *            ブートストラップ・コンテキスト
      */
-    @Binding(bindingType = BindingType.MUST)
+    @Binding(bindingType = BindingType.MAY)
     public void setBootstrapContext(final BootstrapContext bc) {
         this.bc = bc;
     }
@@ -261,7 +275,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
      * @return リソースアダプタのパス
      */
     public String getPath() {
-        return this.path;
+        return path;
     }
 
     /**

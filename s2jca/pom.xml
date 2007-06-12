@@ -15,17 +15,17 @@
   <mailingLists>
     <mailingList>
       <name>Seasar-user</name>
-      <subscribe>http://lists.sourceforge.jp/mailman/listinfo/seasar-user</subscribe>
-      <unsubscribe>http://lists.sourceforge.jp/mailman/listinfo/seasar-user</unsubscribe>
-      <post>seasar-user@lists.sourceforge.jp</post>
-      <archive>http://lists.sourceforge.jp/mailman/archives/seasar-user/</archive>
+      <subscribe>https://www.seasar.org/mailman/listinfo/seasar-user</subscribe>
+      <unsubscribe>https://www.seasar.org/mailman/listinfo/seasar-user</unsubscribe>
+      <post>seasar-user@ml.seasar.org</post>
+      <archive>https://www.seasar.org/mailman/listinfo/seasar-user</archive>
     </mailingList>
     <mailingList>
       <name>Seasar-dev</name>
-      <subscribe>http://lists.sourceforge.jp/mailman/listinfo/seasar-dev</subscribe>
-      <unsubscribe>http://lists.sourceforge.jp/mailman/listinfo/seasar-dev</unsubscribe>
-      <post>seasar-dev@lists.sourceforge.jp</post>
-      <archive>http://lists.sourceforge.jp/mailman/archives/seasar-dev/</archive>
+      <subscribe>https://www.seasar.org/mailman/listinfo/seasar-dev</subscribe>
+      <unsubscribe>https://www.seasar.org/mailman/listinfo/seasar-dev</unsubscribe>
+      <post>seasar-dev@ml.seasar.org</post>
+      <archive>https://www.seasar.org/mailman/listinfo/seasar-dev</archive>
     </mailingList>
     <mailingList>
       <name>Seasar-user-en</name>
@@ -45,7 +45,7 @@
   <scm>
     <connection>scm:svn:https://www.seasar.org/svn/sandbox/s2jca/trunk/s2jca/</connection>
     <developerConnection>scm:svn:https://www.seasar.org/svn/sandbox/s2jca/trunk/s2jca/</developerConnection>
-    <url>http://www.seasar.org/websvn/listing.php?repname=sandbox.s2jca</url>
+    <url>http://svn.seasar.org/browse/?root=sandbox.s2jca</url>
   </scm>
   <organization>
     <name>The Seasar Foundation</name>
@@ -88,14 +88,17 @@
           <links>
           	<link>http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/</link>
             <link>http://java.sun.com/javaee/5/docs/api/</link>
+            <link>http://aopalliance.sourceforge.net/doc/</link>
+            <link>http://s2container.seasar.org/2.4/s2-framework/ja/apidocs/</link>
+            <link>http://s2container.seasar.org/2.4/s2-extension/ja/apidocs/</link>
+            <link>http://s2container.seasar.org/2.4/s2-tiger/ja/apidocs/</link>
           </links>
         </configuration>
         <executions>
           <execution>
-            <id>javadoc-jar</id>
-            <phase>package</phase>
+            <phase>site</phase>
             <goals>
-              <goal>jar</goal>
+              <goal>javadoc</goal>
             </goals>
           </execution>
         </executions>
@@ -113,12 +116,19 @@
     <dependency>
       <groupId>org.seasar.container</groupId>
       <artifactId>s2-tiger</artifactId>
-      <version>2.4.7</version>
+      <version>2.4.14-SNAPSHOT</version>
       <type>jar</type>
     </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-j2ee_1.4_spec</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-jta_1.1_spec</artifactId>
       <version>1.0</version>
       <type>jar</type>
       <scope>provided</scope>
@@ -136,20 +146,19 @@
       <type>jar</type>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <version>2.2</version>
-      <type>jar</type>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   <distributionManagement>
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>maven.seasar.org</id>
       <name>The Seasar Foundation Maven2 Repository</name>
-      <url>scp://www.seasar.org/home/groups/sandbox/s2jca/maven/maven2</url>
+      <url>dav:https://www.seasar.org/maven/maven2</url>
     </repository>
+    <snapshotRepository>
+      <uniqueVersion>true</uniqueVersion>
+      <id>maven.seasar.org</id>
+      <name>The Seasar Foundation Maven2 Snapshot Repository</name>
+      <url>dav:https://www.seasar.org/maven/maven2-snapshot</url>
+    </snapshotRepository>
   </distributionManagement>
 </project>

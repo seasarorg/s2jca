@@ -7,13 +7,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/s2jca"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
-	<classpathentry exported="true" kind="lib" path="C:/develop/products/etc/genericjmsra-1.0a/build/dist/genericra.jar"/>
-	<classpathentry kind="var" path="ACTIVEMQ_HOME/lib/activeio-core-3.0-beta3.jar"/>
-	<classpathentry kind="var" path="ACTIVEMQ_HOME/lib/activemq-console-4.0.1.jar"/>
-	<classpathentry kind="var" path="ACTIVEMQ_HOME/lib/activemq-core-4.0.1.jar"/>
-	<classpathentry kind="var" path="ACTIVEMQ_HOME/lib/backport-util-concurrent-2.1.jar"/>
-	<classpathentry kind="var" path="ACTIVEMQ_HOME/lib/geronimo-j2ee-management_1.0_spec-1.0.jar"/>
-	<classpathentry kind="var" path="ACTIVEMQ_HOME/lib/geronimo-jms_1.1_spec-1.0.jar"/>
-	<classpathentry kind="var" path="ACTIVEMQ_HOME/lib/mx4j-2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/genericra-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/activeio-core-3.0.0-incubator.jar"/>
+	<classpathentry kind="lib" path="lib/activemq-core-4.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/backport-util-concurrent-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/geronimo-j2ee-management_1.0_spec-1.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

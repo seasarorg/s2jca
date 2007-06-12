@@ -39,7 +39,7 @@ public class ActiveMQTest extends S2TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        include("jms-activemq-outbound.dicon");
+        include("jms-outbound.dicon");
     }
 
     public void test() throws Exception {

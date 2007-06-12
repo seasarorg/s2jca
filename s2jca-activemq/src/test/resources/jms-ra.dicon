@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
+	<include path="j2ee.dicon"/>
+
+	<component
+		class="org.seasar.jca.deploy.impl.RarResourceAdapterDeployer"
+	>
+		<arg>10</arg>
+		<property name="path">
+			"ra/activemq-rar-4.1.1.rar"
+		</property>
+		<initMethod name="setProperty">
+			<arg>"ServerUrl"</arg>
+			<arg>"tcp://localhost:61616?trace=true"</arg>
+		</initMethod>
+	</component>
+</components>
