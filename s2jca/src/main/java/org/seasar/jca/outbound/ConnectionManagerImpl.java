@@ -31,25 +31,53 @@ import org.seasar.jca.outbound.policy.ConnectionManagementPolicy;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 
 /**
+ * {@link ConnectionManager}の実装クラスです．
+ * 
  * @author koichik
  */
 public class ConnectionManagerImpl implements ConnectionManager, Serializable {
+
+    // constants
     private static final long serialVersionUID = 1L;
 
+    // static fields
     private static final Logger logger = Logger.getLogger(ConnectionManagerImpl.class);
 
+    // instance fields
+    /** マネージドコネクションファクトリ */
     protected final ManagedConnectionFactory mcf;
+
+    /** コネクションイベントリスナ */
     protected final ConnectionEventListener listener = new Listener();
+
+    /** コネクション管理ポリシー */
     protected ConnectionManagementPolicy policy = new NoPoolingPolicy();
 
+    /**
+     * インスタンスを構築します．
+     */
     public ConnectionManagerImpl() {
         this.mcf = null;
     }
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param mcf
+     *            マネージドコネクションファクトリ
+     */
     public ConnectionManagerImpl(final ManagedConnectionFactory mcf) {
         this.mcf = mcf;
     }
 
+    /**
+     * コネクション管理ポリシーを追加します．
+     * 
+     * @param cmPolicy
+     *            コネクション管理ポリシー
+     * @throws ResourceException
+     *             コネクション管理ポリシーの追加で例外が発生した場合
+     */
     public void addConnectionManagementPolicy(final ConnectionManagementPolicy cmPolicy)
             throws ResourceException {
         cmPolicy.initialize(mcf, this.policy);
@@ -65,17 +93,37 @@ public class ConnectionManagerImpl implements ConnectionManager, Serializable {
         return lch != null ? lch : context.allocateLogicalConnectionHandle();
     }
 
+    /**
+     * インスタンスを破棄します．
+     */
     public void dispose() {
         policy.dispose();
     }
 
-    protected void assertValidMCF(final ManagedConnectionFactory mcf) throws SResourceException {
+    /**
+     * マネージドコネクションファクトリが妥当か検証します．
+     * 
+     * @param mcf
+     *            マネージドコネクションファクトリ
+     * @throws ResourceException
+     *             マネージドコネクションファクトリが不正な場合
+     */
+    protected void assertValidMCF(final ManagedConnectionFactory mcf) throws ResourceException {
         if (this.mcf != null && this.mcf != mcf) {
             throw new SResourceException("EJCA0015", new Object[] { mcf });
         }
     }
 
+    /**
+     * デフォルトで使用されるコネクション管理ポリシーです．
+     * <p>
+     * このポリシーはコネクションプールしません．
+     * </p>
+     * 
+     * @author koichik
+     */
     public class NoPoolingPolicy implements ConnectionManagementPolicy {
+
         public void initialize(final ManagedConnectionFactory mcf,
                 final ConnectionManagementPolicy nextPolicy) throws ResourceException {
         }
@@ -101,7 +149,13 @@ public class ConnectionManagerImpl implements ConnectionManager, Serializable {
         }
     }
 
+    /**
+     * コネクション管理ポリシーにコネクションイベントを通知するためのコネクションイベントリスナです．
+     * 
+     * @author koichik
+     */
     protected class Listener implements ConnectionEventListener {
+
         public void connectionClosed(final ConnectionEvent event) {
             try {
                 final ManagedConnection mc = (ManagedConnection) event.getSource();
@@ -132,5 +186,7 @@ public class ConnectionManagerImpl implements ConnectionManager, Serializable {
 
         public void localTransactionStarted(final ConnectionEvent event) {
         }
+
     }
+
 }

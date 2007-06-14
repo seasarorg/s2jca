@@ -26,25 +26,52 @@ import javax.resource.spi.work.WorkManager;
 
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
-import org.seasar.framework.container.annotation.tiger.Component;
 import org.seasar.jca.work.WorkManagerImpl;
 
 /**
+ * {@link BootstrapContext}の実装クラスです．
+ * 
  * @author koichik
  */
-@Component
 public class BootstrapContextImpl implements BootstrapContext {
+
+    // instance fields
+    /** ワークマネージャ */
     protected WorkManager workManager;
 
+    /**
+     * インスタンスを構築します．
+     * <p>
+     * このコンストラクタで生成したインスタンスは， {@link #setWorkManager(WorkManager)}で
+     * ワークマネージャを設定しなくてはなりません．
+     * </p>
+     */
     public BootstrapContextImpl() {
     }
 
-    public BootstrapContextImpl(final int maxThreads) {
-        workManager = new WorkManagerImpl(maxThreads);
+    /**
+     * 指定されたスレッド数を持つ{@link WorkManagerImpl}を使用してインスタンスを構築します．
+     * 
+     * @param numThreads
+     *            スレッドプールのスレッド数
+     */
+    public BootstrapContextImpl(final int numThreads) {
+        this(new WorkManagerImpl(numThreads));
+    }
+
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param workManager
+     *            ワークマネージャ
+     */
+    public BootstrapContextImpl(WorkManager workManager) {
+        this.workManager = workManager;
     }
 
     public Timer createTimer() throws UnavailableException {
         return AccessController.doPrivileged(new PrivilegedAction<Timer>() {
+
             public Timer run() {
                 return new Timer(true);
             }
@@ -55,12 +82,19 @@ public class BootstrapContextImpl implements BootstrapContext {
         return workManager;
     }
 
+    public XATerminator getXATerminator() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * ワークマネージャを設定します．
+     * 
+     * @param workManager
+     *            ワークマネージャ
+     */
     @Binding(bindingType = BindingType.MAY)
     public void setWorkManager(final WorkManager workManager) {
         this.workManager = workManager;
     }
 
-    public XATerminator getXATerminator() {
-        throw new UnsupportedOperationException();
-    }
 }

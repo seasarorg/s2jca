@@ -21,6 +21,7 @@ package org.seasar.jca.deploy.config;
  * @author koichik
  */
 public class ConfigProperty {
+
     // instance fields
     /** プロパティの名前 */
     protected String name;
@@ -122,4 +123,5 @@ public class ConfigProperty {
     public void setValue(final String value) {
         this.value = value;
     }
+
 }

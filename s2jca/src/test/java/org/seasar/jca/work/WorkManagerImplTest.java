@@ -33,15 +33,10 @@ import junit.framework.TestCase;
  * @author koichik
  */
 public class WorkManagerImplTest extends TestCase {
-    protected WorkManagerImpl workManager;
-    protected List<String> list = Collections.synchronizedList(new ArrayList<String>());
 
-    public WorkManagerImplTest() {
-    }
+    WorkManagerImpl workManager;
 
-    public WorkManagerImplTest(String name) {
-        super(name);
-    }
+    List<String> list = Collections.synchronizedList(new ArrayList<String>());
 
     @Override
     protected void setUp() throws Exception {
@@ -57,6 +52,9 @@ public class WorkManagerImplTest extends TestCase {
         super.tearDown();
     }
 
+    /**
+     * @throws Exception
+     */
     public void testDoWork() throws Exception {
         workManager.doWork(new TestWork(), WorkManager.INDEFINITE, new ExecutionContext(),
                 new TestWorkListener());
@@ -70,6 +68,9 @@ public class WorkManagerImplTest extends TestCase {
         assertEquals("6", "end", list.get(4));
     }
 
+    /**
+     * @throws Exception
+     */
     public void testStartWork() throws Exception {
         workManager.startWork(new TestWork(), WorkManager.INDEFINITE, new ExecutionContext(),
                 new TestWorkListener());
@@ -84,6 +85,9 @@ public class WorkManagerImplTest extends TestCase {
         assertEquals("6", "completed", list.get(4));
     }
 
+    /**
+     * @throws Exception
+     */
     public void testScheduleWork() throws Exception {
         workManager.scheduleWork(new TestWork(), WorkManager.INDEFINITE, new ExecutionContext(),
                 new TestWorkListener());
@@ -98,8 +102,12 @@ public class WorkManagerImplTest extends TestCase {
         assertEquals("6", "completed", list.get(4));
     }
 
+    /**
+     * @throws Exception
+     */
     public void testReject() throws Exception {
         workManager.doWork(new TestWork(), 100, new ExecutionContext(), new TestWorkListener() {
+
             @Override
             public void workAccepted(WorkEvent event) {
                 super.workAccepted(event);
@@ -122,14 +130,19 @@ public class WorkManagerImplTest extends TestCase {
         assertEquals("4", "end", list.get(2));
     }
 
+    /**
+     * @throws Exception
+     */
     public void testException() throws Exception {
         workManager.doWork(new TestWork() {
+
             @Override
             public void run() {
                 super.run();
                 throw new RuntimeException();
             }
         }, 100, new ExecutionContext(), new TestWorkListener() {
+
             @Override
             public void workCompleted(WorkEvent event) {
                 super.workCompleted(event);
@@ -149,6 +162,9 @@ public class WorkManagerImplTest extends TestCase {
         assertEquals("6", "end", list.get(4));
     }
 
+    /**
+     * @param millis
+     */
     protected void sleep(long millis) {
         try {
             Thread.sleep(millis);
@@ -156,7 +172,10 @@ public class WorkManagerImplTest extends TestCase {
         }
     }
 
+    /**
+     */
     public class TestWork implements Work {
+
         public void run() {
             sleep(100);
             list.add("run");
@@ -167,7 +186,10 @@ public class WorkManagerImplTest extends TestCase {
         }
     }
 
+    /**
+     */
     public class TestWorkListener implements WorkListener {
+
         public void workAccepted(WorkEvent event) {
             list.add("accepted");
         }
@@ -184,4 +206,5 @@ public class WorkManagerImplTest extends TestCase {
             list.add("completed");
         }
     }
+
 }

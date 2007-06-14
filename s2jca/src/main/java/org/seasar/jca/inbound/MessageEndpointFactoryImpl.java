@@ -36,69 +36,138 @@ import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 
 /**
+ * {@link MessageEndpointFactory}の実装クラスです．
+ * 
  * @author koichik
  */
 @Component
 public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
+
+    // static fields
     private static final Logger logger = Logger.getLogger(MessageEndpointFactoryImpl.class);
 
+    // instance fields
+    /** S2コンテナ */
     protected S2Container container;
 
+    /** トランザクションマネージャ */
     protected TransactionManager transactionManager;
 
+    /** メッセージエンドポイントの実装クラス */
     protected Class<? extends AbstractMessageEndpointImpl> endpointClass = JMSMessageEndpointImpl.class;
 
+    /** メッセージエンドポイントの実装するリスナの型 */
     protected Class<?> listenerType = MessageListener.class;
 
+    /** リスナのコンポーネント名 */
     protected String listenerName;
 
+    /** メッセージをトランザクショナルに処理する場合は<code>true</code> */
     protected boolean deliveryTransacted = true;
 
+    /** メッセージエンドポイントのコンストラクタ */
     protected Constructor<? extends AbstractMessageEndpointImpl> endpointConstructor;
 
+    /** メッセージエンドポイントのコンポーネント定義 */
     protected ComponentDef componentDef;
 
+    /**
+     * インスタンスを構築します．
+     */
     public MessageEndpointFactoryImpl() {
     }
 
+    /**
+     * S2コンテナを返します．
+     * 
+     * @return S2コンテナ
+     */
     public S2Container getContainer() {
         return container;
     }
 
+    /**
+     * S2コンテナを設定します．
+     * 
+     * @param container
+     *            S2コンテナ
+     */
     @Binding(bindingType = BindingType.MUST)
     public void setContainer(final S2Container container) {
         this.container = container;
     }
 
+    /**
+     * トランザクションマネージャを返します．
+     * 
+     * @return トランザクションマネージャ
+     */
     public TransactionManager getTransactionManager() {
         return transactionManager;
     }
 
+    /**
+     * トランザクションマネージャを設定します．
+     * 
+     * @param transactionManager
+     *            トランザクションマネージャ
+     */
     @Binding(bindingType = BindingType.MAY)
     public void setTransactionManager(final TransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 
+    /**
+     * メッセージエンドポイントの実装クラスを設定します．
+     * 
+     * @param endpointClass
+     *            メッセージエンドポイントの実装クラス
+     */
     @Binding(bindingType = BindingType.MAY)
     public void setEndpointClass(final Class<? extends AbstractMessageEndpointImpl> endpointClass) {
         this.endpointClass = endpointClass;
     }
 
+    /**
+     * メッセージエンドポイントの実装するリスナのインタフェース型を設定します．
+     * 
+     * @param listenerType
+     *            メッセージエンドポイントの実装するリスナのインタフェース型
+     */
     @Binding(bindingType = BindingType.MAY)
     public void setListenerType(final Class<?> listenerType) {
         this.listenerType = listenerType;
     }
 
+    /**
+     * メッセージエンドポイントのコンポーネント名を設定します．
+     * <p>
+     * コンポーネント名が設定されると，そのコンポーネント名でS2コンテナからメッセージエンドポイントをルックアップします．
+     * コンポーネント名が設定されなかった場合はリスナのインタフェース型でS2コンテナからルックアップします．
+     * </p>
+     * 
+     * @param listenerName
+     *            メッセージエンドポイントのコンポーネント名
+     */
     @Binding(bindingType = BindingType.MAY)
     public void setListenerName(final String listenerName) {
         this.listenerName = listenerName;
     }
 
+    /**
+     * メッセージをトランザクショナルに処理する場合は<code>true</code>を設定します．
+     * 
+     * @param deliveryTransacted
+     *            メッセージをトランザクショナルに処理する場合は<code>true</code>
+     */
     @Binding(bindingType = BindingType.MAY)
     public void setDeliveryTransacted(final boolean deliveryTransacted) {
         this.deliveryTransacted = deliveryTransacted;
     }
 
+    /**
+     * インスタンスを初期化します．
+     */
     @InitMethod
     public void initialize() {
         if (deliveryTransacted && transactionManager == null) {
@@ -128,4 +197,5 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
     public boolean isDeliveryTransacted(final Method method) throws NoSuchMethodException {
         return deliveryTransacted;
     }
+
 }

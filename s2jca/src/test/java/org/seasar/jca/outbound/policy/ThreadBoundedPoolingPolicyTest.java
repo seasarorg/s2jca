@@ -26,27 +26,32 @@ import org.seasar.framework.unit.EasyMockTestCase;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 import org.seasar.jca.outbound.support.ManagedConnectionPool;
 
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 
-import static org.seasar.jca.outbound.support.ConnectionManagementContextMatcher.eqContext;
+import static org.seasar.jca.outbound.support.ConnectionManagementContextMatcher.*;
 
 /**
  * @author koichik
  */
 public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
-    private ThreadBoundedPoolingPolicy target;
-    private ConnectionManagementPolicy policy;
-    private ManagedConnectionFactory mcf;
-    private ManagedConnection[] mc = new ManagedConnection[3];
-    private ConnectionRequestInfo info;
-    private Object[] lch = new Object[3];
-    private ConnectionManagementContext[] context = new ConnectionManagementContext[3];
-    private Set<ManagedConnection> set1;
-    private Set<ManagedConnection> set2;
 
-    public ThreadBoundedPoolingPolicyTest(String name) {
-        super(name);
-    }
+    ThreadBoundedPoolingPolicy target;
+
+    ConnectionManagementPolicy policy;
+
+    ManagedConnectionFactory mcf;
+
+    ManagedConnection[] mc = new ManagedConnection[3];
+
+    ConnectionRequestInfo info;
+
+    Object[] lch = new Object[3];
+
+    ConnectionManagementContext[] context = new ConnectionManagementContext[3];
+
+    Set<ManagedConnection> set1;
+
+    Set<ManagedConnection> set2;
 
     @Override
     protected void setUp() throws Exception {
@@ -74,6 +79,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
      * <code>MethodInterceptor</code>
      * のbefore以降に取得したコネクションがafterで解放されることの擬似的なテスト． <br>
      * 
+     * @throws Exception
      */
     public void testAcquireNew() throws Exception {
         target.initialize(mcf, policy);
@@ -87,6 +93,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // コネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -104,6 +111,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
         // 取得したコネクションの解放 (フリープールへ)．
         // <code>MethodInvocation</code>のproceedで行う処理．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -115,6 +123,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
         // <code>MethodInterceptor</code>のafterで行う処理．
         // 最初に取得したコネクションがリリースされる．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.after(before);
@@ -134,6 +143,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
      * コネクションの取得が二回行われた場合で，二番目に取得しようとしたコネクションが最初のコネクションと同じ場合のテスト． <br>
      * アスペクトが適用されたメソッドがネストした場合に，実際にコネクションを取得しなかった場合にはコネクションが解放されないことを確認する．
      * 
+     * @throws Exception
      */
     public void testAcquireSame() throws Exception {
         target.initialize(mcf, policy);
@@ -147,6 +157,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -163,6 +174,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初に取得したコネクションがクローズ (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -180,6 +192,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 二番目のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -196,6 +209,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 2番目に取得したコネクションがクローズ (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -208,6 +222,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
         // 内側のメソッドにおける<code>MethodInterceptor</code>のafterで行われる処理．
         // 取得したコネクション(最初に取得したコネクションと同じ)はクローズされない．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.after(before2);
@@ -220,6 +235,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
         // 外側のメソッドにおける<code>MethodInterceptor</code>のafterで行われる処理．
         // 最初に取得したコネクションをクローズ．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.after(before1);
@@ -253,6 +269,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -269,6 +286,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初に取得したコネクションがクローズ (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -286,6 +304,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 二番目のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[1]);
@@ -304,6 +323,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 取得したコネクションがクローズ (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[1]);
@@ -316,6 +336,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
         // 内側のメソッドにおける<code>MethodInterceptor</code>のafterで行われる処理．
         // 2番目に取得したコネクション(をクローズする．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.after(before2);
@@ -333,6 +354,7 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
         // 外側のメソッドにおける<code>MethodInterceptor</code>のafterで行われる処理．
         // 最初に取得したコネクションをクローズ．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.after(before1);
@@ -347,4 +369,5 @@ public class ThreadBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
         }.doTest();
     }
+
 }

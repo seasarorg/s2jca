@@ -28,6 +28,7 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
  * @author koichik
  */
 public class OutboundAdapterConfig {
+
     // instance fields
     /** コネクション定義構成情報のマップ */
     protected final Map<String, List<ConnectionDefConfig>> connectionDefs = CollectionsUtil
@@ -145,4 +146,5 @@ public class OutboundAdapterConfig {
     public void setTransactionSupport(final String transactionSupport) {
         this.transactionSupport = transactionSupport;
     }
+
 }

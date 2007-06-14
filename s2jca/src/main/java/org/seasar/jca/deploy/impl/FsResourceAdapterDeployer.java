@@ -26,20 +26,38 @@ import javax.resource.ResourceException;
 import org.seasar.jca.exception.SResourceException;
 
 /**
+ * ファイルシステムからリソースアダプタをデプロイするクラスです．
+ * 
  * @author koichik
  */
 public class FsResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
+
+    /**
+     * インスタンスを構築します．
+     * <p>
+     * このコンストラクタで生成したインスタンスは，
+     * {@link AbstractResourceAdapterDeployer#setBootstrapContext(javax.resource.spi.BootstrapContext)}で
+     * ブートストラップコンテキストを設定しなくてはなりません．
+     * </p>
+     */
     public FsResourceAdapterDeployer() {
     }
 
-    public FsResourceAdapterDeployer(final int maxThreads) {
-        super(maxThreads);
+    /**
+     * デフォルトのブートストラップコンテキストでインスタンスを構築します．
+     * 
+     * @param numThreads
+     *            スレッドプールのスレッド数
+     */
+    public FsResourceAdapterDeployer(final int numThreads) {
+        super(numThreads);
     }
 
     @Override
     protected File[] getJarFiles() {
         final File baseDir = new File(path);
         final File[] jars = baseDir.listFiles(new FilenameFilter() {
+
             public boolean accept(final File dir, final String name) {
                 return name.endsWith(".jar");
             }
@@ -57,4 +75,5 @@ public class FsResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
             throw new SResourceException("EJCA0000", e);
         }
     }
+
 }

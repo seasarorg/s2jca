@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -36,23 +35,52 @@ import org.seasar.framework.exception.IORuntimeException;
 import org.seasar.framework.exception.SIOException;
 import org.seasar.jca.exception.SResourceException;
 
+import static org.seasar.framework.util.tiger.IterableAdapter.*;
+
 /**
+ * Rarファイルからリソースアダプタをデプロイするクラスです．
+ * 
  * @author koichik
  */
 public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
+
+    // instance fields
+    /** Rarファイル */
     protected JarFile rar;
 
+    /** Rarファイルを解凍するための一時ディレクトリの名前 */
     protected String tempDirName;
 
+    /** Rarファイルを解凍するための一時ディレクトリ */
     protected File tempDir;
 
+    /**
+     * インスタンスを構築します．
+     * <p>
+     * このコンストラクタで生成したインスタンスは，
+     * {@link AbstractResourceAdapterDeployer#setBootstrapContext(javax.resource.spi.BootstrapContext)}で
+     * ブートストラップコンテキストを設定しなくてはなりません．
+     * </p>
+     */
     public RarResourceAdapterDeployer() {
     }
 
-    public RarResourceAdapterDeployer(final int maxThreads) {
-        super(maxThreads);
+    /**
+     * デフォルトのブートストラップコンテキストでインスタンスを構築します．
+     * 
+     * @param numThreads
+     *            スレッドプールのスレッド数
+     */
+    public RarResourceAdapterDeployer(final int numThreads) {
+        super(numThreads);
     }
 
+    /**
+     * Rarファイルを解凍するための一時ディレクトリの名前を設定します．
+     * 
+     * @param tempDir
+     *            Rarファイルを解凍するための一時ディレクトリの名前
+     */
     @Binding(bindingType = BindingType.MAY)
     public void setTempDir(final String tempDir) {
         tempDirName = tempDir;
@@ -64,8 +92,7 @@ public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer 
             createTempDir();
             createRarFile();
             final List<File> jarFiles = new ArrayList<File>();
-            for (final Enumeration enumeration = rar.entries(); enumeration.hasMoreElements();) {
-                final JarEntry entry = (JarEntry) enumeration.nextElement();
+            for (final JarEntry entry : iterable(rar.entries())) {
                 final String entryName = entry.getName();
                 if (entryName.endsWith(".jar")) {
                     jarFiles.add(extractJar(entry));
@@ -91,6 +118,12 @@ public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer 
         }
     }
 
+    /**
+     * Rarファイルをアクセスするための{@link JarFile}を作成します．
+     * 
+     * @throws IOException
+     *             Rarファイルのアクセス中に例外が発生した場合
+     */
     protected void createRarFile() throws IOException {
         if (rar != null) {
             return;
@@ -98,6 +131,15 @@ public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer 
         rar = new JarFile(path);
     }
 
+    /**
+     * Rarファイル中のJarを一時ディレクトリに解凍します．
+     * 
+     * @param jarEntry
+     *            Rarファイル中のJarファイルを示すエントリ
+     * @return 解凍されたJarファイル
+     * @throws IOException
+     *             Rarファイルの解凍中に例外が発生した場合
+     */
     protected File extractJar(final JarEntry jarEntry) throws IOException {
         final File jarFile = File.createTempFile("s2jca-", ".jar", tempDir);
         final InputStream is = rar.getInputStream(jarEntry);
@@ -115,6 +157,12 @@ public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer 
         return jarFile;
     }
 
+    /**
+     * Rarファイルを解凍するための一時ディレクトリを作成します．
+     * 
+     * @throws IOException
+     *             一時ディレクトリの作成中に例外が発生した場合
+     */
     protected void createTempDir() throws IOException {
         if (tempDirName == null) {
             return;
@@ -130,6 +178,16 @@ public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer 
         tempDir.deleteOnExit();
     }
 
+    /**
+     * 入力ストリームから読み込んだバイト列を出力ストリームへコピーします．
+     * 
+     * @param is
+     *            入力ストリーム
+     * @param os
+     *            出力ストリーム
+     * @throws IOException
+     *             コピー中に例外が発生した場合
+     */
     protected void copy(final InputStream is, final OutputStream os) throws IOException {
         final BufferedInputStream bis = new BufferedInputStream(is);
         final BufferedOutputStream bos = new BufferedOutputStream(os);
@@ -140,4 +198,5 @@ public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer 
         }
         bos.flush();
     }
+
 }

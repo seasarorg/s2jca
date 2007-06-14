@@ -18,25 +18,37 @@ package org.seasar.jca.outbound.support;
 import javax.resource.ResourceException;
 import javax.resource.spi.LocalTransaction;
 import javax.transaction.xa.XAException;
+import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
 import org.seasar.extension.jta.xa.DefaultXAResource;
 import org.seasar.framework.exception.SXAException;
 
 /**
+ * {@link LocalTransaction}を{@link XAResource}として扱うためのクラスです．
+ * 
  * @author koichik
  */
 public class LocalTransactionXAResource extends DefaultXAResource {
+
+    // instance fields
+    /** ローカルトランザクション */
     protected final LocalTransaction tx;
+
+    /** リードオンリーなら<code>true</code> */
     protected boolean readOnly;
+
+    /** トランザクションが進行中なら<code>true</code> */
     protected boolean progress;
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param tx
+     *            ローカルトランザクション
+     */
     public LocalTransactionXAResource(final LocalTransaction tx) {
         this.tx = tx;
-    }
-
-    public boolean isProgress() {
-        return progress;
     }
 
     @Override
@@ -75,21 +87,31 @@ public class LocalTransactionXAResource extends DefaultXAResource {
     }
 
     /**
-     * �v���p�e�B readOnly �̒l��Ԃ��܂��B
+     * トランザクションが進行中なら<code>true</code>を返します．
      * 
-     * @return Returns the readOnly.
+     * @return トランザクションが進行中なら<code>true</code>
+     */
+    public boolean isProgress() {
+        return progress;
+    }
+
+    /**
+     * リードオンリーなら<code>true</code>を返します．
+     * 
+     * @return リードオンリーなら<code>true</code>
      */
     public boolean isReadOnly() {
         return readOnly;
     }
 
     /**
-     * �v���p�e�B readOnly �̒l��ݒ肵�܂��B
+     * リードオンリーなら<code>true</code>を設定します．
      * 
      * @param readOnly
-     *            The readOnly to set.
+     *            リードオンリーなら<code>true</code>
      */
     public void setReadOnly(final boolean readOnly) {
         this.readOnly = readOnly;
     }
+
 }

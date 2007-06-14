@@ -28,28 +28,57 @@ import org.seasar.framework.container.annotation.tiger.Component;
 import org.seasar.framework.container.annotation.tiger.InstanceType;
 
 /**
+ * {@link WorkManager}の実装クラスです．
+ * 
  * @author koichik
  */
 @Component(instance = InstanceType.SINGLETON)
 public class WorkManagerImpl implements WorkManager {
+
+    // constants
+    /** 作業がスケジュールされたことを示します． */
     protected static final int SCHEDULE_WORK = 0;
+
+    /** 作業が開始されたことを示します． */
     protected static final int START_WORK = 1;
+
+    /** 作業が終了したことを示します． */
     protected static final int DO_WORK = 2;
 
+    // instance fields
+    /** スレッドプール */
     protected final ExecutorService pool;
 
+    /**
+     * スレッドプールのサイズ1でインスタンスを構築します．
+     */
     public WorkManagerImpl() {
         this(1);
     }
 
-    public WorkManagerImpl(final int maxThreads) {
-        this(Executors.newFixedThreadPool(maxThreads));
+    /**
+     * 指定されたサイズのスレッドプールでインスタンスを構築します．
+     * 
+     * @param numThreads
+     *            スレッド数
+     */
+    public WorkManagerImpl(final int numThreads) {
+        this(Executors.newFixedThreadPool(numThreads));
     }
 
+    /**
+     * 指定されたスレッドプールを使用してインスタンスを構築します．
+     * 
+     * @param pool
+     *            スレッドプール
+     */
     public WorkManagerImpl(final ExecutorService pool) {
         this.pool = pool;
     }
 
+    /**
+     * ワークマネージャを終了します．
+     */
     public void stop() {
         pool.shutdown();
     }
@@ -86,6 +115,15 @@ public class WorkManagerImpl implements WorkManager {
                 SCHEDULE_WORK));
     }
 
+    /**
+     * {@link Work}を実行します．
+     * 
+     * @param work
+     *            {@link Work}のラッパー
+     * @return {@link Work}を受け付けてから実行完了までの経過時間 (ミリ秒単位)
+     * @throws WorkException
+     *             {@link Work}の実行中に例外が発生した場合
+     */
     protected long executeWork(final WorkWrapper work) throws WorkException {
         try {
             return work.execute(pool);
@@ -95,4 +133,5 @@ public class WorkManagerImpl implements WorkManager {
             throw we;
         }
     }
+
 }

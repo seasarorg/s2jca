@@ -33,6 +33,7 @@ import javax.resource.spi.ManagedConnectionFactory;
  * @author koichik
  */
 public class ConnectionDefConfig extends ConfigPropertyContainer {
+
     // instance fields
     /** 親となる{@link OutboundAdapterConfig} */
     protected final OutboundAdapterConfig parent;
@@ -165,4 +166,5 @@ public class ConnectionDefConfig extends ConfigPropertyContainer {
     public void setConnectionImplClass(final String connectionImplClass) {
         this.connectionImplClass = connectionImplClass;
     }
+
 }

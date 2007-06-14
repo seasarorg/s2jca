@@ -30,18 +30,24 @@ import org.seasar.jca.deploy.config.ConfigProperty;
 /**
  * リソースアダプタ等をデプロイする抽象基底クラスです．
  * 
- * @param TARGET
+ * @param <TARGET>
  *            デプロイ対象
  * @author koichik
  */
 public abstract class AbstractDeployer<TARGET> {
 
     // constants
+    /** 行区切り文字 */
     protected static final String LINE_SEPARATOR = System.getProperty("line.separator");
+
+    /** <code>String</code>を受け取るコンストラクタの引数型の配列 */
     protected static final Class[] PARAMETER_TYPE = new Class[] { String.class };
 
     // instance fields
+    /** プロパティの{@link List} */
     protected final List<ConfigProperty> configProperties = new ArrayList<ConfigProperty>();
+
+    /** クラスローダ */
     protected ClassLoader cl;
 
     /**

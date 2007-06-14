@@ -26,11 +26,21 @@ import org.seasar.jca.outbound.support.ConnectionManagementContext;
 import org.seasar.jca.outbound.support.ManagedConnectionPool;
 
 /**
+ * コネクションをXAトランザクションに関連づけて管理するポリシーの実装クラスです．
+ * 
  * @author koichik
  */
 public class XATransactionBoundedPoolingPolicy extends AbstractTransactionBoundedPoolingPolicy {
+
+    // constants
     private static final long serialVersionUID = 1L;
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param tm
+     *            トランザクションマネージャ
+     */
     public XATransactionBoundedPoolingPolicy(final TransactionManager tm) {
         super(tm);
     }
@@ -50,4 +60,5 @@ public class XATransactionBoundedPoolingPolicy extends AbstractTransactionBounde
             throw new SResourceException("EJCA0000", e);
         }
     }
+
 }

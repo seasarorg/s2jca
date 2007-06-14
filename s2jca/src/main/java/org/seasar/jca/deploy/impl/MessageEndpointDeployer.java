@@ -31,31 +31,67 @@ import org.seasar.jca.deploy.ResourceAdapterDeployer;
 import org.seasar.jca.exception.SResourceException;
 
 /**
+ * メッセージエンドポイント ({@link ActivationSpec}) をデプロイするクラスです．
+ * 
  * @author koichik
  */
 public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
+
+    // static fields
     private static final Logger logger = Logger.getLogger(MessageEndpointDeployer.class);
 
+    // instance fields
+    /** リソースアダプタ・デプロイヤ */
     protected final ResourceAdapterDeployer raDeployer;
+
+    /** {@link MessageEndpointFactory} */
     protected MessageEndpointFactory messageEndpointFactory;
+
+    /** {@link ActivationSpec}の実装クラス名 */
     protected String activationSpecClassName;
+
+    /** {@link ActivationSpec} */
     protected ActivationSpec activationSpec;
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param raDeployer
+     *            リソースアダプタ・デプロイヤ
+     */
     public MessageEndpointDeployer(final ResourceAdapterDeployer raDeployer) {
         this.raDeployer = raDeployer;
         setClassLoader(raDeployer.getClassLoader());
     }
 
+    /**
+     * {@link MessageEndpointFactory}を設定します．
+     * 
+     * @param messageEndpointFactory
+     *            {@link MessageEndpointFactory}
+     */
     @Binding(bindingType = BindingType.MUST)
     public void setMessageEndpointFactory(final MessageEndpointFactory messageEndpointFactory) {
         this.messageEndpointFactory = messageEndpointFactory;
     }
 
+    /**
+     * {@link ActivationSpec}の実装クラス名を設定します．
+     * 
+     * @param activationSpecClassName
+     *            {@link ActivationSpec}の実装クラス名
+     */
     @Binding(bindingType = BindingType.MUST)
     public void setActivationSpecClassName(final String activationSpecClassName) {
         this.activationSpecClassName = activationSpecClassName;
     }
 
+    /**
+     * メッセージエンドポイントをアクティブ化します．
+     * 
+     * @throws ResourceException
+     *             メッセージエンドポイントのアクティブ化中に例外が発生した場合
+     */
     @InitMethod
     public void activate() throws ResourceException {
         assertInboundResourceAdapter();
@@ -63,10 +99,16 @@ public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
         activationSpec.validate();
         raDeployer.getResourceAdapter().endpointActivation(messageEndpointFactory, activationSpec);
         if (logger.isDebugEnabled()) {
-            logger.log("DJCA1019", new Object[] { getLoggingMessage() });
+            loggingDeployedMessage();
         }
     }
 
+    /**
+     * メッセージエンドポイントを非アクティブ化します．
+     * 
+     * @throws ResourceException
+     *             メッセージエンドポイントの非アクティブ化中に例外が発生した場合
+     */
     @DestroyMethod
     public void deactivate() throws ResourceException {
         assertInboundResourceAdapter();
@@ -77,6 +119,13 @@ public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
         }
     }
 
+    /**
+     * {@link ActivationSpec}を作成して返します．
+     * 
+     * @return {@link ActivationSpec}
+     * @throws ResourceException
+     *             {@link ActivationSpec}を作成中に例外が発生した場合
+     */
     protected ActivationSpec createActivationSpec() throws ResourceException {
         final Class<? extends ActivationSpec> activationSpecClass = ReflectionUtil.forName(
                 activationSpecClassName, getClassLoader()).asSubclass(ActivationSpec.class);
@@ -89,13 +138,24 @@ public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
         return activationSpec;
     }
 
-    protected void assertInboundResourceAdapter() throws SResourceException {
+    /**
+     * リソースアダプタの<code>ra.xml</code>に
+     * <code>connector/resource-adapter/inbound-resourceadapter</code>が
+     * 定義されていることを確認します．
+     * 
+     * @throws ResourceException
+     *             <code>ra.xml</code>に<code>connector/resource-adapter/inbound-resourceadapter</code>が定義されていない場合
+     */
+    protected void assertInboundResourceAdapter() throws ResourceException {
         if (raDeployer.getResourceAdapterConfig().getInboundAdapter() == null) {
             throw new SResourceException("EJCA1018");
         }
     }
 
-    protected String getLoggingMessage() {
+    /**
+     * {@link ActivationSpec}をデプロイした情報をログに出力します．
+     */
+    protected void loggingDeployedMessage() {
         final StringBuilder buf = new StringBuilder();
 
         buf.append("\t").append("activationspec-class : ").append(activationSpecClassName).append(
@@ -103,6 +163,7 @@ public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
         loggingConfigProperties(configProperties, "\t", buf);
         buf.append("\t").append(activationSpec).append(LINE_SEPARATOR);
 
-        return new String(buf);
+        logger.log("DJCA1019", new Object[] { new String(buf) });
     }
+
 }

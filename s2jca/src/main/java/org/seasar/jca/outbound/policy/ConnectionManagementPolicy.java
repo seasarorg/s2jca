@@ -22,17 +22,67 @@ import javax.resource.spi.ManagedConnectionFactory;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 
 /**
+ * コネクション管理ポリシーのインタフェースです．
+ * <p>
+ * コネクション管理ポリシーはチェーン状に連結することができます．
+ * </p>
+ * 
  * @author koichik
  */
 public interface ConnectionManagementPolicy {
+
+    /**
+     * コネクション管理ポリシーを初期化します．
+     * 
+     * @param mcf
+     *            マネージドコネクションファクトリ
+     * @param nextPolicy
+     *            後続のポリシー
+     * @throws ResourceException
+     *             コネクション管理ポリシーの初期渦中に例外が発生した場合
+     */
     void initialize(ManagedConnectionFactory mcf, ConnectionManagementPolicy nextPolicy)
             throws ResourceException;
 
+    /**
+     * コネクションを割り当てます．
+     * <p>
+     * 割り当てられたコネクションは{@link ConnectionManagementContext}に設定されます．
+     * </p>
+     * 
+     * @param context
+     *            コネクション管理コンテキスト
+     * @throws ResourceException
+     *             コネクションの割り当て中に例外が発生した場合
+     */
     void allocate(ConnectionManagementContext context) throws ResourceException;
 
+    /**
+     * コネクションを解放します．
+     * 
+     * @param mc
+     *            マネージドコネクション
+     * @throws ResourceException
+     *             コネクションの解放中に例外が発生した場合
+     */
     void release(ManagedConnection mc) throws ResourceException;
 
+    /**
+     * コネクションエラーが発生した場合に呼び出されます．
+     * <p>
+     * エラーが発生したコネクションをキャッシュしているポリシーはコネクションを破棄します．
+     * </p>
+     * 
+     * @param mc
+     *            エラーが発生したマネージドコネクション
+     * @throws ResourceException
+     *             処理中にエラーが発生した場合
+     */
     void connectionErrorOccurred(ManagedConnection mc) throws ResourceException;
 
+    /**
+     * コネクション管理ポリシーを破棄します．
+     */
     void dispose();
+
 }

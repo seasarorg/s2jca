@@ -27,27 +27,28 @@ import org.seasar.extension.unit.S2TestCase;
  */
 public class MessageEndpointFactoryImplTest extends S2TestCase {
 
-    public MessageEndpointFactoryImplTest() {
-    }
-
-    public MessageEndpointFactoryImplTest(String name) {
-        super(name);
-    }
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         include(getClass().getSimpleName() + ".dicon");
     }
 
+    /**
+     * @throws Exception
+     */
     public void testCreateEndpoint() throws Exception {
         MessageEndpointFactoryImpl factory = (MessageEndpointFactoryImpl) getComponent(MessageEndpointFactory.class);
         MessageEndpoint endpoint = factory.createEndpoint(null);
         assertTrue("1", endpoint instanceof MessageListener);
     }
 
+    /**
+     */
     public static class TestListener implements MessageListener {
+
         public void onMessage(Message message) {
         }
+
     }
+
 }

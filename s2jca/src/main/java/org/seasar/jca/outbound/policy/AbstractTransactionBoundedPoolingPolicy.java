@@ -32,18 +32,34 @@ import org.seasar.jca.outbound.support.ConnectionManagementContext;
 import org.seasar.jca.outbound.support.ManagedConnectionPool;
 
 /**
+ * コネクションをトランザクションに関連づけて管理するポリシーの実装クラスです．
+ * 
  * @author koichik
  */
 public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPolicy implements
         Synchronization {
+
+    // static fields
     private static final Logger logger = Logger
             .getLogger(AbstractTransactionBoundedPoolingPolicy.class);
 
+    // instance fields
+    /** トランザクションとマネージドコネクションプールのマッピング */
     protected final Map<Transaction, ManagedConnectionPool<Object>> pools = Collections
             .synchronizedMap(new WeakHashMap<Transaction, ManagedConnectionPool<Object>>());
+
+    /** トランザクションマネージャ */
     protected final TransactionManager tm;
+
+    /** リソースローカルなトランザクションを許可する場合は<code>true</code> */
     protected boolean allowLocalTx;
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param tm
+     *            トランザクションマネージャ
+     */
     public AbstractTransactionBoundedPoolingPolicy(final TransactionManager tm) {
         super(true);
         this.tm = tm;
@@ -63,7 +79,7 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
     @Override
     public void connectionErrorOccurred(final ManagedConnection mc) throws ResourceException {
         try {
-            final ManagedConnectionPool pool = getPool(tm.getTransaction(), false);
+            final ManagedConnectionPool<Object> pool = getPool(tm.getTransaction(), false);
             pool.remove(mc);
             nextPolicy.connectionErrorOccurred(mc);
         } catch (final SystemException e) {
@@ -78,8 +94,19 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
         releaseContext();
     }
 
-    protected void checkOut(final ConnectionManagementContext context) throws SResourceException,
-            ResourceException {
+    /**
+     * コネクションをチェックアウトします．
+     * <p>
+     * 現在のトランザクションにマネージドコネクションが割り当てられていれば，それをコネクション管理コンテキストに設定します．
+     * それ以外の場合は後続のコネクション管理ポリシーからコネクションを割り当てます．
+     * </p>
+     * 
+     * @param context
+     *            コネクション管理ポリシー
+     * @throws ResourceException
+     *             コネクションのチェックアウト中に例外が発生した場合
+     */
+    protected void checkOut(final ConnectionManagementContext context) throws ResourceException {
         try {
             final Transaction tx = tm.getTransaction();
             if (tx == null) {
@@ -101,6 +128,14 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
         }
     }
 
+    /**
+     * スレッドがトランザクションに関連づけられていない場合で，ローカルトランザクションが許可されている場合は，後続のコネクション管理ポリシーからコネクションを割り当てます．
+     * 
+     * @param context
+     *            コネクション管理ポリシー
+     * @throws ResourceException
+     *             コネクションの割り当て中に例外が発生した場合
+     */
     protected void allocateUnboundConnection(final ConnectionManagementContext context)
             throws ResourceException {
         if (!allowLocalTx) {
@@ -109,6 +144,18 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
         nextPolicy.allocate(context);
     }
 
+    /**
+     * 後続のコネクション管理ポリシーから取得したマネージドコネクションをプールします．
+     * 
+     * @param context
+     *            コネクション管理ポリシー
+     * @param tx
+     *            トランザクション
+     * @param pool
+     *            マネージドコネクションのプール
+     * @throws ResourceException
+     *             コネクションの取得中に例外が発生した場合
+     */
     protected void allocateNew(final ConnectionManagementContext context, final Transaction tx,
             final ManagedConnectionPool<Object> pool) throws ResourceException {
         ManagedConnection mc;
@@ -121,9 +168,32 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
         }
     }
 
+    /**
+     * コネクションをトランザクションに関連づけます．
+     * 
+     * @param tx
+     *            トランザクション
+     * @param pool
+     *            マネージドコネクションのプール
+     * @param context
+     *            コネクション管理コンテキスト
+     * @throws ResourceException
+     *             関連づけ中に例外が発生した場合
+     */
     protected abstract void associateTx(Transaction tx, ManagedConnectionPool<Object> pool,
-            ConnectionManagementContext holder) throws ResourceException;
+            ConnectionManagementContext context) throws ResourceException;
 
+    /**
+     * マネージドコネクションをプールに戻します．
+     * <p>
+     * 現在のトランザクションにプールが関連づけられていない場合は後続のコネクション管理ポリシーに返します．
+     * </p>
+     * 
+     * @param mc
+     *            マネージドコネクション
+     * @throws ResourceException
+     *             チェックイン中に例外が発生した場合
+     */
     protected void checkIn(final ManagedConnection mc) throws ResourceException {
         try {
             final ManagedConnectionPool<Object> pool = getPool(tm.getTransaction(), false);
@@ -137,6 +207,15 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
         }
     }
 
+    /**
+     * 現在のトランザクションに関連づけられたマネージドコネクションのプールを返します．
+     * 
+     * @param tx
+     *            トランザクション
+     * @param create
+     *            現在のトランザクションにプールがまだ関連づけられていない場合に新たにプールを作成する場合は<code>true</code>
+     * @return マネージドコネクションのプール
+     */
     protected ManagedConnectionPool<Object> getPool(final Transaction tx, final boolean create) {
         if (tx == null) {
             return null;
@@ -150,6 +229,9 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
         return pool;
     }
 
+    /**
+     * 現在のトランザクションに関連づけられているマネージドコネクションのプールをクローズします．
+     */
     protected void releaseContext() {
         try {
             final Transaction tx = tm.getTransaction();
@@ -163,19 +245,19 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
     }
 
     /**
-     * �v���p�e�B allowLocalTx �̒l��Ԃ��܂��B
+     * リソースローカルなトランザクションが許可されている場合は<code>true</code>を返します．
      * 
-     * @return Returns the allowLocalTx.
+     * @return リソースローカルなトランザクションが許可されている場合は<code>true</code>
      */
     public boolean isAllowLocalTx() {
         return allowLocalTx;
     }
 
     /**
-     * �v���p�e�B allowLocalTx �̒l��ݒ肵�܂��B
+     * リソースローカルなトランザクションが許可されている場合は<code>true</code>を設定します．
      * 
      * @param allowLocalTx
-     *            The allowLocalTx to set.
+     *            リソースローカルなトランザクションが許可されている場合は<code>true</code>
      */
     public void setAllowLocalTx(final boolean allowLocalTx) {
         this.allowLocalTx = allowLocalTx;

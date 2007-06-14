@@ -30,33 +30,38 @@ import javax.transaction.xa.XAResource;
 import org.seasar.framework.unit.EasyMockTestCase;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 
-import static org.seasar.jca.outbound.support.ConnectionManagementContextMatcher.eqContext;
+import static org.seasar.jca.outbound.support.ConnectionManagementContextMatcher.*;
 
 /**
  * @author koichik
  */
 public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
-    private XATransactionBoundedPoolingPolicy target;
-    private TransactionManager tm;
-    private Transaction tx;
-    private XAResource xa;
-    private ConnectionManagementPolicy policy;
-    private ManagedConnectionFactory mcf;
-    private ManagedConnection[] mc = new ManagedConnection[3];
-    private ConnectionRequestInfo info;
-    private ConnectionManagementContext[] context = new ConnectionManagementContext[3];
-    private Object[] lch = new Object[3];
-    private Set<ManagedConnection> set1;
-    private Set<ManagedConnection> set2;
 
-    public XATransactionBoundedPoolingPolicyTest() {
-    }
+    XATransactionBoundedPoolingPolicy target;
 
-    public XATransactionBoundedPoolingPolicyTest(String name) {
-        super(name);
-    }
+    TransactionManager tm;
+
+    Transaction tx;
+
+    XAResource xa;
+
+    ConnectionManagementPolicy policy;
+
+    ManagedConnectionFactory mcf;
+
+    ManagedConnection[] mc = new ManagedConnection[3];
+
+    ConnectionRequestInfo info;
+
+    ConnectionManagementContext[] context = new ConnectionManagementContext[3];
+
+    Object[] lch = new Object[3];
+
+    Set<ManagedConnection> set1;
+
+    Set<ManagedConnection> set2;
 
     @Override
     protected void setUp() throws Exception {
@@ -87,11 +92,13 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
      * <code>allowLocalTx</code> がデフォルト( <code>false</code>
      * )でトランザクションが開始されていない場合のテスト．
      * 
+     * @throws Exception
      */
     public void testNoTransaction() throws Exception {
         target.initialize(mcf, policy);
 
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 try {
@@ -114,6 +121,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
      * <code>allowLocalTx</code> がデフォルト( <code>false</code>
      * )でトランザクションが開始されていない場合のテスト．
      * 
+     * @throws Exception
      */
     public void testNoTransactionAllowLocalTx() throws Exception {
         target.setAllowLocalTx(true);
@@ -121,6 +129,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // コネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -137,6 +146,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // コネクションをリリース．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -155,12 +165,14 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
     /**
      * 一般的な場合のテスト．
      * 
+     * @throws Exception
      */
     public void testNormal() throws Exception {
         target.initialize(mcf, policy);
 
         // 最初のコネクション取得～TransactionへのenlistResource()，registerSynchronization()．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -190,6 +202,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初のコネクションがクローズ (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -206,6 +219,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
         // 2番目のコネクション取得～TransactionへのenlistResource()．
         // registerSynchronization()は呼ばれないこと．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[1]);
@@ -229,6 +243,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 2番目のコネクションがクローズ (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[1]);
@@ -244,6 +259,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 三番目のコネクション取得 (最初のコネクションとマッチ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -260,6 +276,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 3番目のコネクションがクローズ (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -275,6 +292,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // トランザクションコミット (ここでコネクションがリリースされることを確認)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.afterCompletion(Status.STATUS_COMMITTED);
@@ -295,12 +313,14 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
     /**
      * トランザクションがロールバックされる場合のテスト．
      * 
+     * @throws Exception
      */
     public void testErrorWithTransaction() throws Exception {
         target.initialize(mcf, policy);
 
         // 最初のコネクション取得～TransactionへのenlistResource()，registerSynchronization()．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -324,6 +344,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初のコネクションがクローズ (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -340,6 +361,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
         // 2番目のコネクション取得～TransactionへのenlistResource()．
         // registerSynchronization()は呼ばれないこと．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[1]);
@@ -363,6 +385,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 2番目のコネクションがクローズ (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[1]);
@@ -378,6 +401,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初に取得したコネクションにエラー発生．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.connectionErrorOccurred(mc[0]);
@@ -394,6 +418,7 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
         // トランザクションロールバック (二番目のコネクションのみフリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.afterCompletion(Status.STATUS_ROLLEDBACK);
@@ -408,4 +433,5 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
             }
         }.doTest();
     }
+
 }

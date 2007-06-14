@@ -27,33 +27,38 @@ import javax.resource.spi.ManagedConnectionFactory;
 import org.seasar.framework.unit.EasyMockTestCase;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 
-import static org.seasar.jca.outbound.support.ConnectionManagementContextMatcher.eqContext;
+import static org.seasar.jca.outbound.support.ConnectionManagementContextMatcher.*;
 
 /**
  * @author koichik
  */
 public class BasicPoolingPolicyTest extends EasyMockTestCase {
-    private BasicPoolingPolicy target;
-    private int status;
-    private Timer timer;
-    private BootstrapContext bc;
-    private ConnectionManagementPolicy policy;
-    private ManagedConnectionFactory mcf;
-    private ManagedConnection[] mc = new ManagedConnection[3];
-    private ConnectionRequestInfo info;
-    private Object[] lch = new Object[3];
-    private ConnectionManagementContext context[] = new ConnectionManagementContext[3];
-    private Set<ManagedConnection> set1;
-    private Set<ManagedConnection> set2;
 
-    public BasicPoolingPolicyTest() {
-    }
+    BasicPoolingPolicy target;
 
-    public BasicPoolingPolicyTest(String name) {
-        super(name);
-    }
+    int status;
+
+    Timer timer;
+
+    BootstrapContext bc;
+
+    ConnectionManagementPolicy policy;
+
+    ManagedConnectionFactory mcf;
+
+    ManagedConnection[] mc = new ManagedConnection[3];
+
+    ConnectionRequestInfo info;
+
+    Object[] lch = new Object[3];
+
+    ConnectionManagementContext context[] = new ConnectionManagementContext[3];
+
+    Set<ManagedConnection> set1;
+
+    Set<ManagedConnection> set2;
 
     @Override
     protected void setUp() throws Exception {
@@ -79,8 +84,12 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
     }
 
+    /**
+     * @throws Exception
+     */
     protected void createTarget() throws Exception {
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target = new BasicPoolingPolicy(bc);
@@ -100,6 +109,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
     /**
      * 最初(フリープール・アクティブプールとも空)にコネクションを取得する場合のテスト．
      * 
+     * @throws Exception
      */
     public void testAcquireFromEmpty() throws Exception {
         createTarget();
@@ -111,6 +121,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // コネクションの取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -128,6 +139,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // コネクションリリース (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -144,6 +156,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // プールの終了 (コネクションのリリース)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.dispose();
@@ -164,6 +177,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
     /**
      * フリープールからコネクションを取得する場合のテスト．
      * 
+     * @throws Exception
      */
     public void testAcquireFromFreePool() throws Exception {
         createTarget();
@@ -175,6 +189,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -191,6 +206,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 2番目のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[1]);
@@ -207,6 +223,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初に取得したコネクションをリリース (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -223,6 +240,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 2番目に取得したコネクションをリリース (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[1]);
@@ -239,6 +257,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 3番目のコネクション取得 (フリープールから2番目のコネクションを得る)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[1].setManagedConnection(null));
@@ -255,6 +274,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 4番目のコネクション取得 (フリープールから最初のコネクションを得る)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0].setManagedConnection(null));
@@ -271,6 +291,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 3番目に取得したコネクションをリリース (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[1]);
@@ -287,6 +308,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // プールを終了．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.dispose();
@@ -309,6 +331,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
      * フリープールのコネクションにマッチしないコネクションを取得する場合のテスト． <br>
      * フリープールのコネクションを破棄して新しいコネクションを取得する．
      * 
+     * @throws Exception
      */
     public void testAcquireNew() throws Exception {
         createTarget();
@@ -318,6 +341,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -332,6 +356,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 2番目のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[1]);
@@ -346,6 +371,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 取得したコネクションを両方ともリリース (フリープールへ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[0]);
@@ -364,6 +390,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 3番目のコネクション取得 (最初のコネクションをプールから破棄する)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[2].setManagedConnection(null));
@@ -384,6 +411,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // プールを終了．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.dispose();
@@ -405,6 +433,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
      * アクティブプールがmaxPoolSizeに達している場合のテスト． <br>
      * アクティブなコネクションがフリープールに戻されるまで待機する．
      * 
+     * @throws Exception
      */
     public void testAcquireFromFull() throws Exception {
         createTarget();
@@ -414,6 +443,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // コネクションをリリースするスレッド．
         Thread bg = new Thread() {
+
             @Override
             public void run() {
                 try {
@@ -430,6 +460,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 初期状態 (maxPoolSize分のコネクションがアクティブ)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.pool.addToActivePool(mc[0]);
@@ -442,6 +473,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // コネクションを取得 (フリープールが空くまで待機する)．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 assertEquals("4", 0, status);
@@ -464,6 +496,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
     /**
      * フリープールのコネクションがタイムアウトして破棄される場合のテスト．
      * 
+     * @throws Exception
      */
     public void testExpire() throws Exception {
         createTarget();
@@ -474,6 +507,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 最初のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[0]);
@@ -488,6 +522,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 2番目のコネクション取得．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.allocate(context[1]);
@@ -502,6 +537,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // コネクションが二つともクローズされるがすぐにはpolicy.release()は呼ばれない．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.release(mc[1]);
@@ -523,6 +559,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // タイムアウトする直前まで待機．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 Thread.sleep(1 * 1000);
@@ -535,6 +572,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
         // コネクションがタイムアウトして先にクローズが呼ばれたmc1がリリースされる．
         // しかしプールのminPoolSizeが1であるためmc0はリリースされない．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 // コネクションがタイムアウトするまで待機．
@@ -553,6 +591,7 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
 
         // 後処理．
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.dispose();
@@ -568,4 +607,5 @@ public class BasicPoolingPolicyTest extends EasyMockTestCase {
             }
         }.doTest();
     }
+
 }

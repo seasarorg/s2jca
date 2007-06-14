@@ -54,34 +54,44 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
         implements ResourceAdapterDeployer {
 
     // constants
+    /** <code>ra.xml</code>ファイルのパス名 */
     protected static final String META_INF_RA_XML = "META-INF/ra.xml";
 
     // static fields
     private static final Logger logger = Logger.getLogger(AbstractResourceAdapterDeployer.class);
 
     // instance fields
+    /** ブートストラップ・コンテキスト */
     protected BootstrapContext bc;
 
+    /** RARファイルのパス */
     protected String path;
 
+    /** リソースアダプタ */
     protected ResourceAdapter ra;
 
+    /** リソースアダプタのコンフィグレーション */
     protected ResourceAdapterConfig raConfig;
 
     /**
      * インスタンスを構築します．
+     * <p>
+     * このコンストラクタで生成したインスタンスは，
+     * {@link AbstractResourceAdapterDeployer#setBootstrapContext(javax.resource.spi.BootstrapContext)}で
+     * ブートストラップコンテキストを設定しなくてはなりません．
+     * </p>
      */
     protected AbstractResourceAdapterDeployer() {
     }
 
     /**
-     * インスタンスを構築します．
+     * デフォルトのブートストラップコンテキストでインスタンスを構築します．
      * 
-     * @param maxThreads
-     *            スレッド数
+     * @param numThreads
+     *            スレッドプールのスレッド数
      */
-    protected AbstractResourceAdapterDeployer(final int maxThreads) {
-        bc = new BootstrapContextImpl(maxThreads);
+    protected AbstractResourceAdapterDeployer(final int numThreads) {
+        bc = new BootstrapContextImpl(numThreads);
     }
 
     /**
@@ -133,9 +143,9 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
      * デプロイメント・ディスクリプタを読み込みます．
      * 
      * @throws ResourceException
-     *             デプロイメント・ディスクリプタの読み込み中にエラーが発生した場合にスローされます
+     *             デプロイメント・ディスクリプタの読み込み中にエラーが発生した場合
      * @throws IOException
-     *             デプロイメント・ディスクリプタの読み込み中にエラーが発生した場合にスローされます
+     *             デプロイメント・ディスクリプタの読み込み中にエラーが発生した場合
      */
     protected void loadDeploymentDescripter() throws ResourceException, IOException {
         final SaxHandlerParser parser = createSaxHandlerParser();
@@ -164,7 +174,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
      * 
      * @return クラスローダ
      * @throws ResourceException
-     *             JarファイルのパスをURLで表現できなかった場合にスローされます
+     *             JarファイルのパスをURLで表現できなかった場合
      */
     protected ClassLoader createClassLoader() throws ResourceException {
         try {
@@ -182,7 +192,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
      *            ファイルの配列
      * @return URLの配列
      * @throws MalformedURLException
-     *             ファイルをURLで表現できなかった場合にスローされます．
+     *             ファイルをURLで表現できなかった場合
      */
     protected URL[] toURL(final File[] jars) throws MalformedURLException {
         final URL[] urls = new URL[jars.length];
@@ -204,7 +214,7 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
      * 
      * @return デプロイメント・ディスクリプタを読み込むためのバイトストリーム
      * @throws ResourceException
-     *             デプロイメント・ディスクリプタを読み込むためのバイトストリームを作成できなかった場合にスローされます
+     *             デプロイメント・ディスクリプタを読み込むためのバイトストリームを作成できなかった場合
      */
     protected abstract InputStream getDeploymentDescripterAsInputStream() throws ResourceException;
 

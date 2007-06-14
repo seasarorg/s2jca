@@ -34,16 +34,30 @@ import org.easymock.IArgumentMatcher;
  * @author koichik
  */
 public class ConnectionManagementContextMatcher implements IArgumentMatcher {
-    protected ConnectionManagementContext expected;
-    protected ManagedConnection mc;
-    protected Object lch;
 
+    ConnectionManagementContext expected;
+
+    ManagedConnection mc;
+
+    Object lch;
+
+    /**
+     * @param expected
+     * @param mc
+     * @param lch
+     * @return コネクション管理コンテキスト
+     */
     public static ConnectionManagementContext eqContext(final ConnectionManagementContext expected,
             final ManagedConnection mc, final Object lch) {
         EasyMock.reportMatcher(new ConnectionManagementContextMatcher(expected, mc, lch));
         return null;
     }
 
+    /**
+     * @param expected
+     * @param mc
+     * @param lch
+     */
     public ConnectionManagementContextMatcher(final ConnectionManagementContext expected,
             final ManagedConnection mc, final Object lch) {
         this.expected = expected;
@@ -69,6 +83,11 @@ public class ConnectionManagementContextMatcher implements IArgumentMatcher {
         return result;
     }
 
+    /**
+     * @param expected
+     * @param actual
+     * @return <code>expected</code>と<code>actual</code>が同値なら<code>true</code>
+     */
     protected boolean equals(final Object expected, final Object actual) {
         if (expected == actual) {
             return true;
@@ -82,4 +101,5 @@ public class ConnectionManagementContextMatcher implements IArgumentMatcher {
     public void appendTo(final StringBuffer buf) {
         buf.append("ConnectionManagementMatcher");
     }
+
 }

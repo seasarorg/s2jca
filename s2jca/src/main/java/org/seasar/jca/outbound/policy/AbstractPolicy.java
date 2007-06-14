@@ -27,15 +27,31 @@ import org.seasar.jca.exception.SResourceException;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 
 /**
+ * コネクション管理ポリシーの抽象クラスです．
+ * 
  * @author koichik
  */
 public abstract class AbstractPolicy implements ConnectionManagementPolicy, Serializable {
+
+    // static fields
     private static final Logger logger = Logger.getLogger(AbstractPolicy.class);
 
+    // instance fields
+    /** マネージドコネクションファクトリ */
     protected ManagedConnectionFactory mcf;
+
+    /** 後続のポリシー */
     protected ConnectionManagementPolicy nextPolicy;
+
+    /** マネージドコネクションファクトリが必要な場合は<code>true</code> */
     protected final boolean needMCF;
 
+    /**
+     * インスタンスを初期化します．
+     * 
+     * @param needMCF
+     *            マネージドコネクションファクトリが必要な場合は<code>true</code>
+     */
     protected AbstractPolicy(final boolean needMCF) {
         this.needMCF = needMCF;
     }
@@ -66,6 +82,14 @@ public abstract class AbstractPolicy implements ConnectionManagementPolicy, Seri
         nextPolicy.dispose();
     }
 
+    /**
+     * マネージドコネクションファクトリが妥当か検証します．
+     * 
+     * @param context
+     *            コネクション管理コンテキスト
+     * @throws ResourceException
+     *             マネージドコネクションファクトリが不正な場合
+     */
     protected void assertValidMCF(final ConnectionManagementContext context)
             throws ResourceException {
         if (this.mcf != null && this.mcf != context.getManagedConnectionFactory()) {
@@ -73,6 +97,15 @@ public abstract class AbstractPolicy implements ConnectionManagementPolicy, Seri
         }
     }
 
+    /**
+     * マネージドコネクションを解放します．
+     * <p>
+     * マネージドコネクションの解放中に例外が発生しても伝播しません．
+     * </p>
+     * 
+     * @param mc
+     *            マネージドコネクション
+     */
     protected void silentRelease(final ManagedConnection mc) {
         try {
             nextPolicy.release(mc);
@@ -80,4 +113,5 @@ public abstract class AbstractPolicy implements ConnectionManagementPolicy, Seri
             logger.log("EJCA0000", null, e);
         }
     }
+
 }

@@ -28,14 +28,22 @@ import org.seasar.jca.deploy.config.ResourceAdapterConfig;
 import org.xml.sax.Attributes;
 
 /**
+ * <code>ra.xml</code>ファイルを解析する{@link TagHandler}を提供します．
+ * 
  * @author koichik
  */
 public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
+
+    // static fields
     private static final long serialVersionUID = 1L;
 
+    /**
+     * インスタンスを構築します．
+     */
     public ResourceAdapterTagHandlerRule() {
         final ResourceAdapterConfig raConfig = new ResourceAdapterConfig();
         addTagHandler("/connector", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -45,6 +53,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("display-name", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -53,6 +62,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("vendor-name", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -61,6 +71,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("eis-type", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -69,6 +80,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("resourceadapter-version", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -77,6 +89,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("config-property", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -94,6 +107,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("config-property-name", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -109,6 +123,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("config-property-type", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -121,6 +136,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("config-property-value", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -133,6 +149,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("resourceadapter-class", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -141,6 +158,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("outbound-resourceadapter", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -157,6 +175,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("connection-definition", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -176,6 +195,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("managedconnectionfactory-class", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -185,6 +205,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("connectionfactory-interface", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -194,6 +215,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("connectionfactory-impl-class", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -203,6 +225,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("connection-interface", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -212,6 +235,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("connection-impl-class", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -221,6 +245,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("transaction-support", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -231,6 +256,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("inbound-resourceadapter", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -246,6 +272,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("messageListener-type", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -255,6 +282,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("activationspec-class", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -264,6 +292,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("activationspec-class", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -273,6 +302,7 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
             }
         });
         addTagHandler("adminobject", new TagHandler() {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -288,19 +318,56 @@ public class ResourceAdapterTagHandlerRule extends TagHandlerRule {
         });
     }
 
+    /**
+     * {@link TagHandlerContext}のスタックから最上位の要素を取り除いて返します．
+     * 
+     * @param <T>
+     *            スタックの要素の型
+     * @param context
+     *            コンテキスト
+     * @param clazz
+     *            スタックの要素の型
+     * @return スタックから取り除かれた要素
+     */
     protected <T> T pop(final TagHandlerContext context, final Class<T> clazz) {
         return clazz.cast(context.pop());
     }
 
+    /**
+     * {@link TagHandlerContext}のスタックから最上位の要素を返します．
+     * 
+     * @param <T>
+     *            スタックの要素の型
+     * @param context
+     *            コンテキスト
+     * @param clazz
+     *            スタックの要素の型
+     * @return スタックの最上位の要素
+     */
     protected <T> T peek(final TagHandlerContext context, final Class<T> clazz) {
         return clazz.cast(context.peek());
     }
 
+    /**
+     * {@link TagHandlerContext}のスタックから最上位の{@link ConnectionDefConfig}を返します．
+     * 
+     * @param context
+     *            コンテキスト
+     * @return スタックから最上位の{@link ConnectionDefConfig}
+     */
     protected ConnectionDefConfig peekConnectionDefConfig(final TagHandlerContext context) {
         return peek(context, ConnectionDefConfig.class);
     }
 
+    /**
+     * {@link TagHandlerContext}のスタックから最上位の{@link InboundAdapterConfig}を返します．
+     * 
+     * @param context
+     *            コンテキスト
+     * @return スタックから最上位の{@link InboundAdapterConfig}
+     */
     protected InboundAdapterConfig peekInboundAdapterConfig(final TagHandlerContext context) {
         return peek(context, InboundAdapterConfig.class);
     }
+
 }

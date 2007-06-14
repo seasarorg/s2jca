@@ -26,16 +26,12 @@ import org.seasar.framework.unit.EasyMockTestCase;
  * @author koichik
  */
 public class LocalTransactionXAResourceTest extends EasyMockTestCase {
-    private LocalTransactionXAResource target;
-    private LocalTransaction ltx;
-    private Xid xid;
 
-    public LocalTransactionXAResourceTest() {
-    }
+    LocalTransactionXAResource target;
 
-    public LocalTransactionXAResourceTest(String name) {
-        super(name);
-    }
+    LocalTransaction ltx;
+
+    Xid xid;
 
     @Override
     protected void setUp() throws Exception {
@@ -45,8 +41,12 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
         target = new LocalTransactionXAResource(ltx);
     }
 
+    /**
+     * @throws Exception
+     */
     public void testReadOnly() throws Exception {
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 ltx.begin();
@@ -62,8 +62,12 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
         }.doTest();
     }
 
+    /**
+     * @throws Exception
+     */
     public void testCommit2Phase() throws Exception {
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.start(xid, XAResource.TMNOFLAGS);
@@ -80,8 +84,12 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
         }.doTest();
     }
 
+    /**
+     * @throws Exception
+     */
     public void testCommit1Phase() throws Exception {
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.start(xid, XAResource.TMNOFLAGS);
@@ -97,8 +105,12 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
         }.doTest();
     }
 
+    /**
+     * @throws Exception
+     */
     public void testRollback1() throws Exception {
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.start(xid, XAResource.TMNOFLAGS);
@@ -114,8 +126,12 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
         }.doTest();
     }
 
+    /**
+     * @throws Exception
+     */
     public void testRollback2() throws Exception {
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.start(xid, XAResource.TMNOFLAGS);
@@ -131,4 +147,5 @@ public class LocalTransactionXAResourceTest extends EasyMockTestCase {
             }
         }.doTest();
     }
+
 }

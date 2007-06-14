@@ -20,22 +20,54 @@ import javax.resource.spi.IllegalStateException;
 import org.seasar.framework.message.MessageFormatter;
 
 /**
+ * {@link MessageFormatter}を使用してメッセージを組み立てる{@link IllegalStateException}です．
+ * 
  * @author koichik
  */
 public class SIllegalStateException extends IllegalStateException {
+
+    // constants
     private static final long serialVersionUID = 1L;
 
+    // instance fields
+    /** メッセージコード */
     protected String messageCode;
+
+    /** メッセージ中に埋め込む引数 */
     protected Object[] args;
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param messageCode
+     *            メッセージコード
+     */
     public SIllegalStateException(final String messageCode) {
         this(messageCode, null);
     }
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param messageCode
+     *            メッセージコード
+     * @param args
+     *            メッセージ中に埋め込む引数
+     */
     public SIllegalStateException(final String messageCode, final Object[] args) {
         this(messageCode, args, null);
     }
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param messageCode
+     *            メッセージコード
+     * @param args
+     *            メッセージ中に埋め込む引数
+     * @param cause
+     *            この例外の原因となった例外
+     */
     public SIllegalStateException(final String messageCode, final Object[] args,
             final Throwable cause) {
         super(MessageFormatter.getMessage(messageCode, args));
@@ -44,11 +76,22 @@ public class SIllegalStateException extends IllegalStateException {
         this.initCause(cause);
     }
 
+    /**
+     * メッセージコードを返します．
+     * 
+     * @return メッセージコード
+     */
     public String getMessageCode() {
         return messageCode;
     }
 
+    /**
+     * メッセージ中に埋め込む引数を返します．
+     * 
+     * @return メッセージ中に埋め込む引数
+     */
     public Object[] getArgs() {
         return args;
     }
+
 }

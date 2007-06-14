@@ -28,10 +28,9 @@ import junit.framework.TestCase;
  */
 public class ConfigPropertyContainerTest extends TestCase {
 
-    public ConfigPropertyContainerTest(String name) {
-        super(name);
-    }
-
+    /**
+     * @throws Exception
+     */
     public void test() throws Exception {
         ConfigPropertyContainer config = new ConfigPropertyContainer() {
         };
@@ -71,4 +70,5 @@ public class ConfigPropertyContainerTest extends TestCase {
         assertEquals("15", "HOGE2", config.getProperty("hoge2").getValue());
         assertEquals("16", "HOGE3", config.getProperty("hoge3").getValue());
     }
+
 }

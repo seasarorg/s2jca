@@ -24,27 +24,77 @@ import javax.security.auth.Subject;
 import org.seasar.framework.log.Logger;
 
 /**
+ * コネクション管理のために必要な情報を保持するクラスです．
+ * 
  * @author koichik
  */
 public class ConnectionManagementContext {
+
+    // static fields
     private static final Logger logger = Logger.getLogger(ConnectionManagementContext.class);
 
+    // instance fields
+    /** セキュリティ認証のサブジェクト */
     protected Subject subject;
+
+    /** コネクション要求情報 */
     protected ConnectionRequestInfo info;
+
+    /** マネージドコネクションファクトリ */
     protected ManagedConnectionFactory mcf;
+
+    /** マネージドコネクション */
     protected ManagedConnection mc;
+
+    /** 論理コネクションハンドラ */
     protected Object lch;
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param subject
+     *            サブジェクト
+     * @param info
+     *            コネクション要求情報
+     * @param mcf
+     *            マネージドコネクションファクトリ
+     */
     public ConnectionManagementContext(final Subject subject, final ConnectionRequestInfo info,
             final ManagedConnectionFactory mcf) {
         this(subject, info, mcf, null, null);
     }
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param subject
+     *            サブジェクト
+     * @param info
+     *            コネクション要求情報
+     * @param mcf
+     *            マネージドコネクションファクトリ
+     * @param mc
+     *            マネージドコネクション
+     */
     public ConnectionManagementContext(final Subject subject, final ConnectionRequestInfo info,
             final ManagedConnectionFactory mcf, final ManagedConnection mc) {
         this(subject, info, mcf, mc, null);
     }
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param subject
+     *            サブジェクト
+     * @param info
+     *            コネクション要求情報
+     * @param mcf
+     *            マネージドコネクションファクトリ
+     * @param mc
+     *            マネージドコネクション
+     * @param lch
+     *            論理コネクションハンドラ
+     */
     public ConnectionManagementContext(final Subject subject, final ConnectionRequestInfo info,
             final ManagedConnectionFactory mcf, final ManagedConnection mc, final Object lch) {
         this.subject = subject;
@@ -54,6 +104,13 @@ public class ConnectionManagementContext {
         this.lch = lch;
     }
 
+    /**
+     * マネージドコネクションを割り当てます．
+     * 
+     * @return マネージドコネクション
+     * @throws ResourceException
+     *             マネージドコネクションの割り当て中に例外が発生した場合
+     */
     public ManagedConnection allocateManagedConnection() throws ResourceException {
         mc = mcf.createManagedConnection(subject, info);
         if (logger.isDebugEnabled()) {
@@ -62,6 +119,13 @@ public class ConnectionManagementContext {
         return mc;
     }
 
+    /**
+     * 論理コネクションハンドラを割り当てます．
+     * 
+     * @return 論理コネクションハンドラ
+     * @throws ResourceException
+     *             論理コネクションハンドラの割り当て中に例外が発生した場合
+     */
     public Object allocateLogicalConnectionHandle() throws ResourceException {
         lch = mc.getConnection(subject, info);
         if (logger.isDebugEnabled()) {
@@ -71,19 +135,20 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * �v���p�e�B subject �̒l��Ԃ��܂��B
+     * サブジェクトを返します．
      * 
-     * @return Returns the subject.
+     * @return サブジェクト
      */
     public Subject getSubject() {
         return subject;
     }
 
     /**
-     * �v���p�e�B subject �̒l��ݒ肵�܂��B
+     * サブジェクトを設定します．
      * 
      * @param subject
-     *            The subject to set.
+     *            サブジェクト
+     * @return このコネクション管理コンテキスト
      */
     public ConnectionManagementContext setSubject(final Subject subject) {
         this.subject = subject;
@@ -91,19 +156,20 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * �v���p�e�B requestInfo �̒l��Ԃ��܂��B
+     * コネクション要求情報を返します．
      * 
-     * @return Returns the requestInfo.
+     * @return コネクション要求情報
      */
     public ConnectionRequestInfo getRequestInfo() {
         return info;
     }
 
     /**
-     * �v���p�e�B requestInfo �̒l��ݒ肵�܂��B
+     * コネクション要求情報を設定します．
      * 
      * @param requestInfo
-     *            The requestInfo to set.
+     *            コネクション要求情報
+     * @return このコネクション管理コンテキスト
      */
     public ConnectionManagementContext setRequestInfo(final ConnectionRequestInfo requestInfo) {
         this.info = requestInfo;
@@ -111,19 +177,20 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * �v���p�e�B managedConnectionFactory �̒l��Ԃ��܂��B
+     * マネージドコネクションファクトリを返します．
      * 
-     * @return Returns the managedConnectionFactory.
+     * @return マネージドコネクションファクトリ
      */
     public ManagedConnectionFactory getManagedConnectionFactory() {
         return mcf;
     }
 
     /**
-     * �v���p�e�B managedConnectionFactory �̒l��ݒ肵�܂��B
+     * マネージドコネクションファクトリを設定します．
      * 
      * @param managedConnectionFactory
-     *            The managedConnectionFactory to set.
+     *            マネージドコネクションファクトリ
+     * @return このコネクション管理コンテキスト
      */
     public ConnectionManagementContext setManagedConnectionFactory(
             final ManagedConnectionFactory managedConnectionFactory) {
@@ -132,19 +199,20 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * �v���p�e�B managedConnection �̒l��Ԃ��܂��B
+     * マネージドコネクションを返します．
      * 
-     * @return Returns the managedConnection.
+     * @return マネージドコネクション
      */
     public ManagedConnection getManagedConnection() {
         return mc;
     }
 
     /**
-     * �v���p�e�B managedConnection �̒l��ݒ肵�܂��B
+     * マネージドコネクションを設定します．
      * 
      * @param managedConnection
-     *            The managedConnection to set.
+     *            マネージドコネクション
+     * @return このコネクション管理コンテキスト
      */
     public ConnectionManagementContext setManagedConnection(
             final ManagedConnection managedConnection) {
@@ -153,23 +221,25 @@ public class ConnectionManagementContext {
     }
 
     /**
-     * �v���p�e�B logicalConnectionHandle �̒l��Ԃ��܂��B
+     * 論理コネクションハンドラを返します．
      * 
-     * @return Returns the logicalConnectionHandle.
+     * @return 論理コネクションハンドラ
      */
     public Object getLogicalConnectionHandle() {
         return lch;
     }
 
     /**
-     * �v���p�e�B logicalConnectionHandle �̒l��ݒ肵�܂��B
+     * 論理コネクションハンドラを設定します．
      * 
      * @param logicalConnectionHandle
-     *            The logicalConnectionHandle to set.
+     *            論理コネクションハンドラ
+     * @return このコネクション管理コンテキスト
      */
     public ConnectionManagementContext setLogicalConnectionHandle(
             final Object logicalConnectionHandle) {
         this.lch = logicalConnectionHandle;
         return this;
     }
+
 }

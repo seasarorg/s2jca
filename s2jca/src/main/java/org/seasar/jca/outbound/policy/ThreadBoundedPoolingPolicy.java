@@ -16,7 +16,6 @@
 package org.seasar.jca.outbound.policy;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.resource.ResourceException;
@@ -28,18 +27,34 @@ import org.seasar.jca.outbound.support.ConnectionManagementContext;
 import org.seasar.jca.outbound.support.ManagedConnectionPool;
 
 /**
+ * 現在のスレッドにコネクションを割り当てるポリシーの実装クラスです．
+ * <p>
+ * このポリシーは{@link MethodInterceptor}を実装しています．
+ * このインターセプタが適用されたメソッドが実行されている間に割り当てられたマネージドコネクションは，
+ * メソッドの実行が終了するまでスレッドに関連づけられます． メソッドの実行が終了すると，関連づけられたマネージドコネクションは解放されます．
+ * </p>
+ * 
  * @author koichik
  */
 public class ThreadBoundedPoolingPolicy extends AbstractPolicy implements MethodInterceptor {
+
+    // constants
     private static final long serialVersionUID = 1L;
 
+    // instance fields
+    /** スレッドに関連づけられたマネージドコネクション */
     protected final ThreadLocal<ManagedConnectionPool<Object>> pools = new ThreadLocal<ManagedConnectionPool<Object>>() {
+
         @Override
         public ManagedConnectionPool<Object> initialValue() {
             return new ManagedConnectionPool<Object>(nextPolicy);
         }
+
     };
 
+    /**
+     * インスタンスを構築します．
+     */
     public ThreadBoundedPoolingPolicy() {
         super(true);
     }
@@ -60,7 +75,7 @@ public class ThreadBoundedPoolingPolicy extends AbstractPolicy implements Method
 
     @Override
     public void release(final ManagedConnection mc) throws ResourceException {
-        final ManagedConnectionPool pool = pools.get();
+        final ManagedConnectionPool<Object> pool = pools.get();
         if (pool.moveActiveToFreePool(mc)) {
             return;
         }
@@ -76,6 +91,11 @@ public class ThreadBoundedPoolingPolicy extends AbstractPolicy implements Method
         }
     }
 
+    /**
+     * インターセプタが適用されたメソッドの実行開始前に割り当て済みのコネクションの{@link Set}を返します．
+     * 
+     * @return インターセプタが適用されたメソッドの実行開始前に割り当て済みのコネクションの{@link Set}
+     */
     public Set<ManagedConnection> before() {
         final ManagedConnectionPool<Object> context = pools.get();
         final Set<ManagedConnection> before = new HashSet<ManagedConnection>(context
@@ -84,18 +104,26 @@ public class ThreadBoundedPoolingPolicy extends AbstractPolicy implements Method
         return before;
     }
 
+    /**
+     * インターセプタが適用されたメソッドの実行中に割り当てられたコネクションを解放します．
+     * 
+     * @param before
+     *            インターセプタが適用されたメソッドの実行開始前に割り当て済みのコネクションの{@link Set}
+     * @throws ResourceException
+     *             コネクションの解放中に例外が発生した場合
+     */
     public void after(final Set<ManagedConnection> before) throws ResourceException {
         final ManagedConnectionPool<Object> context = pools.get();
         final Set<ManagedConnection> after = new HashSet<ManagedConnection>(context.getActivePool());
         after.addAll(context.getFreePool());
         after.removeAll(before);
         if (!after.isEmpty()) {
-            for (final Iterator it = after.iterator(); it.hasNext();) {
-                final ManagedConnection mc = (ManagedConnection) it.next();
+            for (final ManagedConnection mc : after) {
                 context.removeFromActivePool(mc);
                 context.removeFromFreePool(mc);
                 nextPolicy.release(mc);
             }
         }
     }
+
 }

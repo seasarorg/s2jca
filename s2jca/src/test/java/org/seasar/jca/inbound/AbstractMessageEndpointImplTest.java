@@ -29,18 +29,25 @@ import javax.transaction.xa.XAResource;
 
 import org.seasar.framework.unit.EasyMockTestCase;
 
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 
 /**
  * @author koichik
  */
 public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
+
     AbstractMessageEndpointImpl target;
+
     MessageEndpointFactory mef;
+
     TransactionManager tm;
+
     Transaction tx;
+
     XAResource xar;
+
     ClassLoader cl;
+
     Method method;
 
     @Override
@@ -55,11 +62,15 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
         method = MessageListener.class.getMethod("onMessage", new Class[] { Message.class });
     }
 
+    /**
+     * @throws Exception
+     */
     public void testDeliveryTransactedSuccessfully() throws Exception {
         target = new TestMessageEndpoint(mef, tm, xar, cl);
 
         // test beforeDelivery(Method)
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.beforeDelivery(method);
@@ -78,6 +89,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
         // test afterDelivery()
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.afterDelivery();
@@ -91,11 +103,15 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
         }.doTest();
     }
 
+    /**
+     * @throws Exception
+     */
     public void testDeliveryTransactedFailed() throws Exception {
         target = new TestMessageEndpoint(mef, tm, xar, cl);
 
         // test beforeDelivery(Method)
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.beforeDelivery(method);
@@ -115,6 +131,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
         // test afterDelivery()
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.afterDelivery();
@@ -127,11 +144,15 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
         }.doTest();
     }
 
+    /**
+     * @throws Exception
+     */
     public void testDeliveryTransactedMarkedRollback() throws Exception {
         target = new TestMessageEndpoint(mef, tm, xar, cl);
 
         // test beforeDelivery(Method)
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.beforeDelivery(method);
@@ -150,6 +171,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
         // test afterDelivery()
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.afterDelivery();
@@ -163,11 +185,15 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
         }.doTest();
     }
 
+    /**
+     * @throws Exception
+     */
     public void testDeliveryNotTransacted() throws Exception {
         target = new TestMessageEndpoint(mef, tm, xar, cl);
 
         // test beforeDelivery(Method)
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.beforeDelivery(method);
@@ -183,6 +209,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
         // test afterDelivery()
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.afterDelivery();
@@ -194,11 +221,22 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
         }.doTest();
     }
 
+    /**
+     */
     public static class TestMessageEndpoint extends AbstractMessageEndpointImpl {
+
+        /**
+         * @param messageEndpointFactory
+         * @param transactionManager
+         * @param xaResource
+         * @param classLoader
+         */
         public TestMessageEndpoint(MessageEndpointFactory messageEndpointFactory,
                 TransactionManager transactionManager, XAResource xaResource,
                 ClassLoader classLoader) {
             super(messageEndpointFactory, transactionManager, xaResource, classLoader);
         }
+
     }
+
 }

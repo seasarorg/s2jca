@@ -25,14 +25,8 @@ import junit.framework.TestCase;
  * @author koichik
  */
 public class BootstrapContextImplTest extends TestCase {
+
     BootstrapContext target;
-
-    public BootstrapContextImplTest() {
-    }
-
-    public BootstrapContextImplTest(String name) {
-        super(name);
-    }
 
     @Override
     protected void setUp() throws Exception {
@@ -40,6 +34,9 @@ public class BootstrapContextImplTest extends TestCase {
         target = new BootstrapContextImpl();
     }
 
+    /**
+     * @throws Exception
+     */
     public void testTimer() throws Exception {
         Timer tm1 = target.createTimer();
         assertNotNull("0", tm1);
@@ -48,4 +45,5 @@ public class BootstrapContextImplTest extends TestCase {
         assertNotNull("1", tm1);
         assertNotSame("2", tm1, tm2);
     }
+
 }

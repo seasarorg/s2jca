@@ -28,11 +28,21 @@ import org.seasar.jca.outbound.support.LocalTransactionXAResource;
 import org.seasar.jca.outbound.support.ManagedConnectionPool;
 
 /**
+ * コネクションをリソースローカルなトランザクションに関連づけて管理するポリシーの実装クラスです．
+ * 
  * @author koichik
  */
 public class LocalTransactionBoundedPoolingPolicy extends AbstractTransactionBoundedPoolingPolicy {
+
+    // constants
     private static final long serialVersionUID = 1L;
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param tm
+     *            トランザクションマネージャ
+     */
     public LocalTransactionBoundedPoolingPolicy(final TransactionManager tm) {
         super(tm);
     }
@@ -58,4 +68,5 @@ public class LocalTransactionBoundedPoolingPolicy extends AbstractTransactionBou
             throw new SResourceException("EJCA0000", e);
         }
     }
+
 }

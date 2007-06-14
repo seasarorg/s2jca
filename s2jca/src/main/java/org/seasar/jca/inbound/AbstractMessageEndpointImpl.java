@@ -32,20 +32,52 @@ import org.seasar.jca.exception.SIllegalStateException;
 import org.seasar.jca.exception.SResourceException;
 
 /**
+ * {@link MessageEndpoint}の抽象クラスです．
+ * 
  * @author koichik
  */
 public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
+
+    // static fields
     private static final Logger logger = Logger.getLogger(AbstractMessageEndpointImpl.class);
 
+    // instance fields
+    /** メッセージエンドポイントファクトリ */
     protected MessageEndpointFactory messageEndpointFactory;
+
+    /** トランザクションマネージャ */
     protected TransactionManager transactionManager;
+
+    /** トランザクション */
     protected Transaction transaction;
+
+    /** XAリソース */
     protected XAResource xaResource;
+
+    /** クラスローダ */
     protected ClassLoader classLoader;
+
+    /** {@link #beforeDelivery(Method)}が呼び出された場合は<code>true</code> */
     protected boolean beforeDeliveryCalled;
+
+    /** メッセージエンドポイント固有のハンドラメソッドを処理中なら<code>true</code> */
     protected boolean processing;
+
+    /** メッセージエンドポイント固有のハンドラメソッドが正常に終了した場合は<code>true</code> */
     protected boolean succeeded;
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param messageEndpointFactory
+     *            メッセージエンドポイントファクトリ
+     * @param transactionManager
+     *            トランザクションマネージャ
+     * @param xaResource
+     *            XAリソース
+     * @param classLoader
+     *            クラスローダ
+     */
     public AbstractMessageEndpointImpl(final MessageEndpointFactory messageEndpointFactory,
             final TransactionManager transactionManager, final XAResource xaResource,
             final ClassLoader classLoader) {
@@ -96,6 +128,12 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
         logger.log("DJCA1033", new Object[] { this });
     }
 
+    /**
+     * トランザクションを開始します．
+     * 
+     * @throws ResourceException
+     *             トランザクションの開始中に例外が発生した場合
+     */
     protected void beginTransaction() throws ResourceException {
         try {
             transactionManager.begin();
@@ -106,6 +144,16 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
         }
     }
 
+    /**
+     * トランザクションを終了します．
+     * <p>
+     * メッセージエンドポイント固有のハンドラメソッドが正常に終了し，トランザクションマネージャが
+     * トランザクション中であればトランザクションをコミットします． それ以外の場合はトランザクションをロールバックします．
+     * </p>
+     * 
+     * @throws ResourceException
+     *             トランザクションの終了中に例外が発生した場合
+     */
     protected void endTransaction() throws ResourceException {
         try {
             if (succeeded && transactionManager.getStatus() == Status.STATUS_ACTIVE) {
@@ -118,6 +166,12 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
         }
     }
 
+    /**
+     * {@link #beforeDelivery(Method)}が呼び出されて正常に終了していなければ例外をスローします．
+     * 
+     * @throws IllegalStateException
+     *             {@link #beforeDelivery(Method)}が呼び出されて正常に終了していない場合
+     */
     protected void assertBeforeDeliveryCalled() throws IllegalStateException {
         if (!beforeDeliveryCalled) {
             logger.log("EJCA1028", new Object[] { this });
@@ -125,6 +179,12 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
         }
     }
 
+    /**
+     * メッセージエンドポイント固有のハンドラメソッドが処理中でないことを確認します．
+     * 
+     * @throws java.lang.IllegalStateException
+     *             メッセージエンドポイント固有のハンドラメソッドが処理中の場合
+     */
     protected void assertNotProcessing() {
         if (isProcessing()) {
             final Object[] params = new Object[] { this };
@@ -134,6 +194,9 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
         }
     }
 
+    /**
+     * メッセージエンドポイントの後処理をします．
+     */
     protected void cleanup() {
         succeeded = false;
         processing = false;
@@ -141,27 +204,60 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
         transaction = null;
     }
 
+    /**
+     * クラスローダを返します．
+     * 
+     * @return クラスローダ
+     */
     protected ClassLoader getClassLoader() {
         return classLoader;
     }
 
+    /**
+     * {@link MessageEndpoint#beforeDelivery(Method)}が呼び出されていなければ<code>true</code>を返します．
+     * 
+     * @return {@link MessageEndpoint#beforeDelivery(Method)}が呼び出されていなければ<code>true</code>
+     */
     protected boolean isBeforeDeliveryCalled() {
         return beforeDeliveryCalled;
     }
 
+    /**
+     * メッセージエンドポイント固有のハンドラメソッドが処理中であれば<code>true</code>を返します．
+     * 
+     * @return メッセージエンドポイント固有のハンドラメソッドが処理中であれば<code>true</code>
+     */
     protected synchronized boolean isProcessing() {
         return processing;
     }
 
+    /**
+     * メッセージエンドポイント固有のハンドラメソッドが処理中であれば<code>true</code>を設定します．
+     * 
+     * @param processing
+     *            メッセージエンドポイント固有のハンドラメソッドが処理中であれば<code>true</code>
+     */
     protected synchronized void setProcessing(final boolean processing) {
         this.processing = processing;
     }
 
+    /**
+     * メッセージエンドポイント固有のハンドラメソッドが正常に処理終了した場合は<code>true</code>を返します．
+     * 
+     * @return メッセージエンドポイント固有のハンドラメソッドが正常に処理終了した場合は<code>true</code>
+     */
     protected boolean isSucceeded() {
         return succeeded;
     }
 
+    /**
+     * メッセージエンドポイント固有のハンドラメソッドが正常に処理終了した場合は<code>true</code>を設定します．
+     * 
+     * @param succeeded
+     *            メッセージエンドポイント固有のハンドラメソッドが正常に処理終了した場合は<code>true</code>
+     */
     protected void setSucceeded(final boolean succeeded) {
         this.succeeded = succeeded;
     }
+
 }

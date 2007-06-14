@@ -28,26 +28,26 @@ import org.seasar.jca.outbound.policy.ConnectionManagementPolicy;
 import org.seasar.jca.outbound.support.ConnectionManagementContext;
 import org.seasar.jca.outbound.support.ConnectionManagementContextMatcher;
 
-import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.*;
 
 /**
  * @author koichik
  */
 public class ConnectionManagerImplTest extends EasyMockTestCase {
+
     private ConnectionManagerImpl target;
+
     private ManagedConnectionFactory mcf;
+
     private ManagedConnection mc;
+
     private Connection lch;
+
     private ConnectionManagementPolicy policy;
+
     private ConnectionRequestInfo info;
+
     private ConnectionManagementContext context;
-
-    public ConnectionManagerImplTest() {
-    }
-
-    public ConnectionManagerImplTest(String name) {
-        super(name);
-    }
 
     @Override
     protected void setUp() throws Exception {
@@ -72,6 +72,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
      */
     public void testAddPolicy() throws Exception {
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 target.addConnectionManagementPolicy(policy);
@@ -86,6 +87,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
         }.doTest();
 
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 assertEquals("1", lch, target.allocateConnection(mcf, info));
@@ -111,6 +113,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
         final ManagedConnectionFactory illegalMCF = createMock(ManagedConnectionFactory.class);
 
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 // 例外がスローされる．
@@ -130,6 +133,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
      */
     public void testAllocate() throws Exception {
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 // コネクションを取得．
@@ -155,6 +159,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
      */
     public void testCloseConnection() throws Exception {
         new Subsequence() {
+
             /**
              * ConnectionClosedイベントを受信．
              */
@@ -181,6 +186,7 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
      */
     public void testConnectionErrorOccurred() throws Exception {
         new Subsequence() {
+
             @Override
             public void replay() throws Exception {
                 ConnectionEvent event = new ConnectionEvent(mc,
@@ -197,4 +203,5 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
             }
         }.doTest();
     }
+
 }

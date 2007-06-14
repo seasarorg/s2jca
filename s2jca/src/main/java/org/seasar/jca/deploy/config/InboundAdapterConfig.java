@@ -28,6 +28,7 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
  * @author koichik
  */
 public class InboundAdapterConfig {
+
     // instance fields
     /** メッセージリスナのマップ */
     protected final List<String> messageListenerTypes = CollectionsUtil.newArrayList();
@@ -73,4 +74,5 @@ public class InboundAdapterConfig {
     public void addRequiredConfigProperty(final String requiredConfigProperty) {
         requiredConfigProperties.add(requiredConfigProperty);
     }
+
 }

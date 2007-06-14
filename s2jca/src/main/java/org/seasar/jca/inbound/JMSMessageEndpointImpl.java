@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.resource.spi.endpoint.MessageEndpoint;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
@@ -28,15 +29,36 @@ import org.seasar.framework.message.MessageFormatter;
 import org.seasar.framework.util.ClassUtil;
 
 /**
+ * JMS用の{@link MessageEndpoint}の実装クラスです．
+ * 
  * @author koichik
  */
 public class JMSMessageEndpointImpl extends AbstractMessageEndpointImpl implements MessageListener {
+
+    // static fields
     private static final Logger logger = Logger.getLogger(JMSMessageEndpointImpl.class);
+
+    /** {@link MessageListener#onMessage(Message)}を表すメソッドオブジェクト */
     protected static final Method LISTENER_METHOD = ClassUtil.getMethod(MessageListener.class,
             "onMessage", new Class[] { Message.class });
 
+    /** 移譲先となる本来のメッセージエンドポイント */
     protected MessageListener actualEndpoint;
 
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param messageEndpointFactory
+     *            メッセージエンドポイントファクトリ
+     * @param transactionManager
+     *            トランザクションマネージャ
+     * @param xaResource
+     *            XAリソース
+     * @param classLoader
+     *            クラスローダ
+     * @param actualEndpoint
+     *            移譲先となる本来のメッセージエンドポイント
+     */
     public JMSMessageEndpointImpl(final MessageEndpointFactory messageEndpointFactory,
             final TransactionManager transactionManager, final XAResource xaResource,
             final ClassLoader classLoader, final MessageListener actualEndpoint) {
@@ -66,6 +88,15 @@ public class JMSMessageEndpointImpl extends AbstractMessageEndpointImpl implemen
         }
     }
 
+    /**
+     * 本来のメッセージエンドポイントに処理を委譲します．
+     * <p>
+     * コンストラクタで渡されたクラスローダをスレッドのコンテキストクラスローダに設定して委譲します．
+     * </p>
+     * 
+     * @param message
+     *            受信したJMSメッセージ
+     */
     protected void doOnMessage(final Message message) {
         if (logger.isDebugEnabled()) {
             logger.log("DJCA1029", new Object[] { this, LISTENER_METHOD });
@@ -86,6 +117,13 @@ public class JMSMessageEndpointImpl extends AbstractMessageEndpointImpl implemen
         }
     }
 
+    /**
+     * 引数で指定されたクラスローダをスレッドのコンテキストクラスローダに設定します．
+     * 
+     * @param loader
+     *            コンテキストクラスローダに設定するクラスローダ
+     * @return コンテキストクラスローダに設定されていたクラスローダ
+     */
     protected ClassLoader setContextClassLoader(final ClassLoader loader) {
         final Thread thread = Thread.currentThread();
         final ClassLoader currentClassLoader = thread.getContextClassLoader();
@@ -93,6 +131,12 @@ public class JMSMessageEndpointImpl extends AbstractMessageEndpointImpl implemen
         return currentClassLoader;
     }
 
+    /**
+     * リエントラントに呼び出されていないことを確認します．
+     * 
+     * @throws IllegalStateException
+     *             リエントラントに呼び出された場合
+     */
     protected void assertNotReentrant() {
         if (isProcessing()) {
             final Object[] params = new Object[] { this, LISTENER_METHOD };
@@ -100,4 +144,5 @@ public class JMSMessageEndpointImpl extends AbstractMessageEndpointImpl implemen
             throw new IllegalStateException(MessageFormatter.getSimpleMessage("EJCA1034", params));
         }
     }
+
 }

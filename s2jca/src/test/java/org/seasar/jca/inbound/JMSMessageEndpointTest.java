@@ -27,12 +27,6 @@ import junit.framework.TestCase;
  * @author koichik
  */
 public class JMSMessageEndpointTest extends TestCase {
-    public JMSMessageEndpointTest() {
-    }
-
-    public JMSMessageEndpointTest(String name) {
-        super(name);
-    }
 
     /**
      * <p>
@@ -46,6 +40,7 @@ public class JMSMessageEndpointTest extends TestCase {
     public void testTargetSuccessfullyCompletedA() throws Exception {
         JMSMessageEndpointImpl endpoint = new JMSMessageEndpointImpl(null, null, null, null,
                 new MessageListener() {
+
                     public void onMessage(Message message) {
                     }
                 });
@@ -71,6 +66,7 @@ public class JMSMessageEndpointTest extends TestCase {
     public void testTargetFailedA() throws Exception {
         JMSMessageEndpointImpl endpoint = new JMSMessageEndpointImpl(null, null, null, null,
                 new MessageListener() {
+
                     public void onMessage(Message message) {
                         throw new RuntimeException();
                     }
@@ -92,6 +88,7 @@ public class JMSMessageEndpointTest extends TestCase {
     public void testTargetSuccessfullyCompletedB() throws Exception {
         JMSMessageEndpointImpl endpoint = new JMSMessageEndpointImpl(null, null, null, null,
                 new MessageListener() {
+
                     public void onMessage(Message message) {
                     }
                 });
@@ -118,6 +115,7 @@ public class JMSMessageEndpointTest extends TestCase {
     public void testTargetFailedB() throws Exception {
         JMSMessageEndpointImpl endpoint = new JMSMessageEndpointImpl(null, null, null, null,
                 new MessageListener() {
+
                     public void onMessage(Message message) {
                         throw new RuntimeException();
                     }
@@ -128,12 +126,16 @@ public class JMSMessageEndpointTest extends TestCase {
         assertFalse("2", endpoint.isSucceeded());
     }
 
+    /**
+     * @throws Exception
+     */
     public void testClassLoader() throws Exception {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         final ClassLoader loader = new URLClassLoader(new URL[0]);
 
         JMSMessageEndpointImpl endpoint = new JMSMessageEndpointImpl(null, null, null, loader,
                 new MessageListener() {
+
                     public void onMessage(Message message) {
                         assertSame("0", loader, Thread.currentThread().getContextClassLoader());
                     }
@@ -142,12 +144,16 @@ public class JMSMessageEndpointTest extends TestCase {
         assertSame("1", contextClassLoader, Thread.currentThread().getContextClassLoader());
     }
 
+    /**
+     * @throws Exception
+     */
     public void testClassLoaderWithException() throws Exception {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         final ClassLoader loader = new URLClassLoader(new URL[0]);
 
         JMSMessageEndpointImpl endpoint = new JMSMessageEndpointImpl(null, null, null, loader,
                 new MessageListener() {
+
                     public void onMessage(Message message) {
                         assertSame("0", loader, Thread.currentThread().getContextClassLoader());
                         throw new RuntimeException();
@@ -156,4 +162,5 @@ public class JMSMessageEndpointTest extends TestCase {
         endpoint.doOnMessage(null);
         assertSame("1", contextClassLoader, Thread.currentThread().getContextClassLoader());
     }
+
 }

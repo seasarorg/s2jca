@@ -26,6 +26,7 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
  * @author koichik
  */
 public abstract class ConfigPropertyContainer {
+
     // instance fields
     /** プロパティのマップ */
     protected final Map<String, ConfigProperty> props = CollectionsUtil.newLinkedHashMap();
@@ -99,4 +100,5 @@ public abstract class ConfigPropertyContainer {
     public Collection<ConfigProperty> getPropertyValues() {
         return props.values();
     }
+
 }

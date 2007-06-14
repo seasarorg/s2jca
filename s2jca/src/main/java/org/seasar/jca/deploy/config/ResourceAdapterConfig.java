@@ -29,6 +29,7 @@ import org.seasar.framework.util.tiger.CollectionsUtil;
  * @author koichik
  */
 public class ResourceAdapterConfig extends ConfigPropertyContainer {
+
     // instance fields
     /** リソースアダプタの準拠する仕様のバージョン */
     protected String specificationVersion;
@@ -257,4 +258,5 @@ public class ResourceAdapterConfig extends ConfigPropertyContainer {
     public void setInboundAdapter(final InboundAdapterConfig inboundAdapter) {
         this.inboundAdapter = inboundAdapter;
     }
+
 }
