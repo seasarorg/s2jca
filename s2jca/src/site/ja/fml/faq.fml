@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs title="Frequently Asked Questions">
+	<part id="general">
+		<title>General</title>
+
+		<faq id="general-jca">
+			<question>
+				JCA ってなんですか？
+			</question>
+			<answer>
+				<a href="http://java.sun.com/j2ee/connector/index.jsp">JCA (J2EE Connector Architecture)</a> とは，
+				RDBMSやMOM (Message-Oriented Middleware) をはじめ，
+				CICSなどのメインフレーム，TUXEDOなどのTPモニタ，SAPなどのEIS等への接続を包括的に扱う仕様で，
+				JavaEE仕様の一部となっています．
+				JCAにより，JDBCやJMSはもちろん，独自仕様のリソースに対しても，コネクションプールやトランザクション制御などを
+				単一のコネクションマネージャでサポートすることが可能となります． 
+			</answer>
+		</faq>
+		<faq id="general-s2jca">
+			<question>
+				S2JCA ってなんですか？
+			</question>
+			<answer>
+				S2JCAはJCA仕様に準拠したリソースアダプタをSeasar2から利用するためのプロダクトです．
+				JCA仕様の主な登場人物は次の3つです．
+				<ul>
+				<li>リソースアダプタ</li>
+				<li>アプリケーションサーバ</li>
+				<li>アプリケーション</li>
+				</ul>
+				S2JCAはこの中のApplication Serverに相当する部分の実装です．
+				S2JCAを使うことで，TomcatなどのJavaEEフルスペック対応ではない環境からでもリソースアダプタを通じて
+				MOMやメインフレーム等に接続することが可能となります．
+			</answer>
+		</faq>
+		<faq id="general-cryptography">
+			<question>
+				JCA って暗号化の仕様でしょ？
+			</question>
+			<answer>
+				正式には，JCAという略語は<a href="http://java.sun.com/j2se/1.5.0/docs/guide/security/CryptoSpec.html">Java Cryptography Architecture</a>のことを指し，
+				J2EE Connector ArchitectureはConnector Architectureと呼ばれることが多いようです．
+				しかし，「S2ConnectorArchitecture」ではプロダクト名としてイケてないし，「S2Connector」では意味不明なのでS2JCAという名前にしました．
+				S2JCAなら意味が通るのか疑問がないわけではありませんが気にしてはいけません．
+			</answer>
+		</faq>
+		<faq id="general-ra">
+			<question>
+				リソースアダプタ ってなんですか？
+			</question>
+			<answer>
+				リソースアダプタはRDBMSやMOM，メインフレーム，TPモニタ，EIS等の「リソース」へ接続するためのコンポーネントで，
+				通常はResource Adapter Archive (RAR) と呼ばれるJARファイル (拡張子は<code>.rar</code>) として提供されます．
+			</answer>
+		</faq>
+		<faq id="general-ra-get">
+			<question>
+				リソースアダプタ はどこから入手できますか？
+			</question>
+			<answer>
+				通常はMOMなど接続するプロダクトと一緒に提供されます．<br/>
+				例えばオープンソースのMOMプロダクトである<a href="http://activemq.apache.org/">Apache ActiveMQ</a>には
+				リソースアダプタがバンドルされています．
+				リソースアダプタが提供されていないプロダクトに接続する場合は汎用のリソースアダプタを利用できる場合もあります．
+				<dl>
+				<dt>RDBMSとの接続</dt>
+				<dd><a href="http://java.sun.com/developer/earlyAccess/jdbc/">JDBC Connector</a></dd>
+				<dt>JMSとの接続</dt>
+				<dd><a href="https://genericjmsra.dev.java.net/">Generic Resource Adapter for JMS</a></dd>
+				</dl>
+			</answer>
+		</faq>
+		<faq id="general-outbound">
+			<question>
+				アウトバウンド通信 (outbound communication) ってどういう意味ですか？
+			</question>
+			<answer>
+				アウトバウンド通信というのは，アプリケーションが主体となって接続を確立したり送受信したりすることです．<br/>
+				接続に対する制御の向きが内 (アプリケーションやアプリケーションサーバ) から外 (RDBMSやMOM，メインフレーム等) に向かっているのでアウトバウンドというのだと思われます．
+			</answer>
+		</faq>
+		<faq id="general-inbound">
+			<question>
+				インバウンド通信 (inbound communication) ってどういう意味ですか？
+			</question>
+			<answer>
+				アウトバウンドコネクションとは逆に，リソース (RDBMSやMOM，メインフレーム等) が主体となって接続を確立したり送受信したりすることです．<br/>
+				接続に対する制御の向きが外 (RDBMSやMOM，メインフレーム等) から内 (アプリケーションやアプリケーションサーバ) に向かっているのでインバウンドというのだと思われます．
+				EJB (Enterprise JavaBeans) のMDB (Message-Driven Bean) はインバウンド通信を利用した例の一つです．
+			</answer>
+		</faq>
+		<faq id="general-outbound-recv">
+			<question>
+				アウトバウンド通信は送信，インバウンド通信は受信で使うってこと？
+			</question>
+			<answer>
+				いいえ．<br/>
+				外向き・内向きというのはコネクションに対する制御の向きのことで，メッセージの向きを意味するわけではありません．
+				例えばJMSを利用するアプリケーションは，アウトバウンド通信でメッセージを送信することも受信することもできます．
+				ただし，インバウンド通信はほとんどの場合受信にのみ利用されると思われます．
+			</answer>
+		</faq>
+		<!--
+		<faq id="general-">
+			<question>
+			</question>
+			<answer>
+			</answer>
+		</faq>
+		-->
+	</part>
+</faqs>

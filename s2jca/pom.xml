@@ -4,14 +4,65 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 >
   <modelVersion>4.0.0</modelVersion>
+
+  <!-- The Basics -->
   <groupId>org.seasar.jca</groupId>
   <artifactId>s2jca</artifactId>
-  <packaging>jar</packaging>
-  <name>S2JCA Project</name>
   <version>1.0.0-M2-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <!-- More Project Information -->
+  <name>S2JCA Project</name>
   <description></description>
   <url>http://s2jca.sandbox.seasar.org/</url>
   <inceptionYear>2005</inceptionYear>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <organization>
+    <name>The Seasar Foundation</name>
+    <url>http://www.seasar.org/</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>koichik</id>
+      <name>KOBAYASHI Koichi</name>
+      <email></email>
+      <url>http://d.hatena.ne.jp/koichik/</url>
+      <timezone>+9</timezone>
+    </developer>
+    <developer>
+      <id>y-komori</id>
+      <name>KOMORI Yusuke</name>
+      <email></email>
+      <url>http://d.hatena.ne.jp/y-komori/</url>
+      <timezone>+9</timezone>
+    </developer>
+    <developer>
+      <id>kmurata</id>
+      <name>MURATA Kenichiro</name>
+      <email></email>
+      <url>http://d.hatena.ne.jp/KenichiroMurata/</url>
+      <timezone>+9</timezone>
+    </developer>
+    <developer>
+      <id>bowez</id>
+      <name></name>
+      <email></email>
+      <url>http://d.hatena.ne.jp/bowez/</url>
+      <timezone>+9</timezone>
+    </developer>
+  </developers>
+
+  <!-- Environment Settings -->
+  <issueManagement>
+    <system>JIRA</system>
+    <url>https://www.seasar.org/issues/browse/JCA</url>
+  </issueManagement>
   <mailingLists>
     <mailingList>
       <name>Seasar-user</name>
@@ -35,33 +86,62 @@
       <archive>http://ml.seasar.org/archives/seasar-user-en/</archive>
     </mailingList>
   </mailingLists>
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
   <scm>
     <connection>scm:svn:https://www.seasar.org/svn/sandbox/s2jca/trunk/s2jca/</connection>
     <developerConnection>scm:svn:https://www.seasar.org/svn/sandbox/s2jca/trunk/s2jca/</developerConnection>
     <url>http://svn.seasar.org/browse/?root=sandbox.s2jca</url>
   </scm>
-  <organization>
-    <name>The Seasar Foundation</name>
-    <url>http://www.seasar.org/</url>
-  </organization>
+  <repositories>
+    <repository>
+      <id>maven.seasar.org</id>
+      <name>The Seasar Foundation Maven2 Repository</name>
+      <url>http://maven.seasar.org/maven2</url>
+    </repository>
+  </repositories>
+  <distributionManagement>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>maven.seasar.org</id>
+      <name>The Seasar Foundation Maven2 Repository</name>
+      <url>dav:https://www.seasar.org/maven/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <uniqueVersion>true</uniqueVersion>
+      <id>maven.seasar.org</id>
+      <name>The Seasar Foundation Maven2 Snapshot Repository</name>
+      <url>dav:https://www.seasar.org/maven/maven2-snapshot</url>
+    </snapshotRepository>
+    <site>
+      <id>www.seasar.org</id>
+      <url>scp://www.seasar.org/home/groups/s2jca/public_html/</url>
+    </site>
+  </distributionManagement>
+
+  <!-- Build Settings -->
   <build>
     <defaultGoal>validate</defaultGoal>
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
             <source>1.5</source>
             <target>1.5</target>
             <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <configuration>
+            <updateReleaseInfo>true</updateReleaseInfo>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <configuration>
+            <locales>en,ja</locales>
+            <inputEncoding>UTF-8</inputEncoding>
+            <outputEncoding>UTF-8</outputEncoding>
           </configuration>
         </plugin>
       </plugins>
@@ -86,9 +166,14 @@
           <docencoding>UTF-8</docencoding>
           <charset>UTF-8</charset>
           <links>
-          	<link>http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/</link>
             <link>http://java.sun.com/javaee/5/docs/api/</link>
+          	<link>http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/</link>
             <link>http://aopalliance.sourceforge.net/doc/</link>
+            <link>http://jakarta.apache.org/commons/logging/apidocs/</link>
+            <link>http://www.csg.is.titech.ac.jp/~chiba/javassist/html/</link>
+            <link>http://www.ognl.org/2.6.9/Documentation/javadoc/</link>
+            <link>http://www.junit.org/junit/javadoc/4.3/</link>
+            <link>http://www.junit.org/junit/javadoc/3.8.1/</link>
             <link>http://s2container.seasar.org/2.4/s2-framework/ja/apidocs/</link>
             <link>http://s2container.seasar.org/2.4/s2-extension/ja/apidocs/</link>
             <link>http://s2container.seasar.org/2.4/s2-tiger/ja/apidocs/</link>
@@ -105,13 +190,8 @@
       </plugin>
     </plugins>
   </build>
-  <repositories>
-    <repository>
-      <id>maven.seasar.org</id>
-      <name>The Seasar Foundation Maven2 Repository</name>
-      <url>http://maven.seasar.org/maven2</url>
-    </repository>
-  </repositories>
+
+  <!-- Dependency Settings -->
   <dependencies>
     <dependency>
       <groupId>org.seasar.container</groupId>
@@ -121,7 +201,14 @@
     </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-j2ee_1.4_spec</artifactId>
+      <artifactId>geronimo-j2ee-connector_1.5_spec</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-jms_1.1_spec</artifactId>
       <version>1.0</version>
       <type>jar</type>
       <scope>provided</scope>
@@ -132,6 +219,13 @@
       <version>1.0</version>
       <type>jar</type>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-servlet_2.4_spec</artifactId>
+      <version>1.0</version>
+      <type>jar</type>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
@@ -147,18 +241,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <distributionManagement>
-    <repository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>maven.seasar.org</id>
-      <name>The Seasar Foundation Maven2 Repository</name>
-      <url>dav:https://www.seasar.org/maven/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <uniqueVersion>true</uniqueVersion>
-      <id>maven.seasar.org</id>
-      <name>The Seasar Foundation Maven2 Snapshot Repository</name>
-      <url>dav:https://www.seasar.org/maven/maven2-snapshot</url>
-    </snapshotRepository>
-  </distributionManagement>
 </project>

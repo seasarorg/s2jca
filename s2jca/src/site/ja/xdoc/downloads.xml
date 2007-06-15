@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Downloads</title>
+	</properties>
+	<body>
+		<section name="Latest Release">
+			<ul>
+				<li><p><a href="../downloads/2007-07-07/S2JCA-1.0.0-M2.zip">S2JCA 1.0.0-M2</a> (2007/07/07)</p></li>
+			</ul>
+		</section>
+		<section name="All Releases">
+			<ul>
+				<li><p><a href="../downloads/2007-07-07/S2JCA-1.0.0-M2.zip">S2JCA 1.0.0-M2</a> (2007/07/07)</p></li>
+				<li><p><a href="../downloads/2006-05-11/S2JCA-1.0.0-M1.zip">S2JCA 1.0.0-M1</a> (2006/05/11)</p></li>
+			</ul>
+		</section>
+	</body>
+</document>
