@@ -38,7 +38,7 @@ public interface ResourceAdapterDeployer {
      *             リソースアダプタのデプロイに失敗した場合にスローされます
      * @throws IOException
      *             リソースアダプタのデプロイ中に入出力エラーが発生した場合にスローされます
-     * @see javax.resource.spi.ResourceAdapter#start()
+     * @see javax.resource.spi.ResourceAdapter#start(BootstrapContext)
      */
     public void start() throws ResourceException, IOException;
 

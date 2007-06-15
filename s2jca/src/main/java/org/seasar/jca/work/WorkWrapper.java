@@ -59,7 +59,7 @@ public class WorkWrapper implements Runnable {
     /** {@link Work}の実行と同期するためのラッチ */
     protected CountDownLatch latch;
 
-    /** {@link Wokr}を受け付けた時間 */
+    /** {@link Work}を受け付けた時間 */
     protected long acceptedTime;
 
     /** {@link Work}の実行が開始していれば<code>true</code> */
@@ -69,9 +69,9 @@ public class WorkWrapper implements Runnable {
     protected WorkException exception;
 
     /**
-     * 現在のスレッドで実行中の{@link Wokr}を返します．
+     * 現在のスレッドで実行中の{@link Work}を返します．
      * 
-     * @return 現在のスレッドで実行中の{@link Wokr}
+     * @return 現在のスレッドで実行中の{@link Work}
      */
     public static Work getCurrentWork() {
         return currentWork.get();
@@ -179,9 +179,9 @@ public class WorkWrapper implements Runnable {
     }
 
     /**
-     * {@link Wokr}が受け付けられてからの経過時間がタイムアウト時間を超えている場合は<code>true</code>を返します．
+     * {@link Work}が受け付けられてからの経過時間がタイムアウト時間を超えている場合は<code>true</code>を返します．
      * 
-     * @return {@link Wokr}が受け付けられてからの経過時間がタイムアウト時間を超えている場合は<code>true</code>
+     * @return {@link Work}が受け付けられてからの経過時間がタイムアウト時間を超えている場合は<code>true</code>
      */
     protected boolean isTimedout() {
         if (startTimeout == WorkManager.INDEFINITE) {
