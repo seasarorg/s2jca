@@ -38,7 +38,7 @@
     </menu>
     <menu name="ドキュメント">
       <item name="インストール" href="install.html"/>
-      <item name="" href="basic.html"/>
+      <item name="S2JCA入門" href="basics.html"/>
       <item name="コンフィグレーション" href="config.html"/>
       <item name="FAQ" href="faq.html"/>
       <item name="Javadoc" href="../apidocs/index.html"/>

@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>入門</title>
+	</properties>
+	<body>
+		<section name="目次">
+			<ul>
+				<li><p><a href="#概要">概要</a></p>
+					<ul>
+						<li><p><a href="#JCA">JCA</a></p></li>
+						<li><p><a href="#S2JCA">S2JCA</a></p></li>
+					</ul>
+				</li>
+				<li><p><a href="#アウトバウンド通信とインバウンド通信">アウトバウンド通信とインバウンド通信</a></p>
+					<ul>
+						<li><p><a href="#アウトバウンド通信">アウトバウンド通信</a></p></li>
+						<li><p><a href="#インバウンド通信">インバウンド通信</a></p></li>
+					</ul>
+				</li>
+			</ul>
+		</section>
+
+		<section name="概要">
+			<subsection name="JCA">
+				<p>
+					<a href="http://java.sun.com/j2ee/connector/index.jsp">JCA (J2EE Connector Architecture)</a> は，
+					RDBMSやMOM (Message-Oriented Middleware) をはじめ，
+					CICSなどのメインフレーム，TUXEDOなどのTPモニタ，SAPなどのERP等への接続を包括的に扱う仕様で，
+					JavaEE仕様の一部となっています．
+				</p>
+				<p>
+					JCAは，JavaEEアプリケーションと任意のEIS (Enterprise Information System) を自在に接続することを目的とした仕様です．
+					EIS とは，RDBMSやMOM，メインフレーム，TPモニタ，ERPなどの総称です．
+					JCA以前は，RDBMSに対してはJDBC，MOMに対してはJMSというように，EISの種類毎に個別のAPIが定められてきました．
+					また，標準化されていないEISに対してはベンダ固有のAPIが提供されてきました．
+					その場合，アプリケーションサーバはトランザクション制御やコネクションプーリングなどを個々のAPI毎に提供しなくてはならなくなります．
+					そこで様々なEISへの接続を包括的に扱う仕様としてJCAが定められました．
+				</p>
+				<p>
+					JCAの主要な構成要素を次の図に示します．
+				</p>
+				<img src="images/jca.png" width="600" hight="360"/>
+				<p>
+					JCA仕様では，EISへの接続を提供するコンポーネントは「リソースアダプタ」と呼ばれます．
+					リソースアダプタはJDBCドライバと同じような位置づけになりますが，Resource Adapter Archive (Rar) ファイルにアーカイブされ，
+					アプリケーションサーバに簡単にデプロイすることができるコンポーネントです．
+				</p>
+				<p>
+					アプリケーションサーバとリソースアダプタの間にはJCA Service Provider Interface (SPI) というAPIが定められています．
+					SPIを通じて，アプリケーションサーバはリソースアダプタが提供する接続をプーリングしたり，トランザクション制御を行ったりすることができます．
+				</p>
+				<p>
+					アプリケーションとリソースアダプタの間にはJCA Common Client Interface (CCI) というAPIが定められていますが，
+					JDBCやJMS，ベンダ固有のAPIなど，任意のAPIを利用することもできます．
+					アプリケーションとリソースアダプタ間のAPIと，アプリケーションサーバとリソースアダプタ間のAPIが独立しているのがJCAの特徴です．
+				</p>
+			</subsection>
+			<subsection name="S2JCA">
+				<p>
+					S2JCAは，JCA仕様の中でアプリケーションサーバに相当する実装を提供するプロダクトで，
+					コネクションプーリングやJTAトランザクションとの連携を提供します．
+				</p>
+				<img src="images/s2jca.png" width="600" hight="360"/>
+				<p>
+					S2JCAを使用することにより，フルスペックのアプリケーションサーバを使わなくても，Tomcatやスタンドアロンのアプリケーションから
+					リソースアダプタを用いて様々なEISに接続することが可能となります．
+				</p>
+			</subsection>
+		</section>
+
+		<section name="アウトバウンド通信とインバウンド通信">
+			<p>
+				JCA仕様では，EISとの間の通信をアウトバウンドとインバウンドという2つのモデルに分類しています．
+			</p>
+			<subsection name="アウトバウンド通信">
+				<p>
+					 アウトバウンド通信 (outbound communication) とは，アプリケーション側が主体となって通信を行う形態のモデルです．
+					 EISへの接続は，アプリケーションの要求によって確立されます．
+					 RDBMSへの接続なら<code>javax.sql.DataSource#getConnection()</code>，
+					 MOMへの接続なら<code>javax.jms.ConnectionFactory#getConnection()</code>，
+					 JCAのCCI (Common Client Interface) を利用した接続なら<code>javax.resource.cci.ConnectionFactory#getConnection()</code>等のAPIを
+					 アプリケーションが呼び出すことで，リソースアダプタがEISへの接続を確立します．
+					 その際，アプリケーションサーバやS2JCAはコネクションをプーリングしたり，JTAトランザクションと関連づけたりします．
+				</p>
+				<p>
+					確立したコネクション上での操作もアプリケーション側から行います．
+					RDBMSへの接続であればSQLの実行，MOMへの接続であればメッセージの送信や受信などは，全てアプリケーションからの
+					要求により実行されます．
+				</p>
+				<p>
+					このように，コネクションの確立やコネクションに対する操作がアプリケーションを主体として行われるのがアウトバウンド通信です．
+				</p>
+			</subsection>
+			<subsection name="インバウンド通信">
+				<p>
+					インバウンド通信 (inbound communication) とは，リソースアダプタ (EIS) 側が主体となって通信を行う形態のモデルです．
+					EISとの接続はリソースアダプタによって確立されます．
+				</p>
+				<p>
+					MOMとの接続であれば，インバウンド通信によってリソースアダプタがメッセージを受信すると，
+					<code>javax.jms.MessageListener#onMessage(Message)</code>を実装したアプリケーションに通知されます．
+				</p>
+				<p>
+					このように，コネクションの確立やコネクションに対する操作がリソースアダプタを主体として行われるのがインバウンド通信です．
+				</p>
+			</subsection>
+		</section>
+	</body>
+</document>

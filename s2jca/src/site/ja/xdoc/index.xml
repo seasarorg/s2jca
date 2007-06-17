@@ -11,7 +11,7 @@
 			<p>
 				<a href="http://java.sun.com/j2ee/connector/index.jsp">JCA (J2EE Connector Architecture)</a> は，
 				RDBMSやMOM (Message-Oriented Middleware) をはじめ，
-				CICSなどのメインフレーム，TUXEDOなどのTPモニタ，SAPなどのEIS等への接続を包括的に扱う仕様で，
+				CICSなどのメインフレーム，TUXEDOなどのTPモニタ，SAPなどのERP等への接続を包括的に扱う仕様で，
 				JavaEE仕様の一部となっています．
 				JCAにより，JDBCやJMSはもちろん，独自仕様のリソースに対しても，コネクションプールやトランザクション制御などを
 				単一のコネクションマネージャでサポートすることが可能となります． 
