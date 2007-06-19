@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Top</title>
+	</properties>
+	<body>
+		<section name="Welcome">
+			<p>
+			</p>
+		</section>
+		<section name="News">
+			<dl>
+				<dt>July 07, 2007</dt>
+				<dd>
+					S2JCA 1.0.0-M2 released (<a href="downloads.html">download</a>)
+				</dd>
+				<dt>May 11, 2007</dt>
+				<dd>
+					S2JCA 1.0.0-M1 released (<a href="downloads.html">download</a>)
+				</dd>
+			</dl>
+		</section>
+	</body>
+</document>

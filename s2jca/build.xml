@@ -1,20 +1,37 @@
 <project name="S2JCA" default="dist" basedir=".">
-	<property name="ver" value="1.0.0-M2-SNAPSHOT"/>
+	<tstamp>
+		<format property="releaseDate" pattern="yyyy-MM-dd" locale="ja,JP"/>
+	</tstamp>
+	<property name="zipDir" value="target/site/download/${releaseDate}"/>
+	<property name="site" value="target/site"/>
 
-	<target name="dist">
-		<zip zipfile="target/S2JCA-${ver}.zip">
+	<target name="fix-site">
+		<mkdir dir="${site}/en"/>
+		<move todir="${site}/en">
+			<fileset dir="${site}">
+				<exclude name="apidocs/**"/>
+				<exclude name="en/**"/>
+				<exclude name="ja/**"/>
+				<exclude name="index.html.en"/>
+				<exclude name="index.html.ja"/>
+			</fileset>
+		</move>
+		<move file="${site}/apidocs" todir="${site}/ja" failonerror="false"/>
+		<delete file="${site}/ja/index.html.en"/>
+		<delete file="${site}/ja/index.html.ja"/>
+	</target>
+
+	<target name="dist" depends="fix-site">
+		<mkdir dir="${zipDir}"/>
+		<zip zipfile="${zipDir}/S2JCA-${ver}.zip">
 			<zipfileset prefix="s2jca" dir=".">
+				<exclude name="**/build/**"/>
 				<exclude name="**/target/**"/>
 			</zipfileset>
 			<zipfileset prefix="s2jca/lib" dir="target">
 				<include name="s2jca-${ver}.jar"/>
 			</zipfileset>
-			<zipfileset prefix="s2jca/resources" dir="src/test/resources">
-				<include name="jca.dicon"/>
-				<include name="j2ee.dicon"/>
-				<include name="log4j.properties"/>
-			</zipfileset>
-			<zipfileset prefix="s2jca/doc" dir="../s2jca-www">
+			<zipfileset prefix="s2jca/doc" dir="target/site">
 				<exclude name="**/download/**"/>
 				<exclude name=".project"/>
 			</zipfileset>

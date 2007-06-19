@@ -6,17 +6,16 @@
 	<body>
 		<section name="ようこそ">
 			<p>
-				S2JCAは，JCA仕様に準拠したリソースアダプタをSeasar2から利用するためのプロダクトです．
+				S2JCAは，<a href="http://java.sun.com/j2ee/connector/index.jsp">JCA (J2EE Connector Architecture)</a>仕様に
+				準拠したリソースアダプタをSeasar2から利用するためのプロダクトです．
 			</p>
 			<p>
-				<a href="http://java.sun.com/j2ee/connector/index.jsp">JCA (J2EE Connector Architecture)</a> は，
-				RDBMSやMOM (Message-Oriented Middleware) をはじめ，
-				CICSなどのメインフレーム，TUXEDOなどのTPモニタ，SAPなどのERP等への接続を包括的に扱う仕様で，
-				JavaEE仕様の一部となっています．
-				JCAにより，JDBCやJMSはもちろん，独自仕様のリソースに対しても，コネクションプールやトランザクション制御などを
-				単一のコネクションマネージャでサポートすることが可能となります． 
+				JCAは，RDBMSやMOM (Message-Oriented Middleware) をはじめ，CICSなどのメインフレーム，
+				TUXEDOなどのTPモニタ，SAPなどのERP等を含むEIS (Enterprise Information System) への接続を
+				包括的に扱う仕様で，JavaEE仕様の一部となっています．
 			</p>
 			<p>
+				S2JCAにより，様々なEISに対するコネクションのプーリングとJTAによるトランザクション制御が利用可能となります．
 				S2JCAの主な用途は，<a href="http://s2jms.sandbox.seasar.org/ja/">S2JMS</a>に対するインフラを提供することです．
 			</p>
 		</section>

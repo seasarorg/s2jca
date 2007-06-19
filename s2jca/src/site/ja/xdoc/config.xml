@@ -224,6 +224,22 @@
 					アウトバウンド通信を使用する例を示します．
 				</p>
 <source><![CDATA[
+    <component name="mcfDeployer"
+            class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
+        <property name="managedConnectionFactoryClass">
+            "com.sun.genericra.outbound.ManagedJMSConnectionFactory"
+        </property>
+
+        <!-- キューマネージャ名 -->
+        <initMethod name="setProperty">
+            <arg>"connectionFactoryProperties"</arg>
+            <arg>"QueueManager=QMGR1"</arg>
+        </initMethod>
+    </component>
+
+    <component name="connectionFactory" class="javax.jms.ConnectionFactory">
+        mcfDeployer.createConnectionFactory()
+    </component>
 ]]></source>
 				</subsection>
 			</subsection>
@@ -301,17 +317,23 @@
             <arg>"password"</arg>
             <arg>"passwork"</arg>
         </initMethod>
+
+        <!-- キューマネージャ名 -->
         <initMethod name="setProperty">
             <arg>"connectionFactoryProperties"</arg>
             <arg>"QueueManager=QMGR1"</arg>
         </initMethod>
+
+        <!-- キュー名 -->
         <initMethod name="setProperty">
             <arg>"destinationProperties"</arg>
             <arg>"BaseQueueName=LQ1"</arg>
         </initMethod>
+
+        <!-- デスティネーションタイプ -->
         <initMethod name="setProperty">
             <arg>"destinationType"</arg>
-            <arg>"javax.jms.Queue"</arg>
+            <arg>"javax.jms.Queue"</arg><!-- または javax.jms.Topic -->
         </initMethod>
     </component>
     <component class="org.seasar.jca.inbound.MessageEndpointFactoryImpl"/>
