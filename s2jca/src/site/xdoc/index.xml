@@ -6,6 +6,18 @@
 	<body>
 		<section name="Welcome">
 			<p>
+				S2JCA is a product for using resource adapter based on
+				<a href="http://java.sun.com/j2ee/connector/index.jsp">JCA (J2EE Connector Architecture)</a> 
+				specification from Seasar2.
+			</p>
+			<p>
+				JCA is a part of JavaEE specification, and it treats heterogeneous EIS connection,
+				such as RDBMS, MOM (Message-Oritented Middleware), Mainframe like CICS, 
+				TP monitor like TUXEDO, ERP like SAP, and so on.
+			</p>
+			<p>
+				S2JCA enables to use connection pooling and JTA transaction management for these EIS connections.
+				For the purpose of S2JCA is mainly to providing infrastructure for S2JMS.
 			</p>
 		</section>
 		<section name="News">
