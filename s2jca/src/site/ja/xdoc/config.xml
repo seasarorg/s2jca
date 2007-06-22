@@ -35,9 +35,40 @@
 				</dd>
 			</dl>
 			<p>
-				いずれの場合も，<code>path</code>プロパティにリソースアダプタのJarファイルまたはディレクトリを設定し，
-				リソースアダプタ固有のプロパティを<code>setProperty(String key, String value)</code>メソッドで設定します．
+				上記コンポーネントのプロパティおよびメソッドを以下に示します．
 			</p>
+			<h4>プロパティ</h4>
+			<table border="1">
+				<tr><th>プロパティ</th><th>説明</th></tr>
+				<tr>
+					<td><code>path</code></td>
+					<td>
+						リソースアダプタのJarファイル
+						(<code>RarResourceAdapterDeployer</code>, <code>WmqResourceAdapterDeployer</code>の場合)
+						またはディレクトリ (<code>FsResourceAdapterDeployer</code>の場合) を指定します．
+						このプロパティは必須です．
+					</td>
+				</tr>
+				<tr>
+					<td><code>tempDir</code></td>
+					<td>
+						リソースアダプタのJarファイルを解凍するディレクトリを指定します
+						(<code>RarResourceAdapterDeployer</code>, <code>WmqResourceAdapterDeployer</code>の場合のみ)．
+						省略時はデフォルトの一時ディレクトリが使用されます．
+						デフォルトの一時ディレクトリは<a href="http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/java/io/File.html"><code>java.io.File</code></a>クラスによって提供されます．
+					</td>
+				</tr>
+			</table>
+			<h4>メソッド</h4>
+			<table border="1">
+				<tr><th>メソッド</th><th>説明</th></tr>
+				<tr>
+					<td><code>setProperty(String key, String value)</code></td>
+					<td>
+						リソースアダプタ固有のプロパティを指定します．
+					</td>
+				</tr>
+			</table>
 
 			<subsection name="JDBC Connectorの場合">
 				<p>
@@ -120,10 +151,10 @@
 
 			<subsection name="スレッドプールの設定">
 				<p>
-					いずれの場合も，<code>ResourceAdapterDeployer</code>のコンストラクタ引数で
-					スレッドプールのスレッド数を指定しています．
-					この場合，<code>java.util.concurrent.Executors.newFixedThreadPool(int nThreads)</code>で作成された
-					スレッドプールが使用されます．
+					いずれの<code>ResourceAdapterDeployer</code>も，
+					コンストラクタ引数でスレッドプールのスレッド数を指定することができます．
+					その場合，<code>java.util.concurrent.Executors.newFixedThreadPool(int nThreads)</code>
+					で作成されたスレッドプールが使用されます．
 				</p>
 				<p>
 					異なるスレッドプール実装を使いたい場合は次のように<code>BootstrapContextImpl</code>を定義します．
@@ -157,11 +188,37 @@
 				<dd>アウトバウンド通信で利用されるコネクションを設定するためのコンポーネントです．</dd>
 			</dl>
 			<p>
-				<code>ManagedConnectionFactoryDeployer</code>を使用するには，リソースアダプタが提供する
-				<code>javax.resource.spi.ManagedConnectionFactory</code>の実装クラスを
-				<code>managedConnectionFactoryClass</code>プロパティに設定します．
-				リソースアダプタ固有のプロパティを<code>setProperty(String key, String value)</code>メソッドで設定します．
+				上記コンポーネントのプロパティおよびメソッドを以下に示します．
 			</p>
+			<h4>プロパティ</h4>
+			<table border="1">
+				<tr><th>プロパティ</th><th>説明</th></tr>
+				<tr>
+					<td><code>managedConnectionFactoryClass</code></td>
+					<td>
+						リソースアダプタが提供する，
+						<code>javax.resource.spi.ManagedConnectionFactory</code>の実装クラスを指定します．
+					</td>
+				</tr>
+			</table>
+			<h4>メソッド</h4>
+			<table border="1">
+				<tr><th>メソッド</th><th>説明</th></tr>
+				<tr>
+					<td><code>setProperty(String key, String value)</code></td>
+					<td>
+						リソースアダプタ固有のプロパティを指定します．
+					</td>
+				</tr>
+				<tr>
+					<td><code>createConnectionFactory()</code></td>
+					<td>
+						コネクションファクトリを作成します．
+						コネクションファクトリは，JDBCなら<code>javax.sql.DataSource</code>，
+						JMSなら<code>javax.jms.ConnectionFactory</code>を実装しています．
+					</td>
+				</tr>
+			</table>
 
 			<subsection name="JDBC Connectorの場合">
 				<p>
@@ -256,24 +313,73 @@
 				<dd>インバウンド通信で利用されるメッセージエンドポイントを生成するためのコンポーネントです．</dd>
 			</dl>
 			<p>
-				<code>MessageEndpointDeployer</code>を使用するには，リソースアダプタが提供する
-				<code>javax.resource.spi.ActivationSpec</code>の実装クラスを
-				<code>activationSpecClassName</code>プロパティに設定します．
-				リソースアダプタ固有のプロパティを<code>setProperty(String key, String value)</code>メソッドで設定します．
+				<code>org.seasar.jca.deploy.impl.MessageEndpointDeployer</code>のプロパティおよびメソッドを以下に示します．
 			</p>
+			<h4>プロパティ</h4>
+			<table border="1">
+				<tr><th>プロパティ</th><th>説明</th></tr>
+				<tr>
+					<td><code>activationSpecClassName</code></td>
+					<td>
+						リソースアダプタが提供する，
+						<code>javax.resource.spi.ActivationSpec</code>の実装クラスを指定します．
+					</td>
+				</tr>
+			</table>
+			<h4>メソッド</h4>
+			<table border="1">
+				<tr><th>メソッド</th><th>説明</th></tr>
+				<tr>
+					<td><code>setProperty(String key, String value)</code></td>
+					<td>
+						リソースアダプタ固有のプロパティを指定します．
+					</td>
+				</tr>
+			</table>
 			<p>
-				<code>MessageEndpointFactoryImpl</code>を使用するには，リソースアダプタの使用するリスナインタフェースを
-				<code>listenerType</code>プロパティに設定します．
-				デフォルトではJMSの<code>javax.jms.MessageListener</code>が設定されます．
-				リスナインタフェースを実装し，<code>org.seasar.jca.inbound.AbstractMessageEndpointImpl</code>を継承したクラスを
-				<code>endpointClass</code>プロパティに設定します．
-				デフォルトではJMSの<code>javax.jms.MessageListener</code>を実装した
-				<code>org.seasar.jca.inbound.JMSMessageEndpointImpl</code>が設定されます．
-				JMSの<code>javax.jms.MessageListener</code>以外のメッセージエンドポイントを使用する場合は
-				<code>org.seasar.jca.inbound.AbstractMessageEndpointImpl</code>を継承した独自のクラスを作成する必要があります．
-				メッセージエンドポイントをトランザクショナルに実行するには<code>deliveryTransacted</code>プロパティを
-				<code>true</code>に設定します (デフォルト)．<code>false</code>にするとトランザクションは開始されません．
+				<code>org.seasar.jca.inbound.MessageEndpointFactoryImpl</code>のプロパティおよびメソッドを以下に示します．
 			</p>
+			<h4>プロパティ</h4>
+			<table border="1">
+				<tr><th>プロパティ</th><th>説明</th></tr>
+				<tr>
+					<td><code>listenerType</code></td>
+					<td>
+						リスナのインタフェースを指定します．
+						デフォルトではJMSの<code>javax.jms.MessageListener</code>が設定されます．
+					</td>
+				</tr>
+				<tr>
+					<td><code>endpointClass</code></td>
+					<td>
+						<code>listenerType</code>プロパティで指定されたリスナインタフェースを実装し，
+						<code>org.seasar.jca.inbound.AbstractMessageEndpointImpl</code>を継承したクラスを指定します．
+						デフォルトではJMSの<code>javax.jms.MessageListener</code>を実装した
+						<code>org.seasar.jca.inbound.JMSMessageEndpointImpl</code>が設定されます．
+						JMS以外のメッセージエンドポイントを使用する場合は，
+						<code>listenerType</code>プロパティで指定されたリスナインタフェースを実装し，
+						<code>org.seasar.jca.inbound.AbstractMessageEndpointImpl</code>を継承した
+						独自のクラスを作成する必要があります．
+					</td>
+				</tr>
+				<tr>
+					<td><code>deliveryTransacted</code></td>
+					<td>
+						メッセージエンドポイントをトランザクショナルに実行するには<code>true</code>を設定します (デフォルト)．
+						<code>false</code>にするとトランザクションは開始されません．
+					</td>
+				</tr>
+			</table>
+			<h4>メソッド</h4>
+			<table border="1">
+				<tr><th>メソッド</th><th>説明</th></tr>
+				<tr>
+					<td><code>setProperty(String key, String value)</code></td>
+					<td>
+						リソースアダプタ固有のプロパティを指定します．
+					</td>
+				</tr>
+			</table>
 
 			<subsection name="Apache ActiveMQの場合">
 				<p>
@@ -308,7 +414,9 @@
 				</p>
 <source><![CDATA[
     <component class="org.seasar.jca.deploy.impl.MessageEndpointDeployer">
-        <property name="activationSpecClassName">"com.sun.genericra.inbound.ActivationSpec"</property>
+        <property name="activationSpecClassName">
+            "com.sun.genericra.inbound.ActivationSpec"
+        </property>
         <initMethod name="setProperty">
             <arg>"userName"</arg>
             <arg>"user"</arg>

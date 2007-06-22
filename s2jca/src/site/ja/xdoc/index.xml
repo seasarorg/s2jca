@@ -16,7 +16,8 @@
 			</p>
 			<p>
 				S2JCAにより，様々なEISに対するコネクションのプーリングとJTAによるトランザクション制御が利用可能となります．
-				S2JCAの主な用途は，<a href="http://s2jms.sandbox.seasar.org/ja/">S2JMS</a>に対するインフラを提供することです．
+				S2JCAの主な用途は，<a href="http://s2jms.sandbox.seasar.org/ja/">S2JMS</a>に対する
+				インフラを提供することです．
 			</p>
 		</section>
 		<section name="ニュース">

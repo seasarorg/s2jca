@@ -6,18 +6,10 @@
 	<body>
 		<section name="目次">
 			<ul>
-				<li>
-					<p><a href="#ダウンロード">ダウンロード</a></p>
-				</li>
-				<li>
-					<p><a href="#Eclipseでの利用">Eclipseでの利用</a></p>
-				</li>
-				<li>
-					<p><a href="#Maven2での利用">Maven2での利用</a></p>
-				</li>
-				<li>
-					<p><a href="#JDKでの利用">JDKでの利用</a></p>
-				</li>
+				<li><p><a href="#ダウンロード">ダウンロード</a></p></li>
+				<li><p><a href="#Eclipseでの利用">Eclipseでの利用</a></p></li>
+				<li><p><a href="#Maven2での利用">Maven2での利用</a></p></li>
+				<li><p><a href="#JDKでの利用">JDKでの利用</a></p></li>
 			</ul>
 		</section>
 		<section name="ダウンロード">
@@ -70,7 +62,7 @@
 					</li>
 					<li>
 						<p>
-							「Projects」で "s2jca"がチェックされていることを確認して「Finish」ボタンを押下します．
+							「Projects」で"s2jca"がチェックされていることを確認して「Finish」ボタンを押下します．
 						</p>
 					</li>
 				</ul>
@@ -87,7 +79,7 @@
 						<p>左のペインで「Java Build Path」を，右のペインで「Projects」を選択します．</p>
 					</li>
 					<li>
-						<p>「Add」ボタンを押下し，「Select projects to add:」から "s2jca" をチェックして「OK」ボタンを押下します．</p>
+						<p>「Add」ボタンを押下し，「Select projects to add:」から"s2jca"をチェックして「OK」ボタンを押下します．</p>
 					</li>
 					<li>
 						<p>「OK」ボタンを押下します．</p>
@@ -139,7 +131,8 @@
 				</p>
 				<ul>
 					<li>
-						<p><code>s2jca/lib/s2jca-<var>x.x.x</var>.jar</code></p>
+						<p><code>s2jca/lib/commons-lang-2.1.jar</code></p>
+						<p><code>s2jca/lib/s2jca-<var>x.y.z</var>.jar</code></p>
 					</li>
 				</ul>
 			</subsection>

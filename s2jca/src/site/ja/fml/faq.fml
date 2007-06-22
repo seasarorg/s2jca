@@ -5,13 +5,13 @@
 
 		<faq id="general-jca">
 			<question>
-				JCA ってなんですか？
+				JCAってなんですか？
 			</question>
 			<answer>
 				<a href="http://java.sun.com/j2ee/connector/index.jsp">JCA (J2EE Connector Architecture)</a> とは，
-				RDBMSやMOM (Message-Oriented Middleware) をはじめ，
-				CICSなどのメインフレーム，TUXEDOなどのTPモニタ，SAPなどのERP等への接続を包括的に扱う仕様で，
-				JavaEE仕様の一部となっています．
+				RDBMSやMOM (Message-Oriented Middleware) をはじめ，CICSなどのメインフレーム，
+				TUXEDOなどのTPモニタ，SAPなどのERP等を含むEIS (Enterprise Information System) への接続を
+				包括的に扱う仕様で，JavaEE仕様の一部となっています．
 				JCAにより，JDBCやJMSはもちろん，独自仕様のリソースに対しても，コネクションプールやトランザクション制御などを
 				単一のコネクションマネージャでサポートすることが可能となります． 
 			</answer>
@@ -35,7 +35,7 @@
 		</faq>
 		<faq id="general-cryptography">
 			<question>
-				JCA って暗号化の仕様でしょ？
+				JCAって暗号化の仕様でしょ？
 			</question>
 			<answer>
 				正式には，JCAという略語は<a href="http://java.sun.com/j2se/1.5.0/docs/guide/security/CryptoSpec.html">Java Cryptography Architecture</a>のことを指し，
@@ -49,7 +49,7 @@
 				リソースアダプタ ってなんですか？
 			</question>
 			<answer>
-				リソースアダプタはRDBMSやMOM，メインフレーム，TPモニタ，EIS等の「リソース」へ接続するためのコンポーネントで，
+				リソースアダプタはRDBMSやMOM，メインフレーム，TPモニタ，ERP等の「リソース」へ接続するためのコンポーネントで，
 				通常はResource Adapter Archive (RAR) と呼ばれるJARファイル (拡張子は<code>.rar</code>) として提供されます．
 			</answer>
 		</faq>
