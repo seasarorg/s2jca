@@ -40,7 +40,7 @@
 				<p>
 					JCAの主要な構成要素を次の図に示します．
 				</p>
-				<img src="images/jca.png" width="600" hight="360"/>
+				<img src="images/jca.png" width="579" hight="303"/>
 				<p>
 					JCA仕様では，EISへの接続を提供するコンポーネントは「リソースアダプタ」と呼ばれます．
 					リソースアダプタはJDBCドライバと同じような位置づけになりますが，Resource Adapter Archive (Rar) ファイルにアーカイブされ，
@@ -61,7 +61,7 @@
 					S2JCAは，JCA仕様の中でアプリケーションサーバに相当する実装を提供するプロダクトで，
 					コネクションプーリングやJTAトランザクションとの連携を提供します．
 				</p>
-				<img src="images/s2jca.png" width="600" hight="360"/>
+				<img src="images/s2jca.png" width="654" hight="454"/>
 				<p>
 					S2JCAを使用することにより，フルスペックのアプリケーションサーバを使わなくても，Tomcatやスタンドアロンのアプリケーションから
 					リソースアダプタを用いて様々なEISに接続することが可能となります．
