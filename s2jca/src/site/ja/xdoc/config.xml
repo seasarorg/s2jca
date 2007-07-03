@@ -35,8 +35,21 @@
 				</dd>
 			</dl>
 			<p>
-				上記コンポーネントのプロパティおよびメソッドを以下に示します．
+				上記コンポーネントのコンストラクタ引数，プロパティおよびメソッドを以下に示します．
 			</p>
+			<h4>コンストラクタ引数</h4>
+			<table border="1">
+				<tr><th>引数</th><th>説明</th></tr>
+				<tr>
+					<td><code>nThreads</code></td>
+					<td>
+						スレッドプールのスレッド数を指定します．
+						スレッドプールは
+						<a href="http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/java/util/concurrent/Executors.html#newFixedThreadPool(int)">Executors#newFixedThreadPool(int nThreads)</a>
+						によって作成されます．
+					</td>
+				</tr>
+			</table>
 			<h4>プロパティ</h4>
 			<table border="1">
 				<tr><th>プロパティ</th><th>説明</th></tr>
@@ -151,9 +164,9 @@
 
 			<subsection name="スレッドプールの設定">
 				<p>
-					いずれの<code>ResourceAdapterDeployer</code>も，
-					コンストラクタ引数でスレッドプールのスレッド数を指定することができます．
-					その場合，<code>java.util.concurrent.Executors.newFixedThreadPool(int nThreads)</code>
+					いずれの場合も，<code>ResourceAdapterDeployer</code>のコンストラクタ引数で
+					スレッドプールのスレッド数を指定しています． この場合，
+					<code><a href="http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/java/util/concurrent/Executors.html#newFixedThreadPool(int)">java.util.concurrent.Executors#newFixedThreadPool(int nThreads)</a></code>
 					で作成されたスレッドプールが使用されます．
 				</p>
 				<p>
@@ -273,6 +286,7 @@
         mcfDeployer.createConnectionFactory()
     </component>
 ]]></source>
+			</subsection>
 
 			<subsection name="IBM WebSphere MQの場合">
 				<p>
@@ -298,7 +312,6 @@
         mcfDeployer.createConnectionFactory()
     </component>
 ]]></source>
-				</subsection>
 			</subsection>
 		</section>
 
