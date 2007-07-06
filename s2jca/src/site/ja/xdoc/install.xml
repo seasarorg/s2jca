@@ -130,10 +130,8 @@
 					解凍したディレクトリ以下の次のJarファイルをクラスパスに設定してください．
 				</p>
 				<ul>
-					<li>
-						<p><code>s2jca/lib/commons-lang-2.1.jar</code></p>
-						<p><code>s2jca/lib/s2jca-<var>x.y.z</var>.jar</code></p>
-					</li>
+					<li><p><code>s2jca/lib/commons-lang-2.1.jar</code></p></li>
+					<li><p><code>s2jca/lib/s2jca-<var>x.y.z</var>.jar</code></p></li>
 				</ul>
 			</subsection>
 		</section>
