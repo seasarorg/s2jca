@@ -30,6 +30,7 @@
 			</zipfileset>
 			<zipfileset prefix="s2jca/lib" dir="target">
 				<include name="s2jca-${ver}.jar"/>
+				<include name="s2jca-${ver}-sources.jar"/>
 			</zipfileset>
 			<zipfileset prefix="s2jca/doc" dir="target/site">
 				<exclude name="**/download/**"/>
