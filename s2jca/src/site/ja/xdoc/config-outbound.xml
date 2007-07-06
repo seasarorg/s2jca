@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>コンフィグレーション - アウトバウンド情報</title>
+	</properties>
+	<body>
+		<section name="アウトバウンド情報">
+			<ul>
+				<li><p><a href="#概要">概要</a></p></li>
+				<li><p><a href="#ManagedConnectionFactoryDeployer">ManagedConnectionFactoryDeployer</a></p>
+					<ul>
+						<li><p><a href="#リソースアダプタ固有のプロパティ">リソースアダプタ固有のプロパティ</a></p></li>
+					</ul>
+				</li>
+				<li><p><a href="#コネクションファクトリ">コネクションファクトリ</a></p></li>
+				<li><p><a href="#JDBC Connectorの場合">JDBC Connectorの場合</a></p></li>
+				<li><p><a href="#Apache ActiveMQの場合">Apache ActiveMQの場合</a></p></li>
+				<li><p><a href="#IBM WebSphere MQの場合">IBM WebSphere MQの場合</a></p></li>
+			</ul>
+		</section>
+
+		<section name="概要">
+			<p>
+				アウトバウンド通信を使用するには，次のコンポーネントを使用します．
+			</p>
+			<dl>
+				<dt><code><a href="#ManagedConnectionFactoryDeployer">ManagedConnectionFactoryDeployer</a></code> (必須)</dt>
+				<dd>
+					リソースアダプタが提供する<a href="http://java.sun.com/javaee/5/docs/api/javax/resource/spi/ManagedConnectionFactory.html"><code>ManagedConnectionFactory</code></a>を
+					S2コンテナ内で利用可能にするコンポーネントです．
+				</dd>
+				<dt><code><a href="#コネクションファクトリ">コネクションファクトリ</a></code> (必須)</dt>
+				<dd>
+					EIS固有のコネクションを提供するコンポーネントです．
+				</dd>
+			</dl>
+		</section>
+
+		<section name="ManagedConnectionFactoryDeployer">
+			<p>
+				<code>ManagedConnectionFactoryDeployer</code>は，
+				リソースアダプタが提供する<a href="http://java.sun.com/javaee/5/docs/api/javax/resource/spi/ManagedConnectionFactory.html"><code>ManagedConnectionFactory</code></a>を
+				S2コンテナ内で利用可能にするコンポーネントです．
+			</p>
+			<p>
+				<code>ManagedConnectionFactoryDeployer</code>の実装クラスを以下に示します．
+			</p>
+			<ul>
+				<li><p><code>org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer</code></p></li>
+			</ul>
+			<p>
+				<code>ManagedConnectionFactoryDeployer</code>のプロパティおよびメソッドを以下に示します．
+			</p>
+			<h5>プロパティ</h5>
+			<table border="1">
+				<tr><th>プロパティ</th><th>必須</th><th>説明</th><th>デフォルト</th></tr>
+				<tr>
+					<td><code>managedConnectionFactoryClass</code></td>
+					<td>Yes</td>
+					<td>
+						リソースアダプタが提供する，
+						<code>javax.resource.spi.ManagedConnectionFactory</code>の実装クラスをFQNで指定します．
+					</td>
+					<td>N/A</td>
+				</tr>
+				<tr>
+					<td><code>managedConnectionFactoryIndex</code></td>
+					<td>No</td>
+					<td>
+						<code>ra.xml</code>ファイルに記述された何番目の
+						<code>connector/resource-adapter/outbound-resourceadapter/connection-definition</code>
+						をベースにするかを示すインデックスを指定します．
+					</td>
+					<td>0</td>
+				</tr>
+				<tr>
+					<td><code>managedTx</code></td>
+					<td>No</td>
+					<td>
+						コンテナ管理のトランザクションを使用する場合は<code>true</code>を指定します．
+					</td>
+					<td><code>true</code></td>
+				</tr>
+				<tr>
+					<td><code>maxPoolSize</code></td>
+					<td>No</td>
+					<td>
+						コネクションプールの最大値を指定します．
+					</td>
+					<td>10</td>
+				</tr>
+				<tr>
+					<td><code>minPoolSize</code></td>
+					<td>No</td>
+					<td>
+						コネクションプールの最小値を指定します．
+					</td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<td><code>timeout</code></td>
+					<td>No</td>
+					<td>
+						アイドル状態になったコネクションをクローズするまでのタイムアウト時間を秒単位で指定します．
+					</td>
+					<td>600(秒)</td>
+				</tr>
+			</table>
+			<h5>メソッド</h5>
+			<table border="1">
+				<tr><th>メソッド</th><th>説明</th></tr>
+				<tr>
+					<td><code>setProperty(String key, String value)</code></td>
+					<td>
+						リソースアダプタ固有のプロパティを指定します．
+					</td>
+				</tr>
+				<tr>
+					<td><code>setProperty(String key, String type, String value)</code></td>
+					<td>
+						型を明示してリソースアダプタ固有のプロパティを指定します．
+					</td>
+				</tr>
+				<tr>
+					<td><code>createConnectionFactory()</code></td>
+					<td>
+						<code><a href="#ConnectionFactory">ConnectionFactory</a></code>を作成します．
+					</td>
+				</tr>
+			</table>
+			<p>
+				diconファイルへの記述は以下のようになります．
+			</p>
+<source><![CDATA[
+    <component name="mcfDeployer"
+            class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
+        <property name="managedConnectionFactoryClass">
+            "]]><var>リソースアダプタの提供するManegedConnectionFactory実装クラスのFQN</var><![CDATA["
+        </property>
+
+        <initMethod name="setProperty">
+            <arg>"]]><var>リソースアダプタ固有のプロパティ名</var><![CDATA["</arg>
+            <arg>"]]><var>リソースアダプタ固有のプロパティ値</var><![CDATA["</arg>
+        </initMethod>
+        ...
+    </component>
+]]></source>
+
+			<subsection name="リソースアダプタ固有のプロパティ">
+				<p>
+					リソースアダプタ固有のプロパティは，使用するリソースアダプタのドキュメントを参照してください．
+					主なプロダクトのドキュメントを以下に示します．
+				</p>
+				<ul>
+					<li><p><a href="http://activemq.apache.org/connection-factory-properties.html">Apache ActiveMQ</a></p></li>
+					<li><p><a href="https://genericjmsra.dev.java.net/docs/userguide/userguide.html#Resource_Adapter_properties">Sun Generic Resource Adapter for JMS</a></p></li>
+				</ul>
+			</subsection>
+		</section>
+
+		<section name="コネクションファクトリ">
+			<p>
+				コネクションファクトリは，EIS固有のコネクションを提供するコンポーネントです．
+				EIS固有のコネクションは，JDBCでは<code>javax.sql.DataSource</code>，
+				JMSでは<code>javax.jms.ConnectionFactory</code>，
+				JCA CCIでは<code>javax.resource.cci.ConnectionFactory</code>になります．
+			</p>
+			<p>
+				コネクションファクトリはリソースアダプタ (<code>ManagedConnectionFactory</code>) が提供するオブジェクトです．
+				このオブジェクトは<code>ManagedConnectionFactoryDeployer</code>の<code>createConnectionFactory()</code>メソッドにより
+				取得したものをコンポーネントとしてdiconファイルに登録します．
+			</p>
+			<p>
+				diconファイルへの記述は以下のようになります．
+			</p>
+<source><![CDATA[
+    <!-- JDBCの場合 -->
+    <component name="connectionFactory" class="javax.sql.DataSource">
+        mcfDeployer.createConnectionFactory()
+    </component>
+]]></source>
+<source><![CDATA[
+    <!-- JMSの場合 -->
+    <component name="connectionFactory" class="javax.jms.ConnectionFactory">
+        mcfDeployer.createConnectionFactory()
+    </component>
+]]></source>
+			<p>
+				<code>mcfDeployer</code>は<code>ManagedConnectionFactoryDeployer</code>のコンポーネント名です．
+			</p>
+		</section>
+
+		<section name="JDBC Connectorの場合">
+			<p>
+				以下にJDBCドライバを使用してRDBMSと接続する汎用のリソースアダプタ，
+				<a href="http://java.sun.com/developer/earlyAccess/jdbc/">JDBC Connector</a>で
+				アウトバウンド通信を使用する例を示します．
+			</p>
+<source><![CDATA[
+    <component name="mcfDeployer"
+            class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
+        <property name="managedConnectionFactoryClass">
+            "com.sun.gjc.spi.DMManagedConnectionFactory"
+        </property>
+        <initMethod name="setProperty">
+            <arg>"ClassName"</arg>
+            <arg>"org.hsqldb.jdbcDriver"</arg>
+        </initMethod>
+        <initMethod name="setProperty">
+            <arg>"ConnectionURL"</arg>
+            <arg>"jdbc:hsqldb:hsql://localhost:9001"</arg>
+        </initMethod>
+        <initMethod name="setProperty">
+            <arg>"User"</arg>
+            <arg>"sa"</arg>
+        </initMethod>
+        <initMethod name="setProperty">
+            <arg>"Password"</arg>
+            <arg>""</arg>
+        </initMethod>
+    </component>
+
+    <component name="dataSource" class="javax.sql.DataSource">
+        mcfDeployer.createConnectionFactory()
+    </component>
+]]></source>
+		</section>
+
+		<section name="Apache ActiveMQの場合">
+			<p>
+				以下にオープンソースのMOMプロダクト，
+				<a href="http://activemq.apache.org/">Apache ActiveMQ</a>で
+				アウトバウンド通信を使用する例を示します．
+			</p>
+<source><![CDATA[
+    <!-- マネージドコネクションファクトリ -->
+    <component name="mcfDeployer"
+            class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
+        <property name="managedConnectionFactoryClass">
+            "org.apache.activemq.ra.ActiveMQManagedConnectionFactory"
+        </property>
+    </component>
+
+    <!-- コネクションファクトリ -->
+    <component name="connectionFactory" class="javax.jms.ConnectionFactory">
+        mcfDeployer.createConnectionFactory()
+    </component>
+]]></source>
+		</section>
+
+		<section name="IBM WebSphere MQの場合">
+			<p>
+				以下に<a href="https://genericjmsra.dev.java.net/">Sun Generic Resource Adapter for JMS</a>と
+				IBM WebSphere MQ (formerly known MQSeries) を組み合わせて
+				アウトバウンド通信を使用する例を示します．
+			</p>
+<source><![CDATA[
+    <!-- マネージドコネクションファクトリ -->
+    <component name="mcfDeployer"
+            class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
+        <property name="managedConnectionFactoryClass">
+            "com.sun.genericra.outbound.ManagedJMSConnectionFactory"
+        </property>
+
+        <!-- キューマネージャ名 -->
+        <initMethod name="setProperty">
+            <arg>"connectionFactoryProperties"</arg>
+            <arg>"QueueManager=QMGR1"</arg>
+        </initMethod>
+    </component>
+
+    <!-- コネクションファクトリ -->
+    <component name="connectionFactory" class="javax.jms.ConnectionFactory">
+        mcfDeployer.createConnectionFactory()
+    </component>
+]]></source>
+		</section>
+	</body>
+</document>

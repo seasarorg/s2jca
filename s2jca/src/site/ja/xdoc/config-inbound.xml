@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>コンフィグレーション - インバウンド情報</title>
+	</properties>
+	<body>
+		<section name="インバウンド情報">
+			<ul>
+				<li><p><a href="#概要">概要</a></p></li>
+				<li><p><a href="#MessageEndpointDeployer">MessageEndpointDeployer</a></p>
+					<ul>
+						<li><p><a href="#リソースアダプタ固有のプロパティ">リソースアダプタ固有のプロパティ</a></p></li>
+					</ul>
+				</li>
+				<li><p><a href="#MessageEndpointFactory">MessageEndpointFactory</a></p></li>
+				<li><p><a href="#Apache ActiveMQの場合">Apache ActiveMQの場合</a></p></li>
+				<li><p><a href="#IBM WebSphere MQの場合">IBM WebSphere MQの場合</a></p></li>
+			</ul>
+		</section>
+
+		<section name="概要">
+			<p>
+				インバウンド通信を使用するには，次のコンポーネントを使用します．
+			</p>
+			<dl>
+				<dt><code><a href="#MessageEndpointDeployer">MessageEndpointDeployer</a></code></dt>
+				<dd>インバウンド通信で利用されるメッセージエンドポイントを設定するためのコンポーネントです．</dd>
+				<dt><code><a href="#MessageEndpointFactory">MessageEndpointFactory</a></code></dt>
+				<dd>インバウンド通信で利用されるメッセージエンドポイントを生成するためのコンポーネントです．</dd>
+			</dl>
+		</section>
+
+		<section name="MessageEndpointDeployer">
+			<p>
+				<code>MessageEndpointDeployer</code>は，
+				リソースアダプタが提供するメッセージエンドポイントを利用可能にするためのコンポーネントです．
+			</p>
+			<p>
+				<code>MessageEndpointDeployer</code>の実装クラスを以下に示します．
+			</p>
+			<ul>
+				<li><p><code>org.seasar.jca.deploy.impl.MessageEndpointDeployer</code></p></li>
+			</ul>
+			<h5>プロパティ</h5>
+			<table border="1">
+				<tr><th>プロパティ</th><th>必須</th><th>説明</th><th>デフォルト</th></tr>
+				<tr>
+					<td><code>activationSpecClassName</code></td>
+					<td>Yes</td>
+					<td>
+						リソースアダプタが提供する，
+						<code>javax.resource.spi.ActivationSpec</code>の実装クラスを指定します．
+					</td>
+					<td>N/A</td>
+				</tr>
+			</table>
+			<h5>メソッド</h5>
+			<table border="1">
+				<tr><th>メソッド</th><th>説明</th></tr>
+				<tr>
+					<td><code>setProperty(String key, String value)</code></td>
+					<td>
+						リソースアダプタ固有のプロパティを指定します．
+					</td>
+				</tr>
+			</table>
+
+			<subsection name="リソースアダプタ固有のプロパティ">
+				<p>
+					リソースアダプタ固有のプロパティは，使用するリソースアダプタのドキュメントを参照してください．
+					主なプロダクトのドキュメントを以下に示します．
+				</p>
+				<ul>
+					<li><p><a href="http://activemq.apache.org/activation-spec-properties.html">Apache ActiveMQ</a></p></li>
+					<li><p><a href="https://genericjmsra.dev.java.net/docs/userguide/userguide.html#Resource_Adapter_properties">Sun Generic Resource Adapter for JMS</a></p></li>
+				</ul>
+			</subsection>
+		</section>
+
+		<section name="MessageEndpointFactory">
+			<p>
+				<code>MessageEndpointFactory</code>は，
+				リソースアダプタからJMSメッセージを受け取るコンポーネントを生成するコンポーネントです．
+			</p>
+			<p>
+				<code>MessageEndpointFactory</code>の実装クラスを以下に示します．
+			</p>
+			<ul>
+				<li><p><code>org.seasar.jca.inbound.MessageEndpointFactoryImpl</code></p></li>
+			</ul>
+			<h5>プロパティ</h5>
+			<table border="1">
+				<tr><th>プロパティ</th><th>必須</th><th>説明</th><th>デフォルト</th></tr>
+				<tr>
+					<td><code>listenerType</code></td>
+					<td>No</td>
+					<td>
+						リスナのインタフェースを指定します．
+					</td>
+					<td>
+						<code><a href="http://java.sun.com/javaee/5/docs/api/javax/jms/MessageListener.html">MessageListener</a></code>
+					</td>
+				</tr>
+				<tr>
+					<td><code>endpointClass</code></td>
+					<td>No</td>
+					<td>
+						<code>listenerType</code>プロパティで指定されたリスナインタフェースを実装し，
+						<code>org.seasar.jca.inbound.AbstractMessageEndpointImpl</code>を継承したクラスを指定します．
+					</td>
+					<td>
+						<code>JMSMessageEndpointImpl</code>
+					</td>
+				</tr>
+				<tr>
+					<td><code>deliveryTransacted</code></td>
+					<td>No</td>
+					<td>
+						メッセージをトランザクショナルに受信するには<code>true</code>を設定します．
+					</td>
+					<td>
+						<code>true</code>
+					</td>
+				</tr>
+			</table>
+			<h5>メソッド</h5>
+			<table border="1">
+				<tr><th>メソッド</th><th>説明</th></tr>
+				<tr>
+					<td><code>setProperty(String key, String value)</code></td>
+					<td>
+						リソースアダプタ固有のプロパティを指定します．
+					</td>
+				</tr>
+			</table>
+		</section>
+
+		<section name="Apache ActiveMQの場合">
+			<p>
+				以下にオープンソースのMOMプロダクト，<a href="http://activemq.apache.org/">Apache ActiveMQ</a>で
+				インバウンド通信を使用する例を示します．
+			</p>
+<source><![CDATA[
+    <component class="org.seasar.jca.deploy.impl.MessageEndpointDeployer">
+        <property name="activationSpecClassName">
+            "org.apache.activemq.ra.ActiveMQActivationSpec"
+        </property>
+        <initMethod name="setProperty">
+            <arg>"destination"</arg>
+            <arg>"foo"</arg>
+        </initMethod>
+        <initMethod name="setProperty">
+            <arg>"destinationType"</arg>
+            <arg>"javax.jms.Queue"</arg>
+        </initMethod>
+    </component>
+    <component class="org.seasar.jca.inbound.MessageEndpointFactoryImpl"/>
+]]></source>
+		</section>
+
+		<section name="IBM WebSphere MQの場合">
+			<p>
+				以下に<a href="https://genericjmsra.dev.java.net/">Generic Resource Adapter for JMS</a>を使用して
+				IBM WebSphere MQ (formerly known MQSeries) で
+				インバウンド通信を使用する例を示します．
+			</p>
+<source><![CDATA[
+    <component class="org.seasar.jca.deploy.impl.MessageEndpointDeployer">
+        <property name="activationSpecClassName">"com.sun.genericra.inbound.ActivationSpec"</property>
+        <initMethod name="setProperty">
+            <arg>"userName"</arg>
+            <arg>"user"</arg>
+        </initMethod>
+        <initMethod name="setProperty">
+            <arg>"password"</arg>
+            <arg>"passwork"</arg>
+        </initMethod>
+
+        <!-- キューマネージャ名 -->
+        <initMethod name="setProperty">
+            <arg>"connectionFactoryProperties"</arg>
+            <arg>"QueueManager=QMGR1"</arg>
+        </initMethod>
+
+        <!-- キュー名 -->
+        <initMethod name="setProperty">
+            <arg>"destinationProperties"</arg>
+            <arg>"BaseQueueName=LQ1"</arg>
+        </initMethod>
+
+        <!-- デスティネーションタイプ -->
+        <initMethod name="setProperty">
+            <arg>"destinationType"</arg>
+            <arg>"javax.jms.Queue"</arg><!-- または javax.jms.Topic -->
+        </initMethod>
+    </component>
+    <component class="org.seasar.jca.inbound.MessageEndpointFactoryImpl"/>
+]]></source>
+		</section>
+	</body>
+</document>
