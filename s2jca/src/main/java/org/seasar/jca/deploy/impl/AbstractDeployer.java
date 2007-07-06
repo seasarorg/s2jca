@@ -41,7 +41,7 @@ public abstract class AbstractDeployer<TARGET> {
     protected static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     /** <code>String</code>を受け取るコンストラクタの引数型の配列 */
-    protected static final Class[] PARAMETER_TYPE = new Class[] { String.class };
+    protected static final Class<?>[] PARAMETER_TYPE = new Class<?>[] { String.class };
 
     // instance fields
     /** プロパティの{@link List} */
