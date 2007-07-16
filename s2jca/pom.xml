@@ -8,7 +8,7 @@
   <!-- The Basics -->
   <groupId>org.seasar.jca</groupId>
   <artifactId>s2jca</artifactId>
-  <version>1.0.0-M2</version>
+  <version>1.0.0-Alpha-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <!-- More Project Information -->
@@ -221,7 +221,7 @@
     <dependency>
       <groupId>org.seasar.container</groupId>
       <artifactId>s2-tiger</artifactId>
-      <version>2.4.14</version>
+      <version>2.4.15</version>
       <type>jar</type>
     </dependency>
     <dependency>
