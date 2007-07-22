@@ -22,6 +22,7 @@ import javax.resource.spi.ResourceAdapterAssociation;
 import javax.transaction.TransactionManager;
 
 import org.seasar.framework.beans.factory.BeanDescFactory;
+import org.seasar.framework.container.annotation.tiger.DestroyMethod;
 import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.jca.deploy.ResourceAdapterDeployer;
@@ -74,6 +75,9 @@ public class ManagedConnectionFactoryDeployer extends AbstractDeployer<ManagedCo
     /** {@link ManagedConnectionFactory} */
     protected ManagedConnectionFactory mcf;
 
+    /** {@link ConnectionManager} */
+    protected ConnectionManager cm;
+
     /** <code>ConnectionFactory</code> */
     protected Object cf;
 
@@ -104,8 +108,18 @@ public class ManagedConnectionFactoryDeployer extends AbstractDeployer<ManagedCo
             loggingDeployedMessage();
         }
 
-        cf = mcf.createConnectionFactory(createConnectionManager());
+        cm = createConnectionManager();
+
+        cf = mcf.createConnectionFactory(cm);
         return cf;
+    }
+
+    /**
+     * {@link ConnectionManager}を破棄します．
+     */
+    @DestroyMethod
+    public void dispose() {
+        ConnectionManagerImpl.class.cast(cm).dispose();
     }
 
     /**
