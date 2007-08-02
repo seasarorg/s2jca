@@ -76,8 +76,32 @@ public class WmqResourceAdapterDeployer extends RarResourceAdapterDeployer {
 
     /**
      * インスタンスを構築します．
+     * <p>
+     * このコンストラクタで生成したインスタンスは，
+     * {@link AbstractResourceAdapterDeployer#setBootstrapContext(javax.resource.spi.BootstrapContext)}で
+     * ブートストラップコンテキストを設定しなくてはなりません．
+     * </p>
      */
     public WmqResourceAdapterDeployer() {
+        setupProperties();
+    }
+
+    /**
+     * デフォルトのブートストラップコンテキストでインスタンスを構築します．
+     * 
+     * @param numThreads
+     *            スレッドプールのスレッド数
+     */
+    public WmqResourceAdapterDeployer(int numThreads) {
+        super(numThreads);
+        setupProperties();
+    }
+
+    /**
+     * Generic Resource Adapter for JMSとIBM WebSphere
+     * MQを組み合わせて利用するためのプロパティを設定します．
+     */
+    protected void setupProperties() {
         setProperty("supportsXA", "true");
         setProperty("ProviderIntegrationMode", "javabean");
         setProperty("connectionFactoryClassName", "com.ibm.mq.jms.MQConnectionFactory");
