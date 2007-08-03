@@ -18,7 +18,6 @@ package org.seasar.jca.deploy.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.InputStream;
 
 import javax.resource.ResourceException;
@@ -56,13 +55,7 @@ public class FsResourceAdapterDeployer extends AbstractResourceAdapterDeployer {
     @Override
     protected File[] getJarFiles() {
         final File baseDir = new File(path);
-        final File[] jars = baseDir.listFiles(new FilenameFilter() {
-
-            public boolean accept(final File dir, final String name) {
-                return name.endsWith(".jar");
-            }
-        });
-        return jars;
+        return baseDir.listFiles(new JarFileFilter());
     }
 
     @Override

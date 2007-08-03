@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -98,6 +99,10 @@ public class RarResourceAdapterDeployer extends AbstractResourceAdapterDeployer 
                     jarFiles.add(extractJar(entry));
                 }
             }
+
+            final File baseDir = new File(path).getParentFile();
+            jarFiles.addAll(Arrays.asList(baseDir.listFiles(new JarFileFilter())));
+
             return jarFiles.toArray(new File[jarFiles.size()]);
         } catch (final IOException e) {
             throw new IORuntimeException(e);

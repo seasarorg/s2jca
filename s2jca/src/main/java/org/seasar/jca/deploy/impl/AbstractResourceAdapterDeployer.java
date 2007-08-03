@@ -16,6 +16,7 @@
 package org.seasar.jca.deploy.impl;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -304,6 +305,17 @@ public abstract class AbstractResourceAdapterDeployer extends AbstractDeployer<R
 
     public ResourceAdapterConfig getResourceAdapterConfig() {
         return raConfig;
+    }
+
+    /**
+     * 拡張子が{@code .jar}のファイルを選択する{@link FilenameFilter}です．
+     */
+    public static class JarFileFilter implements FilenameFilter {
+
+        public boolean accept(final File dir, final String name) {
+            return name.endsWith(".jar");
+        }
+
     }
 
 }
