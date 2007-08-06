@@ -6,14 +6,27 @@
 	<body>
 		<section name="Latest Release">
 			<ul>
-				<li><p><a href="../download/2007-07-07/S2JCA-1.0.0-M2.zip">S2JCA 1.0.0-M2</a> (2007/07/07)</p></li>
+				<li><p><a href="../download/2007-08-08/S2JCA-1.0.0-RC1.zip">S2JCA 1.0.0-RC1</a> (2007/08/08)</p></li>
 			</ul>
 		</section>
 		<section name="All Releases">
-			<ul>
-				<li><p><a href="../download/2007-07-07/S2JCA-1.0.0-M2.zip">S2JCA 1.0.0-M2</a> (2007/07/07)</p></li>
-				<li><p><a href="../download/2006-05-11/S2JCA-1.0.0-M1.zip">S2JCA 1.0.0-M1</a> (2006/05/11)</p></li>
-			</ul>
+			<table>
+			<thead><col width="100"/><col width="200"/></thead>
+			<tbody>
+			<tr>
+				<th>2007/08/08</th>
+				<td><a href="../download/2007-08-08/S2JCA-1.0.0-RC1.zip">S2JCA 1.0.0-RC1</a></td>
+			</tr>
+			<tr>
+				<th>2007/07/07</th>
+				<td><a href="../download/2007-07-07/S2JCA-1.0.0-M2.zip">S2JCA 1.0.0-M2</a></td>
+			</tr>
+			<tr>
+				<th>2006/05/11</th>
+				<td><a href="../download/2006-05-11/S2JCA-1.0.0-M1.zip">S2JCA 1.0.0-M1</a></td>
+			</tr>
+			</tbody>
+			</table>
 		</section>
 	</body>
 </document>

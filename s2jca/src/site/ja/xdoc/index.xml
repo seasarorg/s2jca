@@ -22,6 +22,10 @@
 		</section>
 		<section name="ニュース">
 			<dl>
+				<dt>2007/08/08</dt>
+				<dd>
+					S2JCA 1.0.0-RC1 をリリースしました． (<a href="downloads.html">ダウンロード</a>)
+				</dd>
 				<dt>2007/07/07</dt>
 				<dd>
 					S2JCA 1.0.0-M2 をリリースしました． (<a href="downloads.html">ダウンロード</a>)
