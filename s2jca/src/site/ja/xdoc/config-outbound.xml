@@ -16,6 +16,7 @@
 				<li><p><a href="#JDBC Connectorの場合">JDBC Connectorの場合</a></p></li>
 				<li><p><a href="#Apache ActiveMQの場合">Apache ActiveMQの場合</a></p></li>
 				<li><p><a href="#IBM WebSphere MQの場合">IBM WebSphere MQの場合</a></p></li>
+				<li><p><a href="#JBoss Messagingの場合">JBoss Messagingの場合</a></p></li>
 			</ul>
 		</section>
 
@@ -266,6 +267,32 @@
         <initMethod name="setProperty">
             <arg>"connectionFactoryProperties"</arg>
             <arg>"QueueManager=QMGR1"</arg>
+        </initMethod>
+    </component>
+
+    <!-- コネクションファクトリ -->
+    <component name="connectionFactory" class="javax.jms.ConnectionFactory">
+        mcfDeployer.createConnectionFactory()
+    </component>
+]]></source>
+		</section>
+
+		<section name="JBoss Messagingの場合">
+			<p>
+				以下に<a href="https://genericjmsra.dev.java.net/">Sun Generic Resource Adapter for JMS</a>と
+				JBoss Messaging を組み合わせてアウトバウンド通信を使用する例を示します．
+			</p>
+<source><![CDATA[
+    <!-- マネージドコネクションファクトリ -->
+    <component name="mcfDeployer"
+        class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
+        <property name="managedConnectionFactoryClass">
+            "com.sun.genericra.outbound.ManagedJMSConnectionFactory"
+        </property>
+        
+        <initMethod name="setProperty">
+            <arg>"ConnectionFactoryJndiName"</arg>
+            <arg>"/ConnectionFactory"</arg>
         </initMethod>
     </component>
 
