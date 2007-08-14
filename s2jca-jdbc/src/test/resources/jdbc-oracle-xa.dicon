@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
-	"http://www.seasar.org/dtd/components23.dtd">
-<components namespace="jdbc-oracle-xa">
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
 	<!--
 		Oracle の ManagedConnectionFactory を使った構成例．
 		でもでも，こいつは ConnectionManager を渡しても使ってくれないらしい．
-
-		実際の接続は JNDI からルックアップした XADataSource から取得する．
-		そのため，接続に関する情報は jndi.dicon にて設定．
 	-->
 
 	<include path="j2ee.dicon"/>

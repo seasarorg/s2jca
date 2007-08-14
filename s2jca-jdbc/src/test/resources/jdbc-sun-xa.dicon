@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.3//EN"
-	"http://www.seasar.org/dtd/components23.dtd">
-<components namespace="jdbc-sun-xa">
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
 	<!--
 		Sun の JCBC Connector と Oracle の XADataSource を使った構成例．
 		Oracle の JDBC ドライバは 10.1.0.2 はバグっていて使えないので注意．
