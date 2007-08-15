@@ -16,12 +16,22 @@
 			</p>
 			<p>
 				S2JCAにより，様々なEISに対するコネクションのプーリングとJTAによるトランザクション制御が利用可能となります．
-				S2JCAの主な用途は，<a href="http://s2jms.sandbox.seasar.org/ja/">S2JMS</a>に対する
+				S2JCAの主な用途は，<a href="http://s2jms.seasar.org/ja/">S2JMS</a>に対する
 				インフラを提供することです．
 			</p>
 		</section>
 		<section name="ニュース">
 			<dl>
+				<dt>2007/08/16</dt>
+				<dd>
+					<div>
+						Sandboxを卒業しました．プロジェクトおよびSVNリポジトリのURLが変更になっているのでご注意ください．
+					</div>
+					<dl>
+						<dt>プロジェクトURL</dt><dd><code>http://s2jca.seasar.org/</code></dd>
+						<dt>SVNリポジトリ</dt><dd><code>https://www.seasar.org/svn/s2jca/</code></dd>
+					</dl>
+				</dd>
 				<dt>2007/08/08</dt>
 				<dd>
 					S2JCA 1.0.0-RC1 をリリースしました． (<a href="downloads.html">ダウンロード</a>)
