@@ -27,7 +27,7 @@ package org.seasar.jca.deploy.impl;
  * <th>値</th>
  * </tr>
  * <tr>
- * <td><code>supportsXA</code></td>
+ * <td><code>SupportsXA</code></td>
  * <td><code>true</code></td>
  * </tr>
  * <tr>
@@ -35,15 +35,15 @@ package org.seasar.jca.deploy.impl;
  * <td><code>javabean</code></td>
  * </tr>
  * <tr>
- * <td><code>connectionFactoryClassName</code></td>
+ * <td><code>ConnectionFactoryClassName</code></td>
  * <td><code>com.ibm.mq.jms.MQConnectionFactory</code></td>
  * </tr>
  * <tr>
- * <td><code>queueConnectionFactoryClassName</code></td>
+ * <td><code>QueueConnectionFactoryClassName</code></td>
  * <td><code>com.ibm.mq.jms.MQQueueConnectionFactory</code></td>
  * </tr>
  * <tr>
- * <td><code>topicConnectionFactoryClassName</code></td>
+ * <td><code>TopicConnectionFactoryClassName</code></td>
  * <td><code>com.ibm.mq.jms.MQTopicConnectionFactory</code></td>
  * </tr>
  * <tr>
@@ -59,12 +59,16 @@ package org.seasar.jca.deploy.impl;
  * <td><code>com.ibm.mq.jms.MQXATopicConnectionFactory</code></td>
  * </tr>
  * <tr>
- * <td><code>queueClassName</code></td>
+ * <td><code>QueueClassName</code></td>
  * <td><code>com.ibm.mq.jms.MQQueue</code></td>
  * </tr>
  * <tr>
- * <td><code>topicClassName</code></td>
+ * <td><code>TopicClassName</code></td>
  * <td><code>com.ibm.mq.jms.MQTopic</code></td>
+ * </tr>
+ * <tr>
+ * <td><code>RMPolicy</code></td>
+ * <td><code>OnePerPhysicalConnection</code></td>
  * </tr>
  * <p>
  * 上記以外のプロパティが必要な場合は{@link #setProperty(String, String)}で設定することができます．
@@ -102,18 +106,19 @@ public class WmqResourceAdapterDeployer extends RarResourceAdapterDeployer {
      * MQを組み合わせて利用するためのプロパティを設定します．
      */
     protected void setupProperties() {
-        setProperty("supportsXA", "true");
+        setProperty("SupportsXA", "true");
         setProperty("ProviderIntegrationMode", "javabean");
-        setProperty("connectionFactoryClassName", "com.ibm.mq.jms.MQConnectionFactory");
-        setProperty("queueConnectionFactoryClassName", "com.ibm.mq.jms.MQQueueConnectionFactory");
-        setProperty("topicConnectionFactoryClassName", "com.ibm.mq.jms.MQTopicConnectionFactory");
+        setProperty("ConnectionFactoryClassName", "com.ibm.mq.jms.MQConnectionFactory");
+        setProperty("QueueConnectionFactoryClassName", "com.ibm.mq.jms.MQQueueConnectionFactory");
+        setProperty("TopicConnectionFactoryClassName", "com.ibm.mq.jms.MQTopicConnectionFactory");
         setProperty("XAConnectionFactoryClassName", "com.ibm.mq.jms.MQXAConnectionFactory");
         setProperty("XAQueueConnectionFactoryClassName",
                 "com.ibm.mq.jms.MQXAQueueConnectionFactory");
         setProperty("XATopicConnectionFactoryClassName",
                 "com.ibm.mq.jms.MQXATopicConnectionFactory");
-        setProperty("queueClassName", "com.ibm.mq.jms.MQQueue");
-        setProperty("topicClassName", "com.ibm.mq.jms.MQTopic");
+        setProperty("QueueClassName", "com.ibm.mq.jms.MQQueue");
+        setProperty("TopicClassName", "com.ibm.mq.jms.MQTopic");
+        setProperty("RMPolicy", "OnePerPhysicalConnection");
     }
 
 }
