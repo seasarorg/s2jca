@@ -80,8 +80,10 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
     public void connectionErrorOccurred(final ManagedConnection mc) throws ResourceException {
         try {
             final ManagedConnectionPool<Object> pool = getPool(tm.getTransaction(), false);
-            pool.remove(mc);
-            nextPolicy.connectionErrorOccurred(mc);
+            if (pool != null) {
+                pool.remove(mc);
+            }
+            super.connectionErrorOccurred(mc);
         } catch (final SystemException e) {
             throw new SResourceException("EJCA0000", e);
         }

@@ -142,7 +142,7 @@ public class ConnectionManagerImpl implements ConnectionManager, Serializable {
         }
 
         public void connectionErrorOccurred(final ManagedConnection mc) throws ResourceException {
-            policy.release(mc);
+            mc.destroy();
         }
 
         public void dispose() {
@@ -163,7 +163,7 @@ public class ConnectionManagerImpl implements ConnectionManager, Serializable {
                     logger.log("DJCA1002", new Object[] { mc });
                 }
                 policy.release(mc);
-            } catch (final ResourceException e) {
+            } catch (final Exception e) {
                 logger.log("EJCA0000", null, e);
             }
         }
@@ -173,7 +173,7 @@ public class ConnectionManagerImpl implements ConnectionManager, Serializable {
                 final ManagedConnection mc = (ManagedConnection) event.getSource();
                 logger.log("EJCA1005", new Object[] { mc });
                 policy.connectionErrorOccurred(mc);
-            } catch (final ResourceException e) {
+            } catch (final Exception e) {
                 logger.log("EJCA0000", null, e);
             }
         }

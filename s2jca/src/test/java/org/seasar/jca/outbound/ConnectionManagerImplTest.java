@@ -196,8 +196,6 @@ public class ConnectionManagerImplTest extends EasyMockTestCase {
 
             @Override
             public void record() throws Exception {
-                // ManagedConnectionに登録したリスナーが削除される．
-                mc.removeConnectionEventListener(target.listener);
                 // ManagedConnectionのdestroy()が呼び出される．
                 mc.destroy();
             }
