@@ -35,10 +35,10 @@ import org.seasar.jca.exception.SResourceException;
  * 
  * @author koichik
  */
-public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
+public class ActivationSpecDeployer extends AbstractDeployer<ActivationSpec> {
 
     // static fields
-    private static final Logger logger = Logger.getLogger(MessageEndpointDeployer.class);
+    private static final Logger logger = Logger.getLogger(ActivationSpecDeployer.class);
 
     // instance fields
     /** リソースアダプタ・デプロイヤ */
@@ -59,7 +59,7 @@ public class MessageEndpointDeployer extends AbstractDeployer<ActivationSpec> {
      * @param raDeployer
      *            リソースアダプタ・デプロイヤ
      */
-    public MessageEndpointDeployer(final ResourceAdapterDeployer raDeployer) {
+    public ActivationSpecDeployer(final ResourceAdapterDeployer raDeployer) {
         this.raDeployer = raDeployer;
         setClassLoader(raDeployer.getClassLoader());
     }
