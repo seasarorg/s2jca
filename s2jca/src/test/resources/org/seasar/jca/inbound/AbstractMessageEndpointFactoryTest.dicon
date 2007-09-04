@@ -4,6 +4,6 @@
 <components>
 	<include path="j2ee.dicon"/>
 
-	<component class="org.seasar.jca.inbound.MessageEndpointFactoryImpl"/>
-	<component class="org.seasar.jca.inbound.MessageEndpointFactoryImplTest$TestListener"/>
+	<component class="org.seasar.jca.inbound.AbstractMessageEndpointFactoryTest$TestEndpointFactory"/>
+	<component class="org.seasar.jca.inbound.AbstractMessageEndpointFactoryTest$TestActualEndpoint"/>
 </components>

@@ -26,20 +26,21 @@ import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
 
+import org.seasar.framework.exception.SRuntimeException;
 import org.seasar.framework.log.Logger;
 import org.seasar.framework.message.MessageFormatter;
 import org.seasar.jca.exception.SIllegalStateException;
 import org.seasar.jca.exception.SResourceException;
 
 /**
- * {@link MessageEndpoint}の抽象クラスです．
+ * {@link MessageEndpoint}の実装クラスです．
  * 
  * @author koichik
  */
-public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
+public abstract class AbstractMessageEndpoint implements MessageEndpoint {
 
     // static fields
-    private static final Logger logger = Logger.getLogger(AbstractMessageEndpointImpl.class);
+    private static final Logger logger = Logger.getLogger(AbstractMessageEndpoint.class);
 
     // instance fields
     /** メッセージエンドポイントファクトリ */
@@ -78,7 +79,7 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
      * @param classLoader
      *            クラスローダ
      */
-    public AbstractMessageEndpointImpl(final MessageEndpointFactory messageEndpointFactory,
+    public AbstractMessageEndpoint(final MessageEndpointFactory messageEndpointFactory,
             final TransactionManager transactionManager, final XAResource xaResource,
             final ClassLoader classLoader) {
         this.messageEndpointFactory = messageEndpointFactory;
@@ -127,6 +128,69 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
         cleanup();
         logger.log("DJCA1033", new Object[] { this });
     }
+
+    /**
+     * @param arg
+     *            配信されたメッセージ
+     * @return 配信されたメッセージを処理した結果
+     * @throws ResourceException
+     *             エンドポイントの処理中に例外が発生した場合
+     */
+    protected Object delivery(Object arg) {
+        assertNotReentrant();
+        setProcessing(true);
+        try {
+            if (isBeforeDeliveryCalled()) {
+                return doDelivery(arg);
+            }
+            beforeDelivery(getListenerMethod());
+            try {
+                return doDelivery(arg);
+            } finally {
+                afterDelivery();
+            }
+        } catch (final RuntimeException e) {
+            throw e;
+        } catch (final Exception e) {
+            throw new SRuntimeException("EJCA0000", null, e);
+        } finally {
+            setProcessing(false);
+        }
+    }
+
+    /**
+     * 配信されたメッセージを処理します．
+     * 
+     * @param arg
+     *            配信されたメッセージ
+     * @return 配信されたメッセージを処理した結果
+     */
+    protected Object doDelivery(Object arg) {
+        if (logger.isDebugEnabled()) {
+            logger.log("DJCA1029", new Object[] { this, getListenerMethod() });
+        }
+
+        final ClassLoader originalClassLoader = setContextClassLoader(getClassLoader());
+        try {
+            final Object result = deligateActualEndpoint(arg);
+            setSucceeded(true);
+            return result;
+        } finally {
+            setContextClassLoader(originalClassLoader);
+            if (logger.isDebugEnabled()) {
+                logger.log("DJCA1030", new Object[] { this, getListenerMethod() });
+            }
+        }
+    }
+
+    /**
+     * 配信されたメッセージを本来のエンドポイントに委譲します．
+     * 
+     * @param arg
+     *            配信されたメッセージ
+     * @return 配信されたメッセージを処理した結果
+     */
+    protected abstract Object deligateActualEndpoint(Object arg);
 
     /**
      * トランザクションを開始します．
@@ -205,6 +269,13 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
     }
 
     /**
+     * リスナ・メソッドを返します．
+     * 
+     * @return リスナ・メソッド
+     */
+    protected abstract Method getListenerMethod();
+
+    /**
      * クラスローダを返します．
      * 
      * @return クラスローダ
@@ -258,6 +329,35 @@ public abstract class AbstractMessageEndpointImpl implements MessageEndpoint {
      */
     protected void setSucceeded(final boolean succeeded) {
         this.succeeded = succeeded;
+    }
+
+    /**
+     * 引数で指定されたクラスローダをスレッドのコンテキストクラスローダに設定します．
+     * 
+     * @param loader
+     *            コンテキストクラスローダに設定するクラスローダ
+     * @return コンテキストクラスローダに設定されていたクラスローダ
+     */
+    protected ClassLoader setContextClassLoader(final ClassLoader loader) {
+        final Thread thread = Thread.currentThread();
+        final ClassLoader currentClassLoader = thread.getContextClassLoader();
+        thread.setContextClassLoader(loader);
+        return currentClassLoader;
+    }
+
+    /**
+     * リエントラントに呼び出されていないことを確認します．
+     * 
+     * @throws IllegalStateException
+     *             リエントラントに呼び出された場合
+     */
+    protected void assertNotReentrant() {
+        if (isProcessing()) {
+            final Object[] params = new Object[] { this, getListenerMethod() };
+            logger.log("EJCA1034", params);
+            throw new java.lang.IllegalStateException(MessageFormatter.getSimpleMessage("EJCA1034",
+                    params));
+        }
     }
 
 }

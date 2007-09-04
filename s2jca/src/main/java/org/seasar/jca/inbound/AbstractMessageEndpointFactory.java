@@ -18,7 +18,6 @@ package org.seasar.jca.inbound;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import javax.jms.MessageListener;
 import javax.resource.spi.UnavailableException;
 import javax.resource.spi.endpoint.MessageEndpoint;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
@@ -36,15 +35,15 @@ import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 
 /**
- * {@link MessageEndpointFactory}の実装クラスです．
+ * {@link MessageEndpointFactory}の抽象クラスです．
  * 
  * @author koichik
  */
 @Component
-public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
+public abstract class AbstractMessageEndpointFactory implements MessageEndpointFactory {
 
     // static fields
-    private static final Logger logger = Logger.getLogger(MessageEndpointFactoryImpl.class);
+    private static final Logger logger = Logger.getLogger(AbstractMessageEndpointFactory.class);
 
     // instance fields
     /** S2コンテナ */
@@ -54,10 +53,10 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
     protected TransactionManager transactionManager;
 
     /** メッセージエンドポイントの実装クラス */
-    protected Class<? extends AbstractMessageEndpointImpl> endpointClass = JMSMessageEndpointImpl.class;
+    protected Class<? extends AbstractMessageEndpoint> endpointClass;
 
     /** メッセージエンドポイントの実装するリスナの型 */
-    protected Class<?> listenerType = MessageListener.class;
+    protected Class<?> listenerType;
 
     /** リスナのコンポーネント名 */
     protected String listenerName;
@@ -66,7 +65,7 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
     protected boolean deliveryTransacted = true;
 
     /** メッセージエンドポイントのコンストラクタ */
-    protected Constructor<? extends AbstractMessageEndpointImpl> endpointConstructor;
+    protected Constructor<? extends AbstractMessageEndpoint> endpointConstructor;
 
     /** メッセージエンドポイントのコンポーネント定義 */
     protected ComponentDef componentDef;
@@ -74,7 +73,21 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
     /**
      * インスタンスを構築します．
      */
-    public MessageEndpointFactoryImpl() {
+    public AbstractMessageEndpointFactory() {
+    }
+
+    /**
+     * インスタンスを構築します．
+     * 
+     * @param endpointClass
+     *            メッセージエンドポイントの実装クラス
+     * @param listenerType
+     *            メッセージエンドポイントの実装するリスナの型
+     */
+    public AbstractMessageEndpointFactory(Class<? extends AbstractMessageEndpoint> endpointClass,
+            Class<?> listenerType) {
+        this.endpointClass = endpointClass;
+        this.listenerType = listenerType;
     }
 
     /**
@@ -124,7 +137,7 @@ public class MessageEndpointFactoryImpl implements MessageEndpointFactory {
      *            メッセージエンドポイントの実装クラス
      */
     @Binding(bindingType = BindingType.MAY)
-    public void setEndpointClass(final Class<? extends AbstractMessageEndpointImpl> endpointClass) {
+    public void setEndpointClass(final Class<? extends AbstractMessageEndpoint> endpointClass) {
         this.endpointClass = endpointClass;
     }
 

@@ -19,8 +19,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-import javax.jms.Message;
-import javax.jms.MessageListener;
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.Status;
 import javax.transaction.Transaction;
@@ -28,15 +26,16 @@ import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
 
 import org.seasar.framework.unit.EasyMockTestCase;
+import org.seasar.framework.util.ClassUtil;
 
 import static org.easymock.EasyMock.*;
 
 /**
  * @author koichik
  */
-public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
+public class AbstractMessageEndpointTest extends EasyMockTestCase {
 
-    AbstractMessageEndpointImpl target;
+    AbstractMessageEndpoint target;
 
     MessageEndpointFactory mef;
 
@@ -59,7 +58,7 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
         xar = createStrictMock(XAResource.class);
 
         cl = new URLClassLoader(new URL[0]);
-        method = MessageListener.class.getMethod("onMessage", new Class[] { Message.class });
+        method = Runnable.class.getMethod("run");
     }
 
     /**
@@ -223,18 +222,33 @@ public class AbstractMessageEndpointImplTest extends EasyMockTestCase {
 
     /**
      */
-    public static class TestMessageEndpoint extends AbstractMessageEndpointImpl {
+    public static class TestMessageEndpoint extends AbstractMessageEndpoint implements Runnable {
 
         /**
          * @param messageEndpointFactory
          * @param transactionManager
          * @param xaResource
          * @param classLoader
+         * @param actualEndpoint
          */
         public TestMessageEndpoint(MessageEndpointFactory messageEndpointFactory,
                 TransactionManager transactionManager, XAResource xaResource,
                 ClassLoader classLoader) {
             super(messageEndpointFactory, transactionManager, xaResource, classLoader);
+        }
+
+        public void run() {
+            doDelivery(null);
+        }
+
+        @Override
+        protected Object deligateActualEndpoint(Object arg) {
+            return null;
+        }
+
+        @Override
+        protected Method getListenerMethod() {
+            return ClassUtil.getMethod(Runnable.class, "run", null);
         }
 
     }
