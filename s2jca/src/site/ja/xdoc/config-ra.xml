@@ -11,9 +11,6 @@
 					<ul>
 						<li><p><a href="#ResourceAdapterDeployer">ResourceAdapterDeployer</a></p></li>
 						<li><p><a href="#リソースアダプタ固有のプロパティ">リソースアダプタ固有のプロパティ</a></p></li>
-						<li><p><a href="#Apache ActiveMQの場合">Apache ActiveMQの場合</a></p></li>
-						<li><p><a href="#IBM WebSphere MQの場合">IBM WebSphere MQの場合</a></p></li>
-						<li><p><a href="#JBoss Messagingの場合">JBoss Messagingの場合</a></p></li>
 					</ul>
 				</li>
 				<li><p><a href="#スレッドプールの設定">スレッドプールの設定</a></p>
@@ -31,7 +28,7 @@
 			<dl>
 				<dt><code>ResourceAdapterDeployer</code> (必須)</dt>
 				<dd>
-					<code>ResourceAdapterDeployer</code>はMOMとの接続に使用するリソースアダプタを
+					<code>ResourceAdapterDeployer</code>はEISとの接続に使用するリソースアダプタを
 					S2コンテナ内で利用可能にするコンポーネントです．
 					詳細は「<a href="#リソースアダプタのデプロイ">リソースアダプタの設定</a>」を参照してください．
 				</dd>
@@ -54,7 +51,6 @@
 				<ul>
 					<li><p><code>org.seasar.jca.deploy.impl.RarResourceAdapterDeployer</code></p></li>
 					<li><p><code>org.seasar.jca.deploy.impl.FsResourceAdapterDeployer</code></p></li>
-					<li><p><code>org.seasar.jca.deploy.impl.WmqResourceAdapterDeployer</code></p></li>
 				</ul>
 
 				<h4>RarResourceAdapterDeployer</h4>
@@ -147,61 +143,6 @@
 						</td>
 					</tr>
 				</table>
-
-				<h4>org.seasar.jca.deploy.impl.WmqResourceAdapterDeployer</h4>
-				<p>
-					<a href="https://genericjmsra.dev.java.net/">Generic Resource Adapter for JMS</a>と
-					IBM WebSphere MQ (formerly known MQSeries) を組み合わせて使用するためのコンポーネントです．
-				</p>
-				<p>
-					Rarファイル内にパッケージされているJarファイルと，Rarファイルと同じディレクトリにあるJarファイルがクラスパスに追加されます．
-					IBM WebSphere MQのJarファイルはGeneric Resource Adapter for JMSのRarファイルと同じディレクトリに配置してください．
-				</p>
-				<h5>コンストラクタ引数</h5>
-				<table border="1">
-					<tr><th>引数</th><th>説明</th></tr>
-					<tr>
-						<td><code>nThreads</code></td>
-						<td>
-							スレッドプールのスレッド数を指定します．
-							詳細は「<a href="#スレッドプールの設定">スレッドプールの設定</a>」を参照してください．
-						</td>
-					</tr>
-				</table>
-				<h5>プロパティ</h5>
-				<table border="1">
-					<tr><th>プロパティ</th><th>必須</th><th>説明</th><th>デフォルト</th></tr>
-					<tr>
-						<td><code>path</code></td>
-						<td>Yes</td>
-						<td>
-							<a href="https://genericjmsra.dev.java.net/">Generic Resource Adapter for JMS</a>が提供するRarファイルへのパスを指定します．
-						</td>
-						<td>N/A</td>
-					</tr>
-					<tr>
-						<td><code>tempDir</code></td>
-						<td>No</td>
-						<td>
-							リソースアダプタのJarファイルを解凍するディレクトリを指定します
-							省略時はデフォルトの一時ディレクトリが使用されます．
-							<a href="http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/java/io/File.html"><code>java.io.File</code></a>クラスによって提供されます．
-						</td>
-						<td>
-							<a href="http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/java/io/File.html"><code>File</code></a>クラスが提供する一時ディレクトリ
-						</td>
-					</tr>
-				</table>
-				<h5>メソッド</h5>
-				<table border="1">
-					<tr><th>メソッド</th><th>説明</th></tr>
-					<tr>
-						<td><code>setProperty(String key, String value)</code></td>
-						<td>
-							リソースアダプタ固有のプロパティを指定します．
-						</td>
-					</tr>
-				</table>
 			</subsection>
 
 			<subsection name="リソースアダプタ固有のプロパティ">
@@ -213,137 +154,6 @@
 					<li><p><a href="http://activemq.apache.org/resource-adapter-properties.html">Apache ActiveMQ</a></p></li>
 					<li><p><a href="https://genericjmsra.dev.java.net/docs/userguide/userguide.html#Resource_Adapter_properties">Sun Generic Resource Adapter for JMS</a></p></li>
 				</ul>
-			</subsection>
-
-			<subsection name="JDBC Connectorの場合">
-				<p>
-					以下にJDBCドライバを使用してRDBMSと接続する汎用のリソースアダプタ，
-					<a href="http://java.sun.com/developer/earlyAccess/jdbc/">JDBC Connector</a>を
-					使用する例を示します．
-				</p>
-<source><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
-    "http://www.seasar.org/dtd/components24.dtd">
-    <include path="j2ee.dicon"/>
-
-    <component class="org.seasar.jca.deploy.impl.RarResourceAdapterDeployer">
-        <!-- スレッドプールのスレッド数 -->
-        <arg>10</arg>
-
-        <!-- JDBC Connectorへのパス -->
-        <property name="path">
-            "ra/spi_15_dm.rar"
-        </property>
-    </component>
-</components>
-]]></source>
-			</subsection>
-
-			<subsection name="Apache ActiveMQの場合">
-				<p>
-					以下にオープンソースのMOMプロダクト，<a href="http://activemq.apache.org/">Apache ActiveMQ</a>を使用する例を示します．
-				</p>
-<source><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
-    "http://www.seasar.org/dtd/components24.dtd">
-<components>
-    <include path="j2ee.dicon"/>
-
-    <component class="org.seasar.jca.deploy.impl.RarResourceAdapterDeployer">
-        <!-- スレッドプールのスレッド数 -->
-        <arg>10</arg>
-
-        <!-- ActiveMQ ResourceAdapterへのパス -->
-        <property name="path">
-            "ra/activemq-rar-4.1.1.rar"
-        </property>
-
-        <!-- ActiveMQ Broker へのURL -->
-        <initMethod name="setProperty">
-            <arg>"ServerUrl"</arg>
-            <arg>"tcp://localhost:61616?trace=true"</arg>
-        </initMethod>
-    </component>
-</components>
-]]></source>
-			</subsection>
-
-			<subsection name="IBM WebSphere MQの場合">
-				<p>
-					以下に<a href="https://genericjmsra.dev.java.net/">Generic Resource Adapter for JMS</a>を使用して
-					IBM WebSphere MQ (formerly known MQSeries) と接続する例を示します．
-				</p>
-<source><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
-    "http://www.seasar.org/dtd/components24.dtd">
-<components>
-    <include path="j2ee.dicon"/>
-
-    <component class="org.seasar.jca.deploy.impl.WmqResourceAdapterDeployer">
-        <!-- スレッドプールのスレッド数 -->
-        <arg>10</arg>
-
-        <!-- Generic JMS ResourceAdapterへのパス -->
-        <property name="path">
-            "ra/genericra-1.5.rar"
-        </property>
-    </component>
-</components>
-]]></source>
-			</subsection>
-
-			<subsection name="JBoss Messagingの場合">
-				<p>
-					以下に<a href="https://genericjmsra.dev.java.net/">Sun Generic Resource Adapter for JMS</a>と
-					JBoss Messaging を組み合わせて使用する例を示します．
-				</p>
-<source><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
-    "http://www.seasar.org/dtd/components24.dtd">
-<components>
-    <include path="j2ee.dicon"/>
-
-    <!-- リソースアダプタ -->
-    <component
-        class="org.seasar.jca.deploy.impl.RarResourceAdapterDeployer"
-    >
-        <!-- スレッドプールのスレッド数 -->
-        <arg>10</arg>
-
-        <!-- Generic ResourceAdapter へのパス -->
-        <property name="path">
-            "ra/genericra-1.5.rar"
-        </property>
-
-        <!-- JBoss Messaging を JNDI 経由で利用します -->
-        <initMethod name="setProperty">
-            <arg>"ProviderIntegrationMode"</arg>
-            <arg>"jndi"</arg>
-        </initMethod>
-
-        <!-- XA を使用します -->
-        <initMethod name="setProperty">
-            <arg>"SupportsXA"</arg>
-            <arg>"true"</arg>
-        </initMethod>
-
-        <initMethod name="setProperty">
-            <arg>"RMPolicy"</arg>
-            <arg>"OnePerPhysicalConnection"</arg>
-        </initMethod>
-
-        <!-- JNDI の設定です (JBoss APサーバの位置にあわせて URL を変更してください) -->
-        <initMethod name="setProperty">
-            <arg>"JndiProperties"</arg>
-            <arg>"java.naming.provider.url=jnp://localhost:1099,java.naming.factory.initial=org.jnp.interfaces.NamingContextFactory,java.naming.factory.url.pkgs=org.jboss.naming:org.jnp.interfaces"</arg>
-        </initMethod>
-    </component>
-</components>
-]]></source>
 			</subsection>
 		</section>
 
@@ -376,7 +186,6 @@
 					リソースアダプタに合わせて適切に設定してください．
 					多くの場合，アウトバウンド通信ではスレッドプールはあまり使われていないようです．
 					インバウンド通信では同時に処理できるメッセージの数に影響します．
-					S2JMS-Containerメッセージを順序を維持して処理する場合はスレッド数を1に設定してください．
 				</p>
 			</subsection>
 		</section>

@@ -13,10 +13,6 @@
 					</ul>
 				</li>
 				<li><p><a href="#コネクションファクトリ">コネクションファクトリ</a></p></li>
-				<li><p><a href="#JDBC Connectorの場合">JDBC Connectorの場合</a></p></li>
-				<li><p><a href="#Apache ActiveMQの場合">Apache ActiveMQの場合</a></p></li>
-				<li><p><a href="#IBM WebSphere MQの場合">IBM WebSphere MQの場合</a></p></li>
-				<li><p><a href="#JBoss Messagingの場合">JBoss Messagingの場合</a></p></li>
 			</ul>
 		</section>
 
@@ -189,118 +185,6 @@
 			<p>
 				<code>mcfDeployer</code>は<code>ManagedConnectionFactoryDeployer</code>のコンポーネント名です．
 			</p>
-		</section>
-
-		<section name="JDBC Connectorの場合">
-			<p>
-				以下にJDBCドライバを使用してRDBMSと接続する汎用のリソースアダプタ，
-				<a href="http://java.sun.com/developer/earlyAccess/jdbc/">JDBC Connector</a>で
-				アウトバウンド通信を使用する例を示します．
-			</p>
-<source><![CDATA[
-    <component name="mcfDeployer"
-            class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
-        <property name="managedConnectionFactoryClass">
-            "com.sun.gjc.spi.DMManagedConnectionFactory"
-        </property>
-        <initMethod name="setProperty">
-            <arg>"ClassName"</arg>
-            <arg>"org.hsqldb.jdbcDriver"</arg>
-        </initMethod>
-        <initMethod name="setProperty">
-            <arg>"ConnectionURL"</arg>
-            <arg>"jdbc:hsqldb:hsql://localhost:9001"</arg>
-        </initMethod>
-        <initMethod name="setProperty">
-            <arg>"User"</arg>
-            <arg>"sa"</arg>
-        </initMethod>
-        <initMethod name="setProperty">
-            <arg>"Password"</arg>
-            <arg>""</arg>
-        </initMethod>
-    </component>
-
-    <component name="dataSource" class="javax.sql.DataSource">
-        mcfDeployer.createConnectionFactory()
-    </component>
-]]></source>
-		</section>
-
-		<section name="Apache ActiveMQの場合">
-			<p>
-				以下にオープンソースのMOMプロダクト，
-				<a href="http://activemq.apache.org/">Apache ActiveMQ</a>で
-				アウトバウンド通信を使用する例を示します．
-			</p>
-<source><![CDATA[
-    <!-- マネージドコネクションファクトリ -->
-    <component name="mcfDeployer"
-            class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
-        <property name="managedConnectionFactoryClass">
-            "org.apache.activemq.ra.ActiveMQManagedConnectionFactory"
-        </property>
-    </component>
-
-    <!-- コネクションファクトリ -->
-    <component name="connectionFactory" class="javax.jms.ConnectionFactory">
-        mcfDeployer.createConnectionFactory()
-    </component>
-]]></source>
-		</section>
-
-		<section name="IBM WebSphere MQの場合">
-			<p>
-				以下に<a href="https://genericjmsra.dev.java.net/">Sun Generic Resource Adapter for JMS</a>と
-				IBM WebSphere MQ (formerly known MQSeries) を組み合わせて
-				アウトバウンド通信を使用する例を示します．
-			</p>
-<source><![CDATA[
-    <!-- マネージドコネクションファクトリ -->
-    <component name="mcfDeployer"
-            class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
-        <property name="managedConnectionFactoryClass">
-            "com.sun.genericra.outbound.ManagedJMSConnectionFactory"
-        </property>
-
-        <!-- キューマネージャ名 -->
-        <initMethod name="setProperty">
-            <arg>"connectionFactoryProperties"</arg>
-            <arg>"QueueManager=QMGR1"</arg>
-        </initMethod>
-    </component>
-
-    <!-- コネクションファクトリ -->
-    <component name="connectionFactory" class="javax.jms.ConnectionFactory">
-        mcfDeployer.createConnectionFactory()
-    </component>
-]]></source>
-		</section>
-
-		<section name="JBoss Messagingの場合">
-			<p>
-				以下に<a href="https://genericjmsra.dev.java.net/">Sun Generic Resource Adapter for JMS</a>と
-				JBoss Messaging を組み合わせてアウトバウンド通信を使用する例を示します．
-			</p>
-<source><![CDATA[
-    <!-- マネージドコネクションファクトリ -->
-    <component name="mcfDeployer"
-        class="org.seasar.jca.deploy.impl.ManagedConnectionFactoryDeployer">
-        <property name="managedConnectionFactoryClass">
-            "com.sun.genericra.outbound.ManagedJMSConnectionFactory"
-        </property>
-        
-        <initMethod name="setProperty">
-            <arg>"ConnectionFactoryJndiName"</arg>
-            <arg>"/ConnectionFactory"</arg>
-        </initMethod>
-    </component>
-
-    <!-- コネクションファクトリ -->
-    <component name="connectionFactory" class="javax.jms.ConnectionFactory">
-        mcfDeployer.createConnectionFactory()
-    </component>
-]]></source>
 		</section>
 	</body>
 </document>
