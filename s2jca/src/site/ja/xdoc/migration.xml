@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>移行ガイド</title>
+	</properties>
+	<body>
+		<section name="目次">
+			<ul>
+				<li><p><a href="#1.0.0">1.0.0</a></p>
+					<ul>
+						<li><p><a href="#リソースアダプタの設定">リソースアダプタの設定</a></p></li>
+						<li><p><a href="#インバウンド通信の設定">インバウンド通信の設定</a></p></li>
+					</ul>
+				</li>
+			</ul>
+		</section>
+
+		<section name="1.0.0">
+			<subsection name="リソースアダプタの設定">
+				<p>
+					<a href="https://genericjmsra.dev.java.net/">Sun Generic Resource Adapter for JMS</a>と
+					IBM WebSphere MQ (formerly known MQSeries) を組み合わせて使用するための
+					ResourceAdapterDeployer実装クラスのパッケージが変更になりました．
+				</p>
+				<dl>
+					<dt>変更前</dt>
+					<dd><code>org.seasar.jca.deploy.impl.WmqResourceAdapterDeployer</code></dd>
+					<dt>変更後</dt>
+					<dd><code>org.seasar.jms.core.deploy.impl.WmqResourceAdapterDeployer</code></dd>
+				</dl>
+			</subsection>
+			<subsection name="インバウンド通信の設定">
+				<p>
+					MessageEndpointDeployerはActivationSpecDeployerに変更となりました．
+				</p>
+				<dl>
+					<dt>変更前</dt>
+					<dd><code>org.seasar.jca.deploy.impl.MessageEndpointDeployer</code></dd>
+					<dt>変更後</dt>
+					<dd><code>org.seasar.jca.deploy.impl.ActivationSpecDeployer</code></dd>
+				</dl>
+				<p>
+					S2JCAは，MessageEndpointFactoryの具象クラスを提供しなくなりました．
+					JMSを使用する場合は，S2JMSの提供するMessageEndpointFactory実装クラスを使用してください．
+				</p>
+				<dl>
+					<dt>変更前</dt>
+					<dd><code>org.seasar.jca.inbound.MessageEndpointFactoryImpl</code></dd>
+					<dt>変更後</dt>
+					<dd><code>org.seasar.jms.container.impl.JMSMessageEndpointFactory</code></dd>
+				</dl>
+			</subsection>
+		</section>
+	</body>
+</document>
