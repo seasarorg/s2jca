@@ -13,8 +13,7 @@
 		class="org.seasar.jca.deploy.impl.FsResourceAdapterDeployer"
 	>
 		<property name="path">
-			@org.seasar.framework.util.EclipseUtil@getProjectRoot("s2jca-jdbc")
-				.getAbsolutePath() + "/ra/spi_15_cp"
+			"ra/spi_15_cp"
 		</property>
 	</component>
 

@@ -5,7 +5,7 @@
 	<include path="jms-ra.dicon"/>
 
 	<component
-		class="org.seasar.jca.deploy.impl.MessageEndpointDeployer"
+		class="org.seasar.jca.deploy.impl.ActivationSpecDeployer"
 	>
 		<property name="activationSpecClassName">
 			"org.apache.activemq.ra.ActiveMQActivationSpec"
@@ -21,7 +21,7 @@
 	</component>
 
 	<component
-		class="org.seasar.jca.inbound.MessageEndpointFactoryImpl"
+		class="org.seasar.jca.inbound.ActiveMQTest$JMSMessageEndpointFactory"
 	>
 		<property name="deliveryTransacted">true</property>
 	</component>

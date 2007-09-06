@@ -51,5 +51,9 @@
 			<arg>"topicClassName"</arg>
 			<arg>"org.apache.activemq.command.ActiveMQTopic"</arg>
 		</initMethod>
+		<initMethod name="setProperty">
+			<arg>"connectionFactoryProperties"</arg>
+			<arg>"BrokerURL=vm:(broker:(tcp://localhost:61616)?persistent=false&amp;useJmx=false)"</arg>
+		</initMethod>
 	</component>
 </components>

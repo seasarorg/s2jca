@@ -15,17 +15,22 @@
  */
 package org.seasar.jca.inbound;
 
+import java.lang.reflect.Method;
+
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
+import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.TransactionManager;
+import javax.transaction.xa.XAResource;
 
 import junit.framework.Assert;
 
 import org.seasar.extension.unit.S2TestCase;
+import org.seasar.framework.util.ClassUtil;
 
 /**
  * <p>
@@ -39,13 +44,6 @@ public class ActiveMQTest extends S2TestCase {
 
     protected TransactionManager tm;
     protected ConnectionFactory cf;
-
-    public ActiveMQTest() {
-    }
-
-    public ActiveMQTest(String name) {
-        super(name);
-    }
 
     @Override
     protected void setUp() throws Exception {
@@ -87,6 +85,41 @@ public class ActiveMQTest extends S2TestCase {
         } finally {
             tm.commit();
         }
+    }
+
+    public static class JMSMessageEndpointFactory extends AbstractMessageEndpointFactory {
+        public JMSMessageEndpointFactory() {
+            super(JMSMessageEndpoint.class, MessageListener.class);
+        }
+    }
+
+    public static class JMSMessageEndpoint extends AbstractMessageEndpoint implements
+            MessageListener {
+        private MessageListener actualEndpoint;
+
+        public JMSMessageEndpoint(final MessageEndpointFactory messageEndpointFactory,
+                final TransactionManager transactionManager, final XAResource xaResource,
+                final ClassLoader classLoader, final MessageListener actualEndpoint) {
+            super(messageEndpointFactory, transactionManager, xaResource, classLoader);
+            this.actualEndpoint = actualEndpoint;
+        }
+
+        public void onMessage(Message message) {
+            delivery(message);
+        }
+
+        @Override
+        protected Object deligateActualEndpoint(Object message) {
+            actualEndpoint.onMessage(Message.class.cast(message));
+            return null;
+        }
+
+        @Override
+        protected Method getListenerMethod() {
+            return ClassUtil.getMethod(MessageListener.class, "onMessage",
+                    new Class[] { Message.class });
+        }
+
     }
 
     public static class MessageListenerImpl extends Assert implements MessageListener {

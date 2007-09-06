@@ -7,10 +7,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/s2jca"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
-	<classpathentry kind="lib" path="lib/genericra-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/activeio-core-3.0.0-incubator.jar"/>
-	<classpathentry kind="lib" path="lib/activemq-core-4.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/backport-util-concurrent-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/geronimo-j2ee-management_1.0_spec-1.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

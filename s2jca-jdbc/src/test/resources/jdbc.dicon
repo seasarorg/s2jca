@@ -7,9 +7,11 @@
 		そのためのネーミングコンテキスト (java:comp/env/jdbc) を提供する．
 	-->
 
+	<!--
 	<component name="OracleXADataSource" class="oracle.jdbc.xa.client.OracleXADataSource">
 		<property name="URL">"jdbc:oracle:thin:@localhost:1521:orcl"</property>
 		<property name="user">"scott"</property>
 		<property name="password">"tiger"</property>
 	</component>
+	-->
 </components>

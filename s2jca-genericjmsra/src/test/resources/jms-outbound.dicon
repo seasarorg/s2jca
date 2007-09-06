@@ -10,10 +10,6 @@
 		<property name="managedConnectionFactoryClass">
 			"com.sun.genericra.outbound.ManagedJMSConnectionFactory"
 		</property>
-		<initMethod name="setProperty">
-			<arg>"connectionFactoryProperties"</arg>
-			<arg>"BrokerURL=tcp://localhost:61616"</arg>
-		</initMethod>
 	</component>
 
 	<component name="connectionFactory" class="javax.jms.ConnectionFactory">

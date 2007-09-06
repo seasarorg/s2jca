@@ -21,14 +21,6 @@ public class GenericJMSTest extends S2TestCase {
     protected TransactionManager tm;
     protected ConnectionFactory cf;
 
-    public GenericJMSTest() {
-        super();
-    }
-
-    public GenericJMSTest(String name) {
-        super(name);
-    }
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();

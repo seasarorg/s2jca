@@ -5,13 +5,9 @@
 	<include path="jms-ra.dicon"/>
 
 	<component
-		class="org.seasar.jca.deploy.impl.MessageEndpointDeployer"
+		class="org.seasar.jca.deploy.impl.ActivationSpecDeployer"
 	>
 		<property name="activationSpecClassName">"com.sun.genericra.inbound.ActivationSpec"</property>
-		<initMethod name="setProperty">
-			<arg>"connectionFactoryProperties"</arg>
-			<arg>"BrokerURL=tcp://localhost:61616"</arg>
-		</initMethod>
 		<initMethod name="setProperty">
 			<arg>"destinationType"</arg>
 			<arg>"javax.jms.Queue"</arg>
@@ -23,7 +19,7 @@
 	</component>
 
 	<component
-		class="org.seasar.jca.inbound.MessageEndpointFactoryImpl"
+		class="org.seasar.jca.inbound.GenericJMSTest$JMSMessageEndpointFactory"
 	>
 		<property name="deliveryTransacted">true</property>
 	</component>
