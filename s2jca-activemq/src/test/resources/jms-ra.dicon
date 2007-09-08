@@ -12,8 +12,8 @@
 			"ra/activemq-rar-4.1.1.rar"
 		</property>
 		<initMethod name="setProperty">
-			<arg>"BrokerXmlConfig"</arg>
-			<arg>"broker:(tcp://localhost:61616)?persistent=false&amp;useJmx=false"</arg>
+			<arg>"ServerUrl"</arg>
+			<arg>"vm:(broker:(tcp://localhost:61616)?persistent=false&amp;useJmx=false)"</arg>
 		</initMethod>
 	</component>
 </components>
