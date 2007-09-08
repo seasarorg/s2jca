@@ -6,15 +6,29 @@ S2JCA Changelog
 
 
 
+Version {1.0.0} (2007/09/09)
+
+* Bug
+
+    * [{{{https://www.seasar.org/issues/browse/JCA-7}JCA-7}}] - プールされているコネクションにエラーが発生した場合に NullPointerException が発生する問題を修正しました．
+
+* Improvement
+
+    * [{{{https://www.seasar.org/issues/browse/JCA-6}JCA-6}}] - WmqResourceAdapterDeployer で，Generic Resource Adapter for JMS の RMPolicy プロパティに OnePerPhysicalConnection を設定するようにしました．
+
+    * [{{{https://www.seasar.org/issues/browse/JCA-8}JCA-8}}] - JMS 用のクラスを S2JMS に移動しました．
+
+    * [{{{https://www.seasar.org/issues/browse/JCA-9}JCA-9}}] - MessageEndpointDeployer のクラス名を ActivationSpecDeployer に変更しました．
+
+    * [{{{https://www.seasar.org/issues/browse/JCA-10}JCA-10}}] - ManagedConnectionFactoryDeployer  で，リソースローカルなトランザクションを許可する alloLoaclTx プロパティを追加しました．
+
 Version {1.0.0-RC1} (2007/08/08)
 
-* 変更点
-
-** Bug
+* Bug
 
     * [{{{https://www.seasar.org/issues/browse/JCA-1}JCA-1}}] - S2 コンテナの終了時にアウトバウンドコネクションがクローズされない問題を修正しました．
     
-** Improvement
+* Improvement
 
     * [{{{https://www.seasar.org/issues/browse/JCA-2}JCA-2}}] - commons-lang のバージョンを 2.1 から 2.3 に更新しました．
 

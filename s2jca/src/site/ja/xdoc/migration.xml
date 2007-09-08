@@ -4,17 +4,6 @@
 		<title>移行ガイド</title>
 	</properties>
 	<body>
-		<section name="目次">
-			<ul>
-				<li><p><a href="#1.0.0">1.0.0</a></p>
-					<ul>
-						<li><p><a href="#リソースアダプタの設定">リソースアダプタの設定</a></p></li>
-						<li><p><a href="#インバウンド通信の設定">インバウンド通信の設定</a></p></li>
-					</ul>
-				</li>
-			</ul>
-		</section>
-
 		<section name="1.0.0">
 			<subsection name="リソースアダプタの設定">
 				<p>
