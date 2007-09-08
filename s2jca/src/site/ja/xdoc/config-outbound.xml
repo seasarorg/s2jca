@@ -78,6 +78,17 @@
 					</td>
 					<td><code>true</code></td>
 				</tr>
+					<tr>
+						<td><code>allowLocalTx</code></td>
+						<td>No</td>
+						<td>
+							コンテナ管理のトランザクションを使用する場合に，
+							リソースローカルなトランザクションを許可する場合は<code>true</code>を設定します．
+							<code>false</code> (デフォルト) の場合，
+							JTAトランザクションが開始されていない状態でコネクションが取得されると例外がスローされます．
+						</td>
+						<td><code>false</code></td>
+					</tr>
 				<tr>
 					<td><code>maxPoolSize</code></td>
 					<td>No</td>
