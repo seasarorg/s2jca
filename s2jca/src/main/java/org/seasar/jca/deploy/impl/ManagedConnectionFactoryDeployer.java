@@ -63,6 +63,9 @@ public class ManagedConnectionFactoryDeployer extends AbstractDeployer<ManagedCo
     /** コネクションがS2JCA側からトランザクション制御される場合は<code>true</code> */
     protected boolean managedTx = true;
 
+    /** リソースローカルなトランザクションを許可する場合は<code>true</code> */
+    protected boolean allowLocalTx = false;
+
     /** コネクションプールの最小値 */
     protected int minPoolSize = 5;
 
@@ -162,9 +165,14 @@ public class ManagedConnectionFactoryDeployer extends AbstractDeployer<ManagedCo
             final String transactionSupport = getConnectionDefinitionConfig().getOutboundAdapter()
                     .getTransactionSupport();
             if ("XATransaction".equals(transactionSupport)) {
-                cm.addConnectionManagementPolicy(new XATransactionBoundedPoolingPolicy(tm));
+                XATransactionBoundedPoolingPolicy policy = new XATransactionBoundedPoolingPolicy(tm);
+                policy.setAllowLocalTx(allowLocalTx);
+                cm.addConnectionManagementPolicy(policy);
             } else if ("LocalTransaction".equals(transactionSupport)) {
-                cm.addConnectionManagementPolicy(new LocalTransactionBoundedPoolingPolicy(tm));
+                LocalTransactionBoundedPoolingPolicy policy = new LocalTransactionBoundedPoolingPolicy(
+                        tm);
+                policy.setAllowLocalTx(allowLocalTx);
+                cm.addConnectionManagementPolicy(policy);
             }
         }
 
@@ -327,6 +335,25 @@ public class ManagedConnectionFactoryDeployer extends AbstractDeployer<ManagedCo
      */
     public void setManagedTx(final boolean managedTx) {
         this.managedTx = managedTx;
+    }
+
+    /**
+     * リソースローカルなトランザクションが許可されている場合は<code>true</code>を返します．
+     * 
+     * @return リソースローカルなトランザクションが許可されている場合は<code>true</code>
+     */
+    public boolean isAllowLocalTx() {
+        return allowLocalTx;
+    }
+
+    /**
+     * リソースローカルなトランザクションを許可する場合は<code>true</code>を設定します．
+     * 
+     * @param allowLocalTx
+     *            リソースローカルなトランザクションを許可する場合は<code>true</code>
+     */
+    public void setAllowLocalTx(final boolean allowLocalTx) {
+        this.allowLocalTx = allowLocalTx;
     }
 
     /**
