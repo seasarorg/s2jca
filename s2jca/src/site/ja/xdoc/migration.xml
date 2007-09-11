@@ -9,13 +9,13 @@
 				<p>
 					<a href="https://genericjmsra.dev.java.net/">Sun Generic Resource Adapter for JMS</a>と
 					IBM WebSphere MQ (formerly known MQSeries) を組み合わせて使用するための
-					ResourceAdapterDeployer実装クラスのパッケージが変更になりました．
+					ResourceAdapterDeployer実装クラスがS2JMSへ移動しました．
 				</p>
 				<dl>
 					<dt>変更前</dt>
 					<dd><code>org.seasar.jca.deploy.impl.WmqResourceAdapterDeployer</code></dd>
 					<dt>変更後</dt>
-					<dd><code>org.seasar.jms.core.deploy.impl.WmqResourceAdapterDeployer</code></dd>
+					<dd><code>org.seasar.jms.core.deploy.impl.WMQResourceAdapterDeployer</code></dd>
 				</dl>
 			</subsection>
 			<subsection name="インバウンド通信の設定">
