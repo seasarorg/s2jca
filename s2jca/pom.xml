@@ -8,10 +8,10 @@
   <!-- The Basics -->
   <groupId>org.seasar.jca</groupId>
   <artifactId>s2jca</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <properties>
-    <seasar2.version>2.4.17</seasar2.version>
+    <seasar2.version>2.4.25</seasar2.version>
   </properties>
 
   <!-- More Project Information -->
@@ -115,8 +115,8 @@
       <url>dav:https://www.seasar.org/maven/maven2-snapshot</url>
     </snapshotRepository>
     <site>
-      <id>www.seasar.org</id>
-      <url>scp://www.seasar.org/home/groups/s2jca/public_html/</url>
+      <id>maven.seasar.org</id>
+      <url>dav:https://www.seasar.org/site/s2jca</url>
     </site>
   </distributionManagement>
 
