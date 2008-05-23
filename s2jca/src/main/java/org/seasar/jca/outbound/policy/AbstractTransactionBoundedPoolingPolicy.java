@@ -21,6 +21,7 @@ import java.util.WeakHashMap;
 
 import javax.resource.ResourceException;
 import javax.resource.spi.ManagedConnection;
+import javax.transaction.RollbackException;
 import javax.transaction.Synchronization;
 import javax.transaction.SystemException;
 import javax.transaction.Transaction;
@@ -36,8 +37,7 @@ import org.seasar.jca.outbound.support.ManagedConnectionPool;
  * 
  * @author koichik
  */
-public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPolicy implements
-        Synchronization {
+public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPolicy {
 
     // static fields
     private static final Logger logger = Logger
@@ -87,13 +87,6 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
         } catch (final SystemException e) {
             throw new SResourceException("EJCA0000", e);
         }
-    }
-
-    public void beforeCompletion() {
-    }
-
-    public void afterCompletion(final int status) {
-        releaseContext();
     }
 
     /**
@@ -232,17 +225,41 @@ public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPo
     }
 
     /**
-     * 現在のトランザクションに関連づけられているマネージドコネクションのプールをクローズします．
+     * 現在のトランザクションにマネージドコネクションのプールを関連づけます．
+     * 
+     * @param tx
+     *            トランザクション
+     * @throws IllegalStateException
+     *             例外が発生した場合
+     * @throws RollbackException
+     *             例外が発生した場合
+     * @throws SystemException
+     *             例外が発生した場合
      */
-    protected void releaseContext() {
-        try {
-            final Transaction tx = tm.getTransaction();
-            final ManagedConnectionPool<Object> pool = pools.get(tx);
-            if (pool != null) {
-                pool.close();
+    protected void registerContext(final Transaction tx) throws IllegalStateException,
+            RollbackException, SystemException {
+        tx.registerSynchronization(new Synchronization() {
+
+            public void beforeCompletion() {
             }
-        } catch (final SystemException e) {
-            logger.log("EJCA0000", null, e);
+
+            public void afterCompletion(int status) {
+                releaseContext(tx);
+            }
+
+        });
+    }
+
+    /**
+     * 現在のトランザクションに関連づけられているマネージドコネクションのプールをクローズします．
+     * 
+     * @param tx
+     *            トランザクション
+     */
+    protected void releaseContext(final Transaction tx) {
+        final ManagedConnectionPool<Object> pool = pools.get(tx);
+        if (pool != null) {
+            pool.close();
         }
     }
 

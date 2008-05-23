@@ -69,7 +69,7 @@ public class AbstractMessageEndpointFactoryTest extends S2TestCase {
          * @param classLoader
          * @param actualEndpoint
          */
-        public TestEndpoint(AbstractMessageEndpointFactory messageEndpointFactory,
+        public TestEndpoint(MessageEndpointFactory messageEndpointFactory,
                 TransactionManager transactionManager, XAResource xaResource,
                 ClassLoader classLoader, Runnable actualEndpoint) {
             super(messageEndpointFactory, transactionManager, xaResource, classLoader);

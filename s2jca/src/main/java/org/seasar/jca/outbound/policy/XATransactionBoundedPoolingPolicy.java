@@ -51,7 +51,7 @@ public class XATransactionBoundedPoolingPolicy extends AbstractTransactionBounde
         try {
             tx.enlistResource(context.getManagedConnection().getXAResource());
             if (pool.size() == 0) {
-                tx.registerSynchronization(this);
+                registerContext(tx);
             }
             return;
         } catch (final RollbackException e) {

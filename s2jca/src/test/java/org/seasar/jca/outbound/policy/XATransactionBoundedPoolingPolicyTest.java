@@ -22,7 +22,7 @@ import javax.resource.ResourceException;
 import javax.resource.spi.ConnectionRequestInfo;
 import javax.resource.spi.ManagedConnection;
 import javax.resource.spi.ManagedConnectionFactory;
-import javax.transaction.Status;
+import javax.transaction.Synchronization;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
@@ -195,8 +195,8 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
                 expect(mc[0].getXAResource()).andReturn(xa);
                 // XAResourceがTransactionに登録される．
                 expect(tx.enlistResource(xa)).andReturn(true);
-                // TransactionにSynchronizationとしてターゲットが登録される．
-                tx.registerSynchronization(target);
+                // TransactionにSynchronizationが登録される．
+                tx.registerSynchronization(Synchronization.class.cast(anyObject()));
             }
         }.doTest();
 
@@ -295,13 +295,11 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void replay() throws Exception {
-                target.afterCompletion(Status.STATUS_COMMITTED);
+                target.releaseContext(tx);
             }
 
             @Override
             public void record() throws Exception {
-                // トランザクションが開始されている．
-                expect(tm.getTransaction()).andReturn(tx);
                 // 後続のpolicyにmc1がリリースされる．
                 policy.release(mc[1]);
                 // 後続のpolicyにmc0がリリースされる．
@@ -337,8 +335,8 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
                 expect(mc[0].getXAResource()).andReturn(xa);
                 // XAResourceがTransactionに登録される．
                 expect(tx.enlistResource(xa)).andReturn(true);
-                // TransactionにSynchronizationとしてターゲットが登録される．
-                tx.registerSynchronization(target);
+                // TransactionにSynchronizationが登録される．
+                tx.registerSynchronization(Synchronization.class.cast(anyObject()));
             }
         }.doTest();
 
@@ -421,13 +419,11 @@ public class XATransactionBoundedPoolingPolicyTest extends EasyMockTestCase {
 
             @Override
             public void replay() throws Exception {
-                target.afterCompletion(Status.STATUS_ROLLEDBACK);
+                target.releaseContext(tx);
             }
 
             @Override
             public void record() throws Exception {
-                // トランザクションが開始されている．
-                expect(tm.getTransaction()).andReturn(tx);
                 // コネクションがリリースされる．
                 policy.release(mc[1]);
             }
