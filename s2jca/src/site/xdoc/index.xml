@@ -1,4 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document
+	PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+	"http://maven.apache.org/dtd/xdoc_1_0.dtd">
 <document>
 	<properties>
 		<title>Top</title>
@@ -22,6 +25,18 @@
 		</section>
 		<section name="News">
 			<dl>
+				<dt>Nov 21, 2008</dt>
+				<dd>
+					S2JCA 1.0.1 released (<a href="downloads.html">download</a>)
+				</dd>
+				<dt>Sep 09, 2007</dt>
+				<dd>
+					S2JCA 1.0.0 released (<a href="downloads.html">download</a>)
+				</dd>
+				<dt>Aug 08, 2007</dt>
+				<dd>
+					S2JCA 1.0.0-RC1 released (<a href="downloads.html">download</a>)
+				</dd>
 				<dt>July 07, 2007</dt>
 				<dd>
 					S2JCA 1.0.0-M2 released (<a href="downloads.html">download</a>)

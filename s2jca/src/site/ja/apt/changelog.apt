@@ -6,6 +6,12 @@ S2JCA Changelog
 
 
 
+Version {1.0.1} (2008/11/21)
+
+* Bug
+
+    * [{{{https://www.seasar.org/issues/browse/JCA-11}JCA-11}}] - Seasar2.4.18 以降との組み合わせでインバウンドコネクションが解放されない問題を修正しました．
+
 Version {1.0.0} (2007/09/09)
 
 * Bug

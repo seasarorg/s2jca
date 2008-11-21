@@ -1,9 +1,18 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document
+	PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+	"http://maven.apache.org/dtd/xdoc_1_0.dtd">
 <document>
 	<properties>
 		<title>移行ガイド</title>
 	</properties>
 	<body>
+		<section name="1.0.1">
+			<p>
+				重要な変更はありません．
+			</p>
+		</section>
+
 		<section name="1.0.0">
 			<subsection name="リソースアダプタの設定">
 				<p>
