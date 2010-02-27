@@ -6,6 +6,12 @@ S2JCA Changelog
 
 
 
+Version {1.0.2} (2010/02/27)
+
+* Bug
+
+    * [{{{https://www.seasar.org/issues/browse/JCA-12}JCA-12}}] - SMART deploy や AutoRegister でコンポーネントが登録される前にリソースアダプタが動き出して ComponentNotFoundRuntimeException が発生する場合がある問題を修正しました．[Seasar-user:19139]
+
 Version {1.0.1} (2008/11/21)
 
 * Bug

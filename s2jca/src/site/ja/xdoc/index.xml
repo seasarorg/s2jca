@@ -25,6 +25,13 @@
 		</section>
 		<section name="ニュース">
 			<dl>
+				<dt>2010/02/27</dt>
+				<dd>
+					S2JCA 1.0.2 をリリースしました．
+					(<a href="downloads.html">ダウンロード</a>)
+					(<a href="changelog.html#a1.0.2">変更履歴</a>)
+					(<a href="migration.html#a1.0.2">移行ガイド</a>)
+				</dd>
 				<dt>2008/11/21</dt>
 				<dd>
 					S2JCA 1.0.1 をリリースしました．

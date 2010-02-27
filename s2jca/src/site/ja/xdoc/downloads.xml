@@ -9,13 +9,17 @@
 	<body>
 		<section name="Latest Release">
 			<ul>
-				<li><p><a href="../download/2008-11-21/S2JCA-1.0.1.zip">S2JCA 1.0.1</a> (2008/11/21)</p></li>
+				<li><p><a href="../download/2010-02-27/S2JCA-1.0.2.zip">S2JCA 1.0.2</a> (2010/02/27)</p></li>
 			</ul>
 		</section>
 		<section name="All Releases">
 			<table>
 			<thead><col width="100"/><col width="200"/></thead>
 			<tbody>
+			<tr>
+				<th>2010/02/27</th>
+				<td><a href="../download/2010-02-27/S2JCA-1.0.2.zip">S2JCA 1.0.2</a></td>
+			</tr>
 			<tr>
 				<th>2008/11/21</th>
 				<td><a href="../download/2008-11-21/S2JCA-1.0.1.zip">S2JCA 1.0.1</a></td>

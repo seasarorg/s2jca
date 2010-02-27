@@ -7,6 +7,70 @@
 		<title>移行ガイド</title>
 	</properties>
 	<body>
+		<section name="1.0.2">
+			<subsection name="インバウンド通信の設定">
+				<p>
+					SMART deploy や AutoRegister を使っている場合，
+					インバウンド通信で受信したメッセージを処理するコンポーネントが登録される前に
+					メッセージの受信が開始されてしまう問題があったため，従来は
+					<code>ActivationSpecDeployer</code>
+					の初期化と同時に行っていたメッセージ受信の開始をやめて，新たに追加した
+					<code>MessageEndpointActivator</code>
+					というコンポーネントで受信を開始するようにしました．
+				</p>
+				<p>
+					このため，インバウンド通信の設定を行っている dicon ファイル (
+					<code>jms-inbound.dicon</code>
+					など) の変更が必要です．
+				</p>
+				<h4>jms-inboud.dicon</h4>
+				<p>
+					インバウンド通信の設定を行っている dicon ファイル (
+					<code>jms-inbound.dicon</code>
+					など) で定義している
+					<code>ActivationSpecDeployer</code>
+					にコンポーネント名を指定してください．
+					<code>ActivationSpecDeployer</code>
+					が一つだけの場合は
+					<code>activationSpecDeployer</code>
+					にしてください．
+				</p>
+				<source><![CDATA[
+    <component name="activationSpecDeployer"
+        class="org.seasar.jca.deploy.impl.ActivationSpecDeployer">
+      ・・・
+    </component>
+]]></source>
+				<h4>app.dicon</h4>
+				<p>
+					<code>app.dicon</code>
+					の最後など，メッセージを受信するコンポーネントの登録よりも後に初期化される場所に
+					<code>MessageEndpointActivator</code>
+					を定義します．
+					<code>ActivationSpecDeployer</code>
+					が一つだけでそのコンポーネント名が
+					<code>activationSpecDeployer</code>
+					の場合は自動バインディングが使えるので以下のようになります．
+				</p>
+				<source><![CDATA[
+    <component class="org.seasar.jca.deploy.impl.MessageEndpointActivator"/>
+]]></source>
+				<p>
+					<code>ActivationSpecDeployer</code>
+					が複数ある場合は，
+					<code>activationSpecDeployer</code>
+					プロパティに開始・終了する
+					<code>ActivationSpecDeployer</code>
+					のコンポーネント名を指定してください．
+				</p>
+				<source><![CDATA[
+    <component class="org.seasar.jca.deploy.impl.MessageEndpointActivator">
+      <property name="activationSpecDeployer">someActivationSpec</property>
+    </component>
+]]></source>
+			</subsection>
+		</section>
+
 		<section name="1.0.1">
 			<p>
 				重要な変更はありません．
@@ -16,15 +80,21 @@
 		<section name="1.0.0">
 			<subsection name="リソースアダプタの設定">
 				<p>
-					<a href="https://genericjmsra.dev.java.net/">Sun Generic Resource Adapter for JMS</a>と
-					IBM WebSphere MQ (formerly known MQSeries) を組み合わせて使用するための
+					<a href="https://genericjmsra.dev.java.net/">Sun Generic Resource Adapter for JMS</a>
+					と IBM WebSphere MQ (formerly known MQSeries) を組み合わせて使用するための
 					ResourceAdapterDeployer実装クラスがS2JMSへ移動しました．
 				</p>
 				<dl>
 					<dt>変更前</dt>
-					<dd><code>org.seasar.jca.deploy.impl.WmqResourceAdapterDeployer</code></dd>
+					<dd>
+						<code>org.seasar.jca.deploy.impl.WmqResourceAdapterDeployer
+						</code>
+					</dd>
 					<dt>変更後</dt>
-					<dd><code>org.seasar.jms.core.deploy.impl.WMQResourceAdapterDeployer</code></dd>
+					<dd>
+						<code>org.seasar.jms.core.deploy.impl.WMQResourceAdapterDeployer
+						</code>
+					</dd>
 				</dl>
 			</subsection>
 			<subsection name="インバウンド通信の設定">
@@ -33,9 +103,15 @@
 				</p>
 				<dl>
 					<dt>変更前</dt>
-					<dd><code>org.seasar.jca.deploy.impl.MessageEndpointDeployer</code></dd>
+					<dd>
+						<code>org.seasar.jca.deploy.impl.MessageEndpointDeployer
+						</code>
+					</dd>
 					<dt>変更後</dt>
-					<dd><code>org.seasar.jca.deploy.impl.ActivationSpecDeployer</code></dd>
+					<dd>
+						<code>org.seasar.jca.deploy.impl.ActivationSpecDeployer
+						</code>
+					</dd>
 				</dl>
 				<p>
 					S2JCAは，MessageEndpointFactoryの具象クラスを提供しなくなりました．
@@ -43,9 +119,15 @@
 				</p>
 				<dl>
 					<dt>変更前</dt>
-					<dd><code>org.seasar.jca.inbound.MessageEndpointFactoryImpl</code></dd>
+					<dd>
+						<code>org.seasar.jca.inbound.MessageEndpointFactoryImpl
+						</code>
+					</dd>
 					<dt>変更後</dt>
-					<dd><code>org.seasar.jms.container.impl.JMSMessageEndpointFactory</code></dd>
+					<dd>
+						<code>org.seasar.jms.container.impl.JMSMessageEndpointFactory
+						</code>
+					</dd>
 				</dl>
 			</subsection>
 		</section>

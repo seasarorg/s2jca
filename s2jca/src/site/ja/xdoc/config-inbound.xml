@@ -16,6 +16,7 @@
 					</ul>
 				</li>
 				<li><p><a href="#MessageEndpointFactory">MessageEndpointFactory</a></p></li>
+				<li><p><a href="#MessageEndpointActivator">MessageEndpointActivator</a></p></li>
 			</ul>
 		</section>
 
@@ -28,6 +29,8 @@
 				<dd>インバウンド通信で利用されるアクティベーションスペックを設定するためのコンポーネントです．</dd>
 				<dt><code><a href="#MessageEndpointFactory">MessageEndpointFactory</a></code></dt>
 				<dd>インバウンド通信で利用されるメッセージエンドポイントを生成するためのコンポーネントです．</dd>
+				<dt><code><a href="#MessageEndpointActivator">MessageEndpointActivator</a></code></dt>
+				<dd>インバウンド通信で利用されるメッセージエンドポイントを開始・終了するためのコンポーネントです．</dd>
 			</dl>
 		</section>
 
@@ -136,6 +139,39 @@
 					<td>
 						リソースアダプタ固有のプロパティを指定します．
 					</td>
+				</tr>
+			</table>
+		</section>
+
+		<section name="MessageEndpointActivator">
+			<p>
+				<code>MessageEndpointActivator</code>は，
+				メッセージエンドポイントからメッセージの受信を開始・終了するコンポーネントです．
+			</p>
+			<p>
+				<code>MessageEndpointActivator</code>の実装クラスを以下に示します．
+			</p>
+			<ul>
+				<li><p><code>org.seasar.jca.deploy.impl.MessageEndpointActivator</code></p></li>
+			</ul>
+			<h5>プロパティ</h5>
+			<table border="1">
+				<tr><th>プロパティ</th><th>必須</th><th>説明</th><th>デフォルト</th></tr>
+				<tr>
+					<td><code>activationSpecDeployer</code></td>
+					<td>Yes</td>
+					<td>
+						メッセージエンドポイントの
+						<code>ActivationSepcDeployer</code>
+						を指定します．
+						自動バインディングするには，
+						<code>ActivationSepcDeployer</code>の
+						コンポーネント名が，このプロパティと同じ
+						<code>activationSepcDeployer</code>の
+						でなくてはなりません．
+						それ以外の場合は明示的にプロパティを設定する必要があります．
+					</td>
+					<td>N/A</td>
 				</tr>
 			</table>
 		</section>

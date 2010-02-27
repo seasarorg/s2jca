@@ -45,6 +45,7 @@
 							</ul>
 						</li>
 						<li><p><a href="config-inbound.html#MessageEndpointFactory">MessageEndpointFactory</a></p></li>
+						<li><p><a href="config-inbound.html#MessageEndpointActivator">MessageEndpointActivator</a></p></li>
 					</ul>
 				</li>
 			</ul>
