@@ -4,7 +4,7 @@
 <components>
 	<include path="jms-ra.dicon"/>
 
-	<component
+	<component name="activationSpecDeployer"
 		class="org.seasar.jca.deploy.impl.ActivationSpecDeployer"
 	>
 		<property name="activationSpecClassName">"com.sun.genericra.inbound.ActivationSpec"</property>
@@ -27,4 +27,6 @@
 	<component instance="prototype"
 		class="org.seasar.jca.inbound.GenericJMSTest$MessageListenerImpl"
 	/>
+
+	<component class="org.seasar.jca.deploy.impl.MessageEndpointActivator"/>
 </components>

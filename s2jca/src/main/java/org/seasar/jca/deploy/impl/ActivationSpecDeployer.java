@@ -23,8 +23,6 @@ import javax.resource.spi.endpoint.MessageEndpointFactory;
 import org.seasar.framework.beans.factory.BeanDescFactory;
 import org.seasar.framework.container.annotation.tiger.Binding;
 import org.seasar.framework.container.annotation.tiger.BindingType;
-import org.seasar.framework.container.annotation.tiger.DestroyMethod;
-import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.log.Logger;
 import org.seasar.framework.util.tiger.ReflectionUtil;
 import org.seasar.jca.deploy.ResourceAdapterDeployer;
@@ -92,7 +90,6 @@ public class ActivationSpecDeployer extends AbstractDeployer<ActivationSpec> {
      * @throws ResourceException
      *             メッセージエンドポイントのアクティブ化中に例外が発生した場合
      */
-    @InitMethod
     public void activate() throws ResourceException {
         assertInboundResourceAdapter();
         activationSpec = createActivationSpec();
@@ -109,7 +106,6 @@ public class ActivationSpecDeployer extends AbstractDeployer<ActivationSpec> {
      * @throws ResourceException
      *             メッセージエンドポイントの非アクティブ化中に例外が発生した場合
      */
-    @DestroyMethod
     public void deactivate() throws ResourceException {
         assertInboundResourceAdapter();
         raDeployer.getResourceAdapter()
@@ -144,7 +140,9 @@ public class ActivationSpecDeployer extends AbstractDeployer<ActivationSpec> {
      * 定義されていることを確認します．
      * 
      * @throws ResourceException
-     *             <code>ra.xml</code>に<code>connector/resource-adapter/inbound-resourceadapter</code>が定義されていない場合
+     *             <code>ra.xml</code>に
+     *             <code>connector/resource-adapter/inbound-resourceadapter</code>
+     *             が定義されていない場合
      */
     protected void assertInboundResourceAdapter() throws ResourceException {
         if (raDeployer.getResourceAdapterConfig().getInboundAdapter() == null) {
