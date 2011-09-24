@@ -21,12 +21,14 @@ import java.net.URLClassLoader;
 
 import javax.resource.spi.endpoint.MessageEndpointFactory;
 import javax.transaction.Status;
+import javax.transaction.SystemException;
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.xa.XAResource;
 
 import org.seasar.framework.unit.EasyMockTestCase;
 import org.seasar.framework.util.ClassUtil;
+import org.seasar.jca.exception.SResourceException;
 
 import static org.easymock.EasyMock.*;
 
@@ -98,6 +100,35 @@ public class AbstractMessageEndpointTest extends EasyMockTestCase {
             public void record() throws Exception {
                 expect(tm.getStatus()).andReturn(Status.STATUS_ACTIVE);
                 tm.commit();
+            }
+        }.doTest();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public void testDeliveryTransactedBeforeDeliveryFailed() throws Exception {
+        target = new TestMessageEndpoint(mef, tm, xar, cl);
+
+        // test beforeDelivery(Method)
+        new Subsequence() {
+
+            @Override
+            public void replay() throws Exception {
+                try {
+                    target.beforeDelivery(method);
+                    fail();
+                } catch (SResourceException expected) {
+                }
+            }
+
+            @Override
+            public void record() throws Exception {
+                expect(mef.isDeliveryTransacted(method)).andReturn(true);
+                tm.begin();
+                expect(tm.getTransaction()).andReturn(tx);
+                expect(tx.enlistResource(xar)).andThrow(new SystemException("Enlist Failed"));
+                tm.rollback();
             }
         }.doTest();
     }

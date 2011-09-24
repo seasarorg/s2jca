@@ -201,8 +201,16 @@ public abstract class AbstractMessageEndpoint implements MessageEndpoint {
     protected void beginTransaction() throws ResourceException {
         try {
             transactionManager.begin();
-            transaction = transactionManager.getTransaction();
-            transaction.enlistResource(xaResource);
+            try {
+                transaction = transactionManager.getTransaction();
+                transaction.enlistResource(xaResource);
+            } catch (final Exception e) {
+                try {
+                    transactionManager.rollback();
+                } catch (final Throwable ignore) {
+                }
+                throw e;
+            }
         } catch (final Exception e) {
             throw new SResourceException("EJCA0000", e);
         }
