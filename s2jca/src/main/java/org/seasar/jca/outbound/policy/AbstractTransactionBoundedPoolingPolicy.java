@@ -39,6 +39,9 @@ import org.seasar.jca.outbound.support.ManagedConnectionPool;
  */
 public abstract class AbstractTransactionBoundedPoolingPolicy extends AbstractPolicy {
 
+    // constants
+    private static final long serialVersionUID = 1L;
+
     // static fields
     private static final Logger logger = Logger
             .getLogger(AbstractTransactionBoundedPoolingPolicy.class);

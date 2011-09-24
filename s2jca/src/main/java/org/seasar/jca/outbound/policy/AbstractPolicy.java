@@ -33,6 +33,9 @@ import org.seasar.jca.outbound.support.ConnectionManagementContext;
  */
 public abstract class AbstractPolicy implements ConnectionManagementPolicy, Serializable {
 
+    // constants
+    private static final long serialVersionUID = 1L;
+
     // static fields
     private static final Logger logger = Logger.getLogger(AbstractPolicy.class);
 
